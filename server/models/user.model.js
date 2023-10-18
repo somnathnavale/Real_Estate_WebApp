@@ -15,6 +15,10 @@ const userSchema=new mongoose.Schema({
         type:String,
         required:true 
     },
+    avatar:{
+        type:String,
+        default:"https://cdn0.iconfinder.com/data/icons/social-messaging-ui-color-shapes/128/user-male-circle-blue-512.png"
+    }
 
 },{timestamps:true});
 
