@@ -1,10 +1,10 @@
 import express from "express";
-import {updateUser} from '../controllers/user.controller.js';
-import { verifyToken } from "../utils/verifyUser.js";
+import { updateUser, deleteUser } from "../controllers/user.controller.js";
+import verifyJWT from "../middleware/verifyJWT.js";
 
-const router=express.Router();
+const router = express.Router();
 
-router.get("/",(req,res)=>res.send("hello"));
-router.put("/update/:id",verifyToken,updateUser);
+router.put("/update/:id", verifyJWT, updateUser);
+router.delete("/delete/:id", verifyJWT, deleteUser);
 
 export default router;

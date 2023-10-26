@@ -1,0 +1,50 @@
+import { useSelector, useDispatch } from "react-redux";
+import { generateToken, logoutUser } from "../redux/user/userSlice";
+import { useEffect } from "react";
+
+const useAxios = (axiosInstance) => {
+  const { accessToken } = useSelector((state) => state.user.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const requestInterceptor = axiosInstance.interceptors.request.use(
+      (config) => {
+        if (accessToken) {
+          config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      }
+    );
+
+    const responseInterceptor = axiosInstance.interceptors.response.use(
+      (response) => response,
+      async (error) => {
+        if (error?.response && error.response.status === 401) {
+          dispatch(logoutUser());
+          return Promise.reject(error);
+        }
+        if (
+          error?.response &&
+          error?.response?.status === 403 &&
+          !error.config?.prevRequest
+        ) {
+          error.config.prevRequest = true;
+          await dispatch(generateToken()).unwrap();
+          return axiosInstance(error.config);
+        }
+        return Promise.reject(error);
+      }
+    );
+
+    return () => {
+      axiosInstance.interceptors.request.eject(requestInterceptor);
+      axiosInstance.interceptors.response.eject(responseInterceptor);
+    };
+  }, [axiosInstance, accessToken, dispatch]);
+
+  return axiosInstance;
+};
+
+export default useAxios;
