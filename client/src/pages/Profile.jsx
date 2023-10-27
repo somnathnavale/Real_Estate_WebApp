@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Snackbar from "../components/Snackbar";
-import { updateStatus, updateUser } from "../redux/user/userSlice";
+import { deleteUser, logout, updateStatus, updateUser } from "../redux/user/userSlice";
 import useAxios from "../hooks/useAxios";
 import { axiosPublic } from "../api/axios";
 
@@ -31,10 +31,24 @@ const Profile = () => {
     if (formData?.password) {
       obj.password = formData?.password;
     }
-    await dispatch(updateUser({ userData: obj, axios })).unwrap();
+    await dispatch(updateUser({id:user._id, userData: obj, axios })).unwrap();
   };
 
-  const handleDelete = () => {};
+  const handleDelete = async() => {
+      try {
+        await dispatch(deleteUser({id:user._id,axios})).unwrap();
+      } catch (error) {
+        console.log(error);
+      }
+  };
+
+  const handleLogout=async()=>{
+    try {
+      await dispatch(logout()).unwrap();
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleSnackbar = () => {
     let message =
@@ -107,10 +121,12 @@ const Profile = () => {
         </button>
       </form>
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer" onClick={handleDelete}>
+        <button disabled={status === "loading"} className="text-slate-700 cursor-pointer bg-slate-300 p-2 rounded-lg hover:opacity-90 disabled:opacity-80" type="button" onClick={handleDelete}>
           Delete Account
-        </span>
-        <span className="text-red-700 cursor-pointer">Sign Out</span>
+        </button>
+        <button disabled={status === "loading"} className="text-slate-700 cursor-pointer bg-slate-300 p-2 rounded-lg hover:opacity-90 disabled:opacity-80" type="button" onClick={handleLogout}>
+          Sign out
+        </button>
       </div>
     </div>
   );

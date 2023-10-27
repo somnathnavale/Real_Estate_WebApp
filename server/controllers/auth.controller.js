@@ -115,4 +115,13 @@ const generateToken = async (req, res, next) => {
   }
 };
 
-export { signUp, signIn, google, generateToken };
+const logoutUser = async (req, res, next) => {
+  try {
+    res.clearCookie("refreshToken");
+    res.status(200).json({ message: "user logout successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { signUp, signIn, google, generateToken, logoutUser };

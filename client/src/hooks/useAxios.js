@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { generateToken, logoutUser } from "../redux/user/userSlice";
+import { generateToken, logout } from "../redux/user/userSlice";
 import { useEffect } from "react";
 
 const useAxios = (axiosInstance) => {
@@ -22,7 +22,7 @@ const useAxios = (axiosInstance) => {
       (response) => response,
       async (error) => {
         if (error?.response && error.response.status === 401) {
-          dispatch(logoutUser());
+          await dispatch(logout()).unwrap();
           return Promise.reject(error);
         }
         if (

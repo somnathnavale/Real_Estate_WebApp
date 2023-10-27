@@ -29,11 +29,10 @@ export const signInUser = createAsyncThunk("user/signin", async (userData) => {
 
 export const updateUser = createAsyncThunk(
   "user/update",
-  async ({ userData, axios }, { dispatch, getState, extra }) => {
+  async ({id, userData, axios }, thunkApi) => {
     try {
-      const { user } = getState().user;
       const response = await axios.put(
-        `/api/user/update/${user._id}`,
+        `/api/user/update/${id}`,
         userData
       );
       return response.data;
@@ -54,18 +53,36 @@ export const generateToken = createAsyncThunk("user/token", async () => {
   }
 });
 
+export const deleteUser = createAsyncThunk(
+  "user/delete",
+  async ({id,axios}, thunkApi) => {
+    try {
+      const response = await axios.delete(`/api/user/delete/${id}`);
+      return response.data;
+    } catch (error) {
+      if (error?.response?.data) throw error?.response?.data;
+      throw error?.message;
+    }
+  }
+);
+
+export const logout = createAsyncThunk("user/logout", async () => {
+  try {
+    const response = await axiosPublic.get(`/api/auth/logout`);
+    return response.data;
+  } catch (error) {
+    if (error?.response?.data) throw error?.response?.data;
+    throw error?.message;
+  }
+});
+
 const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
     updateStatus: (state, action) => {
       state.status = action.payload;
-    },
-    logoutUser: (state) => {
-      state.user = null;
-      state.loading = "idle";
-      state.error = null;
-    },
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -110,9 +127,28 @@ const userSlice = createSlice({
       })
       .addCase(generateToken.rejected, (state, action) => {
         state.user = null;
+      })
+      .addCase(deleteUser.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteUser.fulfilled, (state, action) => {
+        state.user = null;
+        state.status='idle'
+      })
+      .addCase(deleteUser.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(logout.fulfilled, (state, action) => {
+        state.user = null;
+        state.status='idle'
+      })
+      .addCase(logout.rejected, (state, action) => {
+        state.status='failed';
+        state.error = action.error.message;
       });
   },
 });
 
-export const { updateStatus, accessToken, logoutUser } = userSlice.actions;
+export const { updateStatus } = userSlice.actions;
 export default userSlice.reducer;

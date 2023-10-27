@@ -29,8 +29,8 @@ const deleteUser = async (req, res) => {
   if (req.user.id !== req.params.id)
     return next(new ErrorHandler(401, "Not Allowed To Update Data"));
   try {
-    await User.findOneAndDelete(req.params.id);
-    res.clearCookie("access_token");
+    await User.findByIdAndDelete(req.params.id);
+    res.clearCookie("refreshToken");
     res.status(200).json({ message: "account deleted successfully" });
   } catch (error) {
     next(error);

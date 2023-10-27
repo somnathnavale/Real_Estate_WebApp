@@ -41,6 +41,8 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(5000, () => {
-  console.log("server is running...");
-});
+mongoose.connection.once("open",()=>{
+  app.listen(5000, () => {
+    console.log("server is running...");
+  });
+})
