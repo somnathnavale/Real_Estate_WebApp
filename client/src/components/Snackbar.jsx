@@ -25,7 +25,7 @@ function Snackbar({ message, type, open, onClose,time }) {
   };
 
   return (
-    <div className={`fixed top-0 right-0 mt-6 mr-4 transform ${isVisible ? 'translate-y-0' : '-translate-y-16'} transition-transform duration-300 ease-in-out`}>
+    <div className={`fixed top-0 right-0 mt-6 mr-4 transform ${isVisible ? 'translate-y-0' : '-translate-y-16'} transition-transform duration-300 ease-in-out`} style={{zIndex:1000}}>
       <div className={`text-white px-4 py-2 rounded shadow-md ${typeClasses[type]}`}>
         {message}
         <button className="ml-2 text-white" onClick={onClose}>X</button>

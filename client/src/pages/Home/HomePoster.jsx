@@ -1,5 +1,5 @@
 import React from 'react'
-import background from "../assets/bg.jpg";
+import background from "../../assets/bg.jpg";
 import { useNavigate } from "react-router-dom";
 
 const HomePoster = () => {

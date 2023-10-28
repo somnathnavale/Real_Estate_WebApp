@@ -1,6 +1,6 @@
 import React from 'react'
-import PropertyCard from '../components/PropertyCard';
-import background from '../assets/background.jpg';
+import PropertyCard from '../../components/PropertyCard';
+import background from '../../assets/background.jpg';
 
 const updatedDemoData = [
     {

@@ -1,8 +1,8 @@
 import React from 'react';
-import home from '../assets/home.png';
-import office from '../assets/office.png';
-import villa from '../assets/villa.png';
-import apartment from '../assets/apartment.png';
+import home from '../../assets/home.png';
+import office from '../../assets/office.png';
+import villa from '../../assets/villa.png';
+import apartment from '../../assets/apartment.png';
 
 const FeaturedProperty = () => {
   const propertyTypes = [
