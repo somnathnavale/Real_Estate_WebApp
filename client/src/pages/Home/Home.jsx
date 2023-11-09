@@ -12,7 +12,6 @@ const Home = () => {
       <FeaturedProperty />
       <RecentListings/>
       <ContactLabel/>
-      <Footer/>
     </>
   );
 };

@@ -16,12 +16,12 @@ const Header = () => {
 
   return (
     <header className="bg-slate-200 shadow-lg sticky top-0" style={{zIndex:100}}>
-      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5 dark:bg-gray-800">
+      <nav className="bg-white border-gray-200 px-4 lg:px-6 py-2.5">
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <div className="flex items-center">
             <img src={logo} className="mr-3 h-6 sm:h-9" alt="NextGen Logo" />
-            <span className="self-center text-xl font-semibold whitespace-nowrap dark:text-white">
-              NextGen
+            <span className="self-center text-xl font-semibold whitespace-nowrap text-slate-500">
+              NextGen<span className="text-slate-700">Estate</span>
             </span>
           </div>
           <div>
@@ -65,10 +65,10 @@ const Header = () => {
               </li>
               <li>
                 <Link
-                  to="/add-properties"
+                  to="/listings/add"
                   className="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 hover:underline underline-offset-4 md:hover:bg-transparent md:border-0 md:hover:text-primary-700 md:p-0 dark:text-gray-400 md:dark:hover:text-white dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700"
                 >
-                  Add Listings
+                  Add Property
                 </Link>
               </li>
               <li>

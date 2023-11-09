@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate,useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { signInUser, updateStatus } from "../redux/user/userSlice";
 import Snackbar from "../components/Snackbar";
@@ -15,6 +15,8 @@ const SignIn = () => {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
+  const location =useLocation();
+
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
@@ -42,7 +44,7 @@ const SignIn = () => {
         : "none";
     let open = status === "failed" || status === "succeeded";
     let onClose = () => {
-      status === "succeeded" ? navigate("/") : null;
+      status === "succeeded" ? navigate(location?.state?.from || '/') : null;
       dispatch(updateStatus("idle", { extra: { name: "somnath" } }));
     };
     return {

@@ -4,17 +4,22 @@ const userSchema = new mongoose.Schema(
   {
     username: {
       type: String,
-      required: true,
+      required: [true,"username is required field"],
       unique: true,
     },
     email: {
       type: String,
-      required: true,
+      required: [true,"email is required field"],
       unique: true,
     },
     password: {
       type: String,
-      required: true,
+      required: [true,"password is required field"],
+    },
+    contactNumber:{
+      type:Number,
+      min:[1000000000,"provide correct mobile number"],
+      max:[9999999999,"provide correct mobile number"]
     },
     avatar: {
       type: String,

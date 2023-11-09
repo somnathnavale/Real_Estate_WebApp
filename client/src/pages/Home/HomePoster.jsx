@@ -24,14 +24,14 @@ const HomePoster = () => {
               <button
                 className="text-white cursor-pointer bg-slate-900 px-3 py-2 rounded-lg hover:opacity-90"
                 type="button"
-                onClick={() => navigate('/properties')}
+                onClick={() => navigate('/listings')}
               >
                 Search Property
               </button>
               <button
                 className="text-slate-900 cursor-pointer bg-slate-300 px-3 py-2 rounded-lg hover:opacity-90 ml-4"
                 type="button"
-                onClick={() => navigate('/add-property')}
+                onClick={() => navigate('/listings/add')}
               >
                 Add Property
               </button>
