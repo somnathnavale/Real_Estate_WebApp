@@ -21,7 +21,7 @@ const Dropdown = ({ data, field, onChange, options }) => {
           Select
         </option>
         {options.map((option) => (
-          <option key={option.key} value={option._id} className="hover:bg-slate-300">
+          <option key={option.key} value={option.value} className="hover:bg-slate-300">
             {option.value}
           </option>
         ))}

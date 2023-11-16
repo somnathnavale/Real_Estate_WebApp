@@ -1,14 +1,12 @@
 import Enum from "../models/enum.model.js"
+import CustomError from "../utils/error/CustomError.js";
+import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
 import { enumConverter } from "../utils/helper/enumHelpers.js";
 
-export const getAllEnums=async(req,res,next)=>{
-    try {
-        const enums=await Enum.find({},{__v:0});
-        const converted=enumConverter(enums);
-        return res.status(200).json({enums:converted});
-    } catch (error) {
-        next(error)
-    }
-}
+export const getAllEnums=asyncErrorHandler(async(req,res)=>{
+    const enums=await Enum.find({},{__v:0});
+    const converted=enumConverter(enums);
+    return res.status(200).json({enums:converted});
+})
 
 

@@ -18,8 +18,14 @@ const userSchema = new mongoose.Schema(
     },
     contactNumber:{
       type:Number,
-      min:[1000000000,"provide correct mobile number"],
-      max:[9999999999,"provide correct mobile number"]
+      validate: {
+        validator: function (v) {
+          return /^[0-9]{10}$/.test(v);
+        },
+        message: 'Please provide a valid 10-digit mobile number.',
+      },
+      unique:true,
+      sparse:true  //allowing multiple null values in db for unique fields otherwise mongodb consider them duplicates 
     },
     avatar: {
       type: String,

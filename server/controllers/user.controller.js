@@ -1,40 +1,44 @@
 import User from "../models/user.model.js";
-import { ErrorHandler } from "../utils/error.js";
 import bcryptjs from "bcryptjs";
+import CustomError from "../utils/error/CustomError.js";
+import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
 
-const updateUser = async (req, res, next) => {
+const updateUser = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.params.id)
-    return next(new ErrorHandler(401, "Not Allowed To Update Data"));
-  try {
-    const allowedFields = ["username", "email", "avatar", "password"];
-    let obj = {};
-    allowedFields.forEach((field) => {
-      if (req.body[field] !== undefined) obj[field] = req.body[field];
-    });
+    throw new CustomError("Not Allowed To Update Data", 401);
 
-    if (obj.password) {
-      obj.password = bcryptjs.hashSync(obj.password, 10);
-    }
-    const updatedUser = await User.findByIdAndUpdate(req.params.id, obj, {
-      new: true,
-      select: { __v: 0, createdAt: 0, updatedAt: 0, password: 0 },
-    });
-    return res.status(200).json({ ...updatedUser._doc });
-  } catch (error) {
-    next(error);
+  const allowedFields = ["username", "email", "avatar", "password"];
+  let obj = {};
+
+  allowedFields.forEach((field) => {
+    if (req.body[field] !== undefined) obj[field] = req.body[field];
+  });
+
+  if (obj.password) {
+    obj.password = bcryptjs.hashSync(obj.password, 10);
   }
-};
+  const updatedUser = await User.findByIdAndUpdate(req.params.id, obj, {
+    new: true,
+    runValidators: true,
+    select: { __v: 0, createdAt: 0, updatedAt: 0, password: 0 },
+  });
 
-const deleteUser = async (req, res) => {
+  if(!updatedUser)
+    throw new CustomError('User With Given Id Not Found',404);
+
+  return res.status(200).json({ ...updatedUser._doc });
+});
+
+const deleteUser = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.params.id)
-    return next(new ErrorHandler(401, "Not Allowed To Update Data"));
-  try {
-    await User.findByIdAndDelete(req.params.id);
+    throw new CustomError("Not Allowed To Update Data", 401);
+
+  const user = await User.findByIdAndDelete(req.params.id);
+  if(!user)
+    throw new CustomError('User With Given Id Not Found',404);
+
     res.clearCookie("refreshToken");
-    res.status(200).json({ message: "account deleted successfully" });
-  } catch (error) {
-    next(error);
-  }
-};
+  res.status(200).json({ message: "account deleted successfully" });
+});
 
 export { updateUser, deleteUser };

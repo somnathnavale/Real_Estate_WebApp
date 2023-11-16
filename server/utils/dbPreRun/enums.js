@@ -34,6 +34,10 @@ const enums = [
   { category: "facing", key: "WEST", value: "West" },
   { category: "facing", key: "NORTH", value: "North" },
   { category: "facing", key: "SOUTH", value: "South" },
+  { category: "facing", key: "NORTHEAST", value: "North-East" },
+  { category: "facing", key: "NORTHWEST", value: "North-West" },
+  { category: "facing", key: "SOUTHEAST", value: "South-East" },
+  { category: "facing", key: "SOUTHWEST", value: "South-West" },
   { category: "lift", key: "YES", value: "Yes" },
   { category: "lift", key: "NO", value: "No" },
 ];

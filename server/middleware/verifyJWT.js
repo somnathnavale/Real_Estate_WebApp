@@ -1,14 +1,14 @@
 import jwt from "jsonwebtoken";
-import { ErrorHandler } from "../utils/error.js";
+import CustomError from "../utils/error/CustomError.js";
 
 const verifyJWT = async (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
   if (!authHeader || !authHeader?.startsWith("Bearer ")){
-    return next(new ErrorHandler(401, "Unauthorized Access"));
+    return next(new CustomError("Unauthorized Access",401));
   }
   const token = authHeader.split(" ")[1];
   jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
-    if (err) return next(new ErrorHandler(403, "Forbidden Access"));
+    if (err) return next(new CustomError("Forbidden Access",403));
     req.user = user;
     next();
   });

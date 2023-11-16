@@ -1,10 +1,11 @@
 import express from 'express';
 import verifyJWT from '../middleware/verifyJWT.js';
-import { addListing,getAllListings } from '../controllers/listing.controller.js';
+import { addListing,getAllListings, getListing } from '../controllers/listing.controller.js';
 
 const router=express.Router();
 
-router.get('/',verifyJWT,getAllListings)
+router.get('/',getAllListings)
     .post('/',verifyJWT,addListing)
+    .get('/:id',verifyJWT,getListing);
 
 export default router;
