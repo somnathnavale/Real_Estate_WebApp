@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import { Outlet } from "react-router-dom";
-import Footer from "../pages/Footer";
 import Loader from "./Loader";
 import { useSelector } from "react-redux";
+import Footer from "./Footer";
 
 const Layout = () => {
   const enums=useSelector(store=>store.enum);

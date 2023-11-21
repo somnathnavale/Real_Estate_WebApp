@@ -6,9 +6,9 @@ import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Layout from "./components/Layout";
-import AddListings from "./pages/Listings/AddListings";
-import Listings from "./pages/Listings/Listings";
-import ListingPage from "./pages/Listings/ListingPage";
+import Listings from "./redux/listings/Listings";
+import AddListings from "./redux/listings/AddListings";
+import ListingPage from "./redux/listings/ListingPage";
 
 export default function App() {
   return (

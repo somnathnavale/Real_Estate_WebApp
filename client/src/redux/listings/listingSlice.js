@@ -1,4 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createFilterQuery } from "../../utils/helpers/listingsHelper";
 
 const initialState={
     listings:[],
@@ -17,9 +18,14 @@ export const addListing=createAsyncThunk('listing/add',async({axios,data},thunkA
     }
 })
 
-export const getListings=createAsyncThunk('listing/getAll',async({axios},thunkApi)=>{
+export const getListings=createAsyncThunk('listing/getAll',async({axios},{getState})=>{
     try {
-        const response=await axios.get('/api/listings');
+        const filter=getState().filter;
+        const query=createFilterQuery(filter);
+        console.log(query)
+        const response=await axios.get('/api/listings',{
+          params:query
+        });
         console.log('response',response.data);
         return response.data;
     } catch (error) {
@@ -32,9 +38,9 @@ const listingSlice=createSlice({
     name:"listing",
     initialState,
     reducers:{
-        updateListingStatus:(state,action)=>{
-            state.status=action.payload;
-        }
+      updateListingStatus:(state,action)=>{
+          state.status=action.payload;
+      }
     },
     extraReducers:(builder)=>{
         builder

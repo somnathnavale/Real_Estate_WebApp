@@ -17,7 +17,6 @@ const Profile = () => {
 
   const dispatch = useDispatch();
   const axios = useAxios(axiosPublic);
-
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };

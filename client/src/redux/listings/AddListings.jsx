@@ -3,11 +3,11 @@ import { useSelector,useDispatch } from "react-redux";
 import { defaultPropertyData, property } from "../../utils/constants/listings";
 import TextInput from '../../components/Inputs/TextInput';
 import Dropdown from "../../components/Inputs/Dropdown";
-import { getEnums } from "../../redux/enum/enumSlice";
+import { getEnums } from "../enum/enumSlice";
 import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
 import Snackbar from "../../components/Snackbar";
-import { addListing, updateListingStatus } from "../../redux/listings/listingSlice";
+import { addListing, updateListingStatus } from "./listingSlice";
 
 const AddListing = () => {
   const [propertyData, setPropertyData] = useState(

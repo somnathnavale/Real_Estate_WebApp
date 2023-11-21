@@ -1,18 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { IoMenu, IoClose } from "react-icons/io5";
-import { Link,useLocation } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { Link,useLocation,useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/logo.png";
+import { selectFilter,setFilter } from "../redux/filter/filterSlice";
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
   const { user } = useSelector((state) => state.user);
+  const filter = useSelector(selectFilter);
+  
   const location=useLocation();
+  const navigate=useNavigate();
+  const dispatch=useDispatch();
 
   useEffect(()=>{
     setOpenMenu(false);
   },[location])
+
+  const handleSearch=(e)=>{
+    e.preventDefault();
+    if(location.pathname!=='/listings'){
+      navigate('listings')
+    }
+  }
 
   return (
     <header className="bg-slate-200 shadow-lg sticky top-0" style={{zIndex:100}}>
@@ -25,11 +37,14 @@ const Header = () => {
             </span>
           </div>
           <div>
-            <form className="bg-slate-100 p-3 rounded-lg flex items-center">
+            <form className="bg-slate-100 p-3 rounded-lg flex items-center" onSubmit={handleSearch}>
             <input
               type="text"
               placeholder="Search..."
               className="bg-transparent focus:outline-none w-24 sm:w-64"
+              name="searchText"
+              value={filter.searchText}
+              onChange={(e)=>dispatch(setFilter({searchText:e.target.value}))}
             />
             <FaSearch className="text-slate-600" />
           </form>

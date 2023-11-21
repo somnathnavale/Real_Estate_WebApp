@@ -1,6 +1,7 @@
 import Listing from "../models/listing.model.js";
 import CustomError from "../utils/error/CustomError.js";
 import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
+import { generateQuery } from "../utils/helper/listingHelpers.js";
 
 export const addListing = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.body.owner)
@@ -11,7 +12,8 @@ export const addListing = asyncErrorHandler(async (req, res) => {
 });
 
 export const getAllListings = asyncErrorHandler(async (req, res) => {
-  const response = await Listing.find({}).select("-__v");
+  const filteredQuery=generateQuery(Listing.find(),req);
+  const response = await filteredQuery;
   res.json({ listings: response });
 });
 
