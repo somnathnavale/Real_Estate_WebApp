@@ -27,7 +27,7 @@ const Header = () => {
       navigate('listings');
       return;
     }
-    dispatch(getListings({axios:axiosPublic}));
+    dispatch(getListings());
   }
 
   return (
@@ -40,7 +40,7 @@ const Header = () => {
               NextGen<span className="text-slate-700">Estate</span>
             </span>
           </div>
-          <div>
+          <div className="hidden md:block">
             <form className="bg-slate-100 p-3 rounded-lg flex items-center" onSubmit={handleSearch}>
             <input
               type="text"
@@ -48,6 +48,7 @@ const Header = () => {
               className="bg-transparent focus:outline-none w-24 sm:w-64"
               name="searchText"
               value={filter.searchText}
+              autoComplete="off"
               onChange={(e)=>dispatch(setFilter({searchText:e.target.value}))}
             />
             <button type="submit"><FaSearch className="text-slate-600 cursor-pointer"/></button>
