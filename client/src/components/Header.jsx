@@ -5,6 +5,8 @@ import { Link,useLocation,useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/logo.png";
 import { selectFilter,setFilter } from "../redux/filter/filterSlice";
+import { getListings } from "../redux/listings/listingSlice";
+import { axiosPublic } from "../api/axios";
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);
@@ -22,8 +24,10 @@ const Header = () => {
   const handleSearch=(e)=>{
     e.preventDefault();
     if(location.pathname!=='/listings'){
-      navigate('listings')
+      navigate('listings');
+      return;
     }
+    dispatch(getListings({axios:axiosPublic}));
   }
 
   return (
@@ -46,7 +50,7 @@ const Header = () => {
               value={filter.searchText}
               onChange={(e)=>dispatch(setFilter({searchText:e.target.value}))}
             />
-            <FaSearch className="text-slate-600" />
+            <button type="submit"><FaSearch className="text-slate-600 cursor-pointer"/></button>
           </form>
           </div>
           <div

@@ -1,5 +1,8 @@
 export const createFilterQuery=(filter)=>{
     let query={}
+    if(filter.searchText){
+        query.searchText=filter.searchText;
+    }
     if(filter.category.length){
         query.category=filter.category.join(',');
     }

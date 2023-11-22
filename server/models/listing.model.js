@@ -116,7 +116,9 @@ const listingSchema = new mongoose.Schema({
       message,
     },
   },
-  owner: { type: String, ref: "User" },
+  owner: { type: String, ref: "User" }
+},{
+  timestamps:true
 });
 
 listingSchema.post(["find", "findOne", "findById"], async function (docs) {

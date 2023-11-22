@@ -1,7 +1,8 @@
 export const generateQuery = (query, req) => {
-  const queryObj = {};
+  let queryObj = {};
 
   let {
+    searchText,
     category,
     listingType,
     furnishing,
@@ -13,6 +14,13 @@ export const generateQuery = (query, req) => {
     limit,
     page,
   } = req.query;
+
+  if (searchText) {
+    const regex=new RegExp(searchText,'i');
+    queryObj = {
+      $or: [{ name:regex }, { description:regex }, { address: regex }],
+    };
+  }
 
   if (category) {
     queryObj.category = { $in: category.split(",") };
@@ -35,8 +43,8 @@ export const generateQuery = (query, req) => {
   if (parking) {
     queryObj.parking = { $gt: 0 };
   }
-
-  query = query.find(queryObj);
+  
+  query=query.find(queryObj);
 
   if (sort) {
     query.sort(sort);
@@ -48,14 +56,7 @@ export const generateQuery = (query, req) => {
   limit = limit * 1 || 10;
 
   const skip = (page - 1) * limit;
-  query.skip(skip).limit(limit).select("-__v");
+  query.skip(skip).limit(limit).select("name price category listingType address photos");
 
   return query;
 };
-
-class FilterQuery {
-  constructor(query, queryStr) {
-    this.query = query;
-    this.queryStr = queryStr;
-  }
-}

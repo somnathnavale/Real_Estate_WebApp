@@ -1,49 +1,68 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { createFilterQuery } from "../../utils/helpers/listingsHelper";
+import { axiosPublic } from "../../api/axios";
+const initialState = {
+  listings: [],
+  listing: {},
+  featuredListings:[],
+  recentListings:[],
+  error: null,
+  status: "idle",
+};
 
-const initialState={
-    listings:[],
-    listing:{},
-    error:null,
-    status:'idle'
-}
-
-export const addListing=createAsyncThunk('listing/add',async({axios,data},thunkApi)=>{
+export const addListing = createAsyncThunk(
+  "listing/add",
+  async ({ axios, data }, thunkApi) => {
     try {
-        const response=await axios.post('/api/listings',data);
-        return response.data;
+      const response = await axios.post("/api/listings", data);
+      return response.data;
     } catch (error) {
-        if (error?.response?.data) throw error?.response?.data;
-        throw error?.message;
+      if (error?.response?.data) throw error?.response?.data;
+      throw error?.message;
     }
-})
+  }
+);
 
-export const getListings=createAsyncThunk('listing/getAll',async({axios},{getState})=>{
+export const getListings = createAsyncThunk(
+  "listing/getAll",
+  async (_, { getState }) => {
     try {
-        const filter=getState().filter;
-        const query=createFilterQuery(filter);
-        console.log(query)
-        const response=await axios.get('/api/listings',{
-          params:query
-        });
-        console.log('response',response.data);
-        return response.data;
+      const filter = getState().filter;
+      const query = createFilterQuery(filter);
+      const response = await axiosPublic.get("/api/listings", {
+        params: query,
+      });
+      return response.data;
     } catch (error) {
-        if (error?.response?.data) throw error?.response?.data;
-        throw error?.message;
+      if (error?.response?.data) throw error?.response?.data;
+      throw error?.message;
     }
-})
+  }
+);
 
-const listingSlice=createSlice({
-    name:"listing",
-    initialState,
-    reducers:{
-      updateListingStatus:(state,action)=>{
-          state.status=action.payload;
-      }
+export const getCategoryWiseCount = createAsyncThunk(
+  "category/count",
+  async () => {
+    try {
+      const response = await axiosPublic.get("/api/listings/category/count");
+      return response.data;
+    } catch (error) {
+      if (error?.response?.data) throw error?.response?.data;
+      throw error?.message;
+    }
+  }
+);
+
+const listingSlice = createSlice({
+  name: "listing",
+  initialState,
+  reducers: {
+    updateListingStatus: (state, action) => {
+      state.status = action.payload;
     },
-    extraReducers:(builder)=>{
-        builder
+  },
+  extraReducers: (builder) => {
+    builder
       .addCase(addListing.pending, (state) => {
         state.status = "loading";
       })
@@ -61,14 +80,28 @@ const listingSlice=createSlice({
       .addCase(getListings.fulfilled, (state, action) => {
         state.error = null;
         state.status = "succeeded";
-        state.listings=action.payload?.listings;
+        if(state.recentListings.length===0)
+          state.recentListings=action.payload?.listings.slice(0,6)
+        state.listings = action.payload?.listings;
       })
       .addCase(getListings.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       })
-    }
-})
+      .addCase(getCategoryWiseCount.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getCategoryWiseCount.fulfilled, (state, action) => {
+        state.error = null;
+        state.status = "succeeded";
+        state.featuredListings=action.payload?.categoryCounts;
+      })
+      .addCase(getCategoryWiseCount.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
+  },
+});
 
-export const {updateListingStatus}=listingSlice.actions;
-export default listingSlice.reducer;
+export const { updateListingStatus } = listingSlice.actions;
+export default listingSlice.reducer;   

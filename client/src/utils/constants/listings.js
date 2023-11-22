@@ -131,12 +131,3 @@ export const defaultPropertyData = Object.values(property).reduce(
   {}
 );
 
-export const defaultSearchFilter = {
-  searchText:"",
-  category: "",
-  price: "",
-  listingType: "",
-//   furnishing: "",
-//   parking: false,
-//   carpetArea: "",
-};

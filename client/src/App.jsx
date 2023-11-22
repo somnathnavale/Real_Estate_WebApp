@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import SignIn from "./pages/SignIn";
@@ -9,8 +9,21 @@ import Layout from "./components/Layout";
 import Listings from "./redux/listings/Listings";
 import AddListings from "./redux/listings/AddListings";
 import ListingPage from "./redux/listings/ListingPage";
+import { useDispatch } from "react-redux";
+import { getCategoryWiseCount, getListings } from "./redux/listings/listingSlice";
 
 export default function App() {
+  const callRef=useRef(false);
+  const dispatch=useDispatch();
+
+  useEffect(()=>{
+    if(!callRef.current){
+      dispatch(getCategoryWiseCount());
+      dispatch(getListings())
+      callRef.current=true;
+    }
+  },[])
+
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
