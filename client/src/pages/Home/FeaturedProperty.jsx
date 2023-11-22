@@ -1,9 +1,18 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addField } from '../../redux/filter/filterSlice';
+import { useNavigate } from 'react-router-dom';
 
 const FeaturedProperty = () => {
   const {featuredListings}=useSelector(store=>store.listing);
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
 
+  const handleClick=(value)=>{
+    dispatch(addField({field:"category",value}));
+    navigate('/listings');
+  }
+  
   return (
     <section className="bg-[#F7F9FC] py-8 sm:py-16">
       <div className="container max-w-6xl mx-auto">
@@ -16,6 +25,7 @@ const FeaturedProperty = () => {
             <div
               key={index}
               className="bg-white shadow-md p-4 rounded-lg hover:shadow-xl transition duration-300 w-[200px] mx-auto flex flex-col justify-center items-center"
+              onClick={()=>handleClick(property.type)}
             >
               <img
                 src={`/src/assets/${property.type.toLowerCase()}.png`}

@@ -17,6 +17,10 @@ const filterSlice = createSlice({
     setFilter: (state, action) => {
       return { ...state, ...action.payload };
     },
+    addField:(state,action)=>{
+      const { field, value } = action.payload;
+      return {...initialState,[field]:[value]};
+    },
     toggleCheckbox(state, action) {
       const { field, value } = action.payload;
       if (state[field].includes(value)) {
@@ -36,6 +40,6 @@ const filterSlice = createSlice({
 });
 
 export default filterSlice.reducer;
-export const { setFilter, toggleCheckbox, togglePriceCheckbox, clearFilters } =
+export const { setFilter, toggleCheckbox, togglePriceCheckbox, clearFilters,addField } =
   filterSlice.actions;
 export const selectFilter = (store) => store.filter;
