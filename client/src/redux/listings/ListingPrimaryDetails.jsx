@@ -28,18 +28,18 @@ const ListingPrimaryDetails = ({ listing }) => {
           <ListingFeature
             Icon={FaHome}
             label="Property Category"
-            value={listing.category}
+            value={listing?.category}
           />
           <ListingFeature
             Icon={BiSolidCategory}
             label="Listed For"
-            value={listing.listingType}
+            value={listing?.listingType}
           />
           <ListingFeature
             Icon={FaQuestionCircle}
             label="Status"
             value={
-              listing.status === "Available"
+              listing?.status === "Available"
                 ? "Available"
                 : listing.listingType === "Sale"
                 ? "Sold Out"
@@ -49,34 +49,34 @@ const ListingPrimaryDetails = ({ listing }) => {
           <ListingFeature
             Icon={MdEventAvailable}
             label="Availabile On"
-            value={`${new Date(
+            value={listing?.createdAt ? `${new Date(
               new Date(listing.createdAt).getTime() +
                 listing.availability * 24 * 60 * 60 * 1000
-            ).toLocaleDateString("en-GB")}`}
+            ).toLocaleDateString("en-GB")}` :""}
           />
           <ListingFeature
             Icon={FaCalendarAlt}
             label="Posted On"
-            value={new Date(listing.createdAt).toLocaleDateString("en-GB")}
+            value={listing?.createdAt ? new Date(listing.createdAt).toLocaleDateString("en-GB"):""}
           />
           <ListingFeature
             Icon={BiSolidArea}
             label="Carpet Area"
-            value={`${listing.carpetArea} sq. ft.`}
+            value={`${listing?.carpetArea} sq. ft.`}
           />
           <ListingFeature
             Icon={GiSofa}
             label="Furnishing"
-            value={listing.furnishing}
+            value={listing?.furnishing}
           />
           <ListingFeature
             Icon={IoMdPricetags}
             label="Price"
-            value={`${listing.price.toLocaleString("en-US", {
+            value={listing.price!==undefined ? `${listing?.price.toLocaleString("en-US", {
                 style: "currency",
                 currency: "INR",
                 maximumFractionDigits: 0,
-              })} ${listing.listingType === "Sale" ? "" : "Per Month"}`}
+              })} ${listing.listingType === "Sale" ? "" : "Per Month"}`:""}
           />
         </div>
         <hr className="mt-4 mb-2" />

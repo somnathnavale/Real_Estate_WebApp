@@ -119,7 +119,7 @@ const listingSlice = createSlice({
       .addCase(getListing.fulfilled, (state, action) => {
         state.error = null;
         state.status = "succeeded";
-        state.featuredListings=action.payload?.listing;
+        state.listing=action.payload?.listing;
       })
       .addCase(getListing.rejected, (state, action) => {
         state.status = "failed";

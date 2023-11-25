@@ -1,43 +1,25 @@
-import React from "react";
-import { Link, useLocation, useParams } from "react-router-dom";
+import React, { useEffect, useRef } from "react";
 import Carousel from "../../components/Carousel";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ListingPrimaryDetails from "./ListingPrimaryDetails";
 import ListingSecondaryDetails from "./ListingSecondaryDetails";
-
-const listing = {
-  _id: "655cb1fa4ba52f6a15d3832e",
-  name: "3BHK Apartment",
-  address: "Nyati Properties, Kharadi, 411048, Pune, Maharashtra",
-  description: "Fully funrnished 3BHK House for Sale",
-  photos: [],
-  category: "Apartment",
-  listingType: "Sale",
-  status: "Available",
-  availability: 0,
-  carpetArea: 1200,
-  furnishing: "Fully-furnished",
-  price: 16000000,
-  floor: 8,
-  facing: "North",
-  lift: "Yes",
-  bed: 3,
-  bathrooms: 3,
-  balcony: 2,
-  parking: 2,
-  waterAvailability: "Always",
-  electricityAvailability: "Always",
-  owner: {
-    _id: "6553607b96da1bcf380ecf6a",
-    username: "user",
-    email: "user@mail.com",
-  },
-  createdAt: "2023-11-21T13:34:50.559Z",
-  updatedAt: "2023-11-21T13:34:50.559Z",
-};
+import { useParams } from "react-router-dom";
+import { getListing } from "./listingSlice";
+import Loader from "../../components/Loader";
 
 const ListingPage = () => {
+  const {id}=useParams();
+  const {listing,status}=useSelector(store=>store.listing);
+  const dispatch=useDispatch();
+  const callRef=useRef(false);
+
+  useEffect(()=>{
+    if(!callRef.current){
+      callRef.current=true;
+      dispatch(getListing({id}));
+    }
+  },[dispatch])
 
   return (
     <div className="max-w-screen-xl mx-4 xl:mx-auto my-4">
