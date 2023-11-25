@@ -7,9 +7,3 @@ export const priceRange=[
  ]
 
 export const amenities=["parking","lift"];
-
-export const listingType=["Sale","Rent"];
-
-export const listingCategory=["Apartment", "House", "Condo", "Commercial"];
-
-export const furnishing=["Fully-furnished","Semi-furnished","Un-furnished"];

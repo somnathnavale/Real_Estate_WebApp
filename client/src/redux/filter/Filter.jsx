@@ -6,20 +6,16 @@ import {
   clearFilters,
   setFilter,
 } from "./filterSlice";
-import {FaFilter, FaSearch } from "react-icons/fa";
+import { FaFilter, FaSearch } from "react-icons/fa";
 import { IoClose } from "react-icons/io5";
-import {
-  amenities,
-  furnishing,
-  listingCategory,
-  listingType,
-} from "../../utils/constants/filter";
+import { amenities } from "../../utils/constants/filter";
 import { getListings } from "../listings/listingService";
 
 const Filter = () => {
   const dispatch = useDispatch();
-  const searchFilter = useSelector((state) => state.filter);
-  const [showFilter,setShowFilter]=useState(false);
+  const searchFilter = useSelector((store) => store.filter);
+  const { enumConst } = useSelector((store) => store.enum);
+  const [showFilter, setShowFilter] = useState(false);
 
   const handleCheckboxChange = (field, value) => {
     dispatch(toggleCheckbox({ field, value }));
@@ -39,7 +35,10 @@ const Filter = () => {
         <div className="grow mr-2">
           <form
             className="bg-slate-100 p-2 text-lg rounded-lg flex items-center justify-between w-full"
-            onSubmit={(e)=>{e.preventDefault(); handleSearch()}}
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
           >
             <input
               type="text"
@@ -57,19 +56,29 @@ const Filter = () => {
             </button>
           </form>
         </div>
-        <FaFilter className="w-12 h-12 bg-slate-100 text-slate-700 p-2 rounded cursor-pointer hover:text-slate-600" onClick={()=>setShowFilter(prev=>!prev)}/>
+        <FaFilter
+          className="w-12 h-12 bg-slate-100 text-slate-700 p-2 rounded cursor-pointer hover:text-slate-600"
+          onClick={() => setShowFilter((prev) => !prev)}
+        />
       </div>
-      <div className={`absolute bg-white border rounded-md p-4 min-w-[240px] ${showFilter ? "top-16 right-0" : "left-[-1000%]"} md:block md:static`}>
+      <div
+        className={`absolute bg-white border rounded-md p-4 min-w-[240px] ${
+          showFilter ? "top-16 right-0" : "left-[-1000%]"
+        } md:block md:static`}
+      >
         <div className="flex justify-between">
           <h3 className="text-lg font-medium">All Filters</h3>
-          <IoClose className="text-lg font-medium w-8 h-8 bottom-0 rounded-2xl cursor-pointer hover:bg-slate-100 active:p-[2px] md:hidden" onClick={()=>setShowFilter(false)}/>
+          <IoClose
+            className="text-lg font-medium w-8 h-8 bottom-0 rounded-2xl cursor-pointer hover:bg-slate-100 active:p-[2px] md:hidden"
+            onClick={() => setShowFilter(false)}
+          />
         </div>
         <div className="my-2 border-b-2 border-slate-300" />
         <div className="max-h-[60vh] overflow-y-auto">
           <div>
             <h3 className="font-medium">Category</h3>
             <div>
-              {listingCategory.map((category) => (
+              {Object.values(enumConst.category).map((category) => (
                 <label key={category} className="flex items-center mt-1">
                   <input
                     type="checkbox"
@@ -87,7 +96,7 @@ const Filter = () => {
           <div>
             <h3 className="font-medium">Listing Type</h3>
             <div>
-              {listingType.map((listingType) => (
+              {Object.values(enumConst.listingType).map((listingType) => (
                 <label key={listingType} className="flex items-center mt-1">
                   <input
                     type="checkbox"
@@ -107,7 +116,7 @@ const Filter = () => {
           <div>
             <h3 className="font-medium">Furnishing</h3>
             <div>
-              {furnishing.map((item) => (
+              {Object.values(enumConst.furnishing).map((item) => (
                 <label key={item} className="flex items-center mt-1">
                   <input
                     type="checkbox"
@@ -173,7 +182,10 @@ const Filter = () => {
           </button>
           <button
             className="bg-slate-300 text-slate-700 px-2 py-1 rounded-lg hover:opacity-90"
-            onClick={() => {dispatch(clearFilters());handleSearch();}}
+            onClick={() => {
+              dispatch(clearFilters());
+              handleSearch();
+            }}
           >
             Clear
           </button>
