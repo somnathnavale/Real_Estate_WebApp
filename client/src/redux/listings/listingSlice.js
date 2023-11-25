@@ -53,6 +53,19 @@ export const getCategoryWiseCount = createAsyncThunk(
   }
 );
 
+export const getListing = createAsyncThunk(
+  "listing/get",
+  async ({id}) => {
+    try {
+      const response = await axiosPublic.get(`/api/listings/${id}`);
+      return response.data;
+    } catch (error) {
+      if (error?.response?.data) throw error?.response?.data;
+      throw error?.message;
+    }
+  }
+);
+
 const listingSlice = createSlice({
   name: "listing",
   initialState,
@@ -99,7 +112,19 @@ const listingSlice = createSlice({
       .addCase(getCategoryWiseCount.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+      .addCase(getListing.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(getListing.fulfilled, (state, action) => {
+        state.error = null;
+        state.status = "succeeded";
+        state.featuredListings=action.payload?.listing;
+      })
+      .addCase(getListing.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
   },
 });
 

@@ -6,7 +6,7 @@ const router=express.Router();
 
 router.get('/',getAllListings)
     .post('/',verifyJWT,addListing)
-    .get('/:id',verifyJWT,getListing);
+    .get('/:id',getListing);
 
 router.get('/category/count',getCategoryCount);
 export default router;

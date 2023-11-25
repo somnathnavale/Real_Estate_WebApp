@@ -36,7 +36,7 @@ const Header = () => {
         <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
           <div className="flex items-center">
             <img src={logo} className="mr-3 h-6 sm:h-9" alt="NextGen Logo" />
-            <span className="self-center text-xl font-semibold whitespace-nowrap text-slate-500">
+            <span className="self-center text-xl font-semibold whitespace-nowrap text-slate-500 font-serif">
               NextGen<span className="text-slate-700">Estate</span>
             </span>
           </div>

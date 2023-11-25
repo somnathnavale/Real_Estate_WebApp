@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   toggleCheckbox,
@@ -6,7 +6,8 @@ import {
   clearFilters,
   setFilter,
 } from "./filterSlice";
-import { FaFilter, FaSearch } from "react-icons/fa";
+import {FaFilter, FaSearch } from "react-icons/fa";
+import { IoClose } from "react-icons/io5";
 import {
   amenities,
   furnishing,
@@ -18,6 +19,7 @@ import { getListings } from "../listings/listingSlice";
 const Filter = () => {
   const dispatch = useDispatch();
   const searchFilter = useSelector((state) => state.filter);
+  const [showFilter,setShowFilter]=useState(false);
 
   const handleCheckboxChange = (field, value) => {
     dispatch(toggleCheckbox({ field, value }));
@@ -32,7 +34,7 @@ const Filter = () => {
   };
 
   return (
-    <div className="w-full md:w-auto">
+    <div className="w-full md:w-auto relative md:block">
       <div className="w-full flex justify-between md:hidden">
         <div className="grow mr-2">
           <form
@@ -55,10 +57,13 @@ const Filter = () => {
             </button>
           </form>
         </div>
-        <FaFilter className="w-12 h-12 bg-slate-100 text-slate-700 p-2 rounded cursor-pointer hover:text-slate-600" />
+        <FaFilter className="w-12 h-12 bg-slate-100 text-slate-700 p-2 rounded cursor-pointer hover:text-slate-600" onClick={()=>setShowFilter(prev=>!prev)}/>
       </div>
-      <div className="hidden md:block bg-white border rounded-md p-4 min-w-[240px]">
-        <h3 className="text-lg font-medium">All Filters</h3>
+      <div className={`absolute bg-white border rounded-md p-4 min-w-[240px] ${showFilter ? "top-16 right-0" : "left-[-1000%]"} md:block md:static`}>
+        <div className="flex justify-between">
+          <h3 className="text-lg font-medium">All Filters</h3>
+          <IoClose className="text-lg font-medium w-8 h-8 bottom-0 rounded-2xl cursor-pointer hover:bg-slate-100 active:p-[2px] md:hidden" onClick={()=>setShowFilter(false)}/>
+        </div>
         <div className="my-2 border-b-2 border-slate-300" />
         <div className="max-h-[60vh] overflow-y-auto">
           <div>

@@ -36,6 +36,7 @@ const PropertyCard = ({ _id, name, address, price, category,listingType,screen }
             {price.toLocaleString("en-US", {
               style: "currency",
               currency: "INR",
+              maximumFractionDigits:0
             })}
             {listingType === "Sale" ? "" : "/Month"}
           </p>
