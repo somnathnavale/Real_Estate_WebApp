@@ -1,133 +1,64 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
+import ProfileForm from "./ProfileForm";
+import { allOptions } from "../utils/constants/user";
 import { useDispatch, useSelector } from "react-redux";
-import Snackbar from "../components/Snackbar";
-import { updateStatus } from "../redux/user/userSlice";
+import { deleteUser, logout } from "../redux/user/userService";
 import useAxios from "../hooks/useAxios";
 import { axiosPublic } from "../api/axios";
-import { deleteUser, logout, updateUser } from "../redux/user/userService";
+import { updateMylistings } from "../redux/listings/listingSlice";
+import MyListings from "../redux/listings/MyListings";
 
-const defaultFormData = {
-  username: "",
-  email: "",
-  password: "",
+const renderer = (option) => {
+  switch (option) {
+    case "profile":
+      return <ProfileForm />;
+    case "mylistings":
+      return <MyListings/>;
+    default:
+      return <></>;
+  }
+};
+
+const optionRenderer = (label, value, option, setOption) => {
+  return (
+    <li
+      key={label}
+      className={`block p-1 sm:p-2 cursor-pointer ${
+        option === value ? "bg-slate-700 text-white" : ""
+      } rounded`}
+      onClick={() => setOption(value)}
+    >
+      {label}
+    </li>
+  );
 };
 
 const Profile = () => {
-  const { status, error, user } = useSelector((store) => store.user);
-  const [formData, setFormData] = useState({ ...defaultFormData, ...user });
+  const [option, setOption] = useState("profile");
 
+  const { status, user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const axios = useAxios(axiosPublic);
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.id]: e.target.value });
-  };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    const obj = {
-      username: formData?.username,
-      email: formData?.email,
-    };
-    if (formData?.password) {
-      obj.password = formData?.password;
+  useEffect(() => {
+    if (status === "loading") return;
+    else if (option === "logout") {
+      dispatch(logout());
+      dispatch(updateMylistings({flag:"clear"}))
+    } else if (option === "delete") {
+      dispatch(deleteUser({ id: user._id, axios }));
+      dispatch(updateMylistings({flag:"clear"}));
     }
-    await dispatch(updateUser({id:user._id, userData: obj, axios })).unwrap();
-  };
-
-  const handleDelete = async() => {
-      try {
-        await dispatch(deleteUser({id:user._id,axios})).unwrap();
-      } catch (error) {
-        console.log(error);
-      }
-  };
-
-  const handleLogout=async()=>{
-    try {
-      await dispatch(logout()).unwrap();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  const handleSnackbar = () => {
-    let message =
-      status === "failed"
-        ? error
-        : status === "succeeded"
-        ? "User Successfully Updated"
-        : "";
-    let type =
-      status === "failed"
-        ? "error"
-        : status === "succeeded"
-        ? "success"
-        : "none";
-    let open = status === "failed" || status === "succeeded";
-    let onClose = () => {
-      dispatch(updateStatus("idle"));
-    };
-    return {
-      message,
-      type,
-      open,
-      onClose,
-      time: 1500,
-    };
-  };
+  }, [option, status, user]);
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <Snackbar {...handleSnackbar()} />
-      <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form onSubmit={handleUpdate} className="flex flex-col gap-4">
-        <img
-          src={user?.avatar}
-          alt='="profile'
-          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center"
-        />
-        <input
-          type="text"
-          placeholder="username"
-          className="border p-3 rounded-lg"
-          id="username"
-          value={formData?.username}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        <input
-          type="email"
-          placeholder="email"
-          className="border p-3 rounded-lg"
-          id="email"
-          value={formData?.email}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        <input
-          type="password"
-          placeholder="password"
-          className="border p-3 rounded-lg"
-          id="password"
-          value={formData?.password}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        <button
-          disabled={status === "loading"}
-          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
-        >
-          {status === "loading" ? "Loading..." : "Update"}
-        </button>
-      </form>
-      <div className="flex justify-between mt-5">
-        <button disabled={status === "loading"} className="text-slate-700 cursor-pointer bg-slate-300 p-2 rounded-lg hover:opacity-90 disabled:opacity-80" type="button" onClick={handleDelete}>
-          Delete Account
-        </button>
-        <button disabled={status === "loading"} className="text-slate-700 cursor-pointer bg-slate-300 p-2 rounded-lg hover:opacity-90 disabled:opacity-80" type="button" onClick={handleLogout}>
-          Sign out
-        </button>
-      </div>
+    <div className="max-w-screen-xl mx-auto grid grid-cols-10 p-2 min-[400px]:p-4 gap-4 my-2">
+      <div className="order-last col-span-full md:col-span-8">{renderer(option)}</div>
+      <ul className=" flex md:flex-col font-semibold text-slate-700 col-span-full md:col-span-2 md:order-last">
+        {allOptions.map((opt) => {
+          return optionRenderer(opt.label, opt.value, option, setOption);
+        })}
+      </ul>
     </div>
   );
 };

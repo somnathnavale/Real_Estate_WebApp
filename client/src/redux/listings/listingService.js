@@ -41,3 +41,16 @@ export const getListing = createAsyncThunk(
     return response.data;
   })
 );
+
+export const getMyListing = createAsyncThunk(
+  "listing/getMy",
+  asyncHandler(async (props, thunkAPI) => {
+    const { userId } = props;
+    const response = await axiosPublic.get("/api/listings", {
+      params: {
+        userId,
+      },
+    });
+    return response.data;
+  })
+);

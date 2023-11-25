@@ -2,6 +2,7 @@ import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import CustomError from "../utils/error/CustomError.js";
 import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
+import Listing from "../models/listing.model.js";
 
 const updateUser = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.params.id)
@@ -36,8 +37,8 @@ const deleteUser = asyncErrorHandler(async (req, res) => {
   const user = await User.findByIdAndDelete(req.params.id);
   if(!user)
     throw new CustomError('User With Given Id Not Found',404);
-
-    res.clearCookie("refreshToken");
+  await Listing.deleteMany({owner:req.user.id});
+  res.clearCookie("refreshToken");
   res.status(200).json({ message: "account deleted successfully" });
 });
 

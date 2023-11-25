@@ -10,16 +10,21 @@ import PropertyCard from "../../components/PropertyCard";
 
 const ListingPage = () => {
   const { id } = useParams();
-  const { listing, status, listings } = useSelector((store) => store.listing);
+  const { listing, listings } = useSelector((store) => store.listing);
   const dispatch = useDispatch();
   const callRef = useRef(false);
 
   useEffect(() => {
+    console.log(callRef);
     if (!callRef.current) {
       callRef.current = true;
       dispatch(getListing({ id }));
     }
   }, [dispatch]);
+
+  useEffect(()=>{
+    console.log("hello");
+  },[])
 
   return (
     <div className="max-w-screen-xl mx-4 xl:mx-auto my-4">

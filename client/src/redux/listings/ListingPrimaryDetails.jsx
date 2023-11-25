@@ -90,7 +90,7 @@ const ListingPrimaryDetails = ({ listing }) => {
             </span>
           </div>
           {user ? (
-            <p className="font-bold text-slate-700 ml:2">{`${listing.owner.username} (${listing.owner.email})`}</p>
+            <p className="font-bold text-slate-700 ml:2">{`${listing?.owner?.username} (${listing?.owner?.email})`}</p>
           ) : (
             <Link
               to="/sign-in"

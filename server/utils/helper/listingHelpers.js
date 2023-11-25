@@ -13,7 +13,12 @@ export const generateQuery = (query, req) => {
     sort,
     limit,
     page,
+    userId
   } = req.query;
+
+  if(userId){
+    queryObj.owner=userId;
+  }
 
   if (searchText) {
     const regex=new RegExp(searchText,'i');
