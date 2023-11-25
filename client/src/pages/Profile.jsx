@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Snackbar from "../components/Snackbar";
-import { deleteUser, logout, updateStatus, updateUser } from "../redux/user/userSlice";
+import { updateStatus } from "../redux/user/userSlice";
 import useAxios from "../hooks/useAxios";
 import { axiosPublic } from "../api/axios";
+import { deleteUser, logout, updateUser } from "../redux/user/userService";
 
 const defaultFormData = {
   username: "",

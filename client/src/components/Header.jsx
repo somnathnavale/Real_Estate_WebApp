@@ -5,8 +5,7 @@ import { Link,useLocation,useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import logo from "../assets/logo.png";
 import { selectFilter,setFilter } from "../redux/filter/filterSlice";
-import { getListings } from "../redux/listings/listingSlice";
-import { axiosPublic } from "../api/axios";
+import { getListings } from "../redux/listings/listingService";
 
 const Header = () => {
   const [openMenu, setOpenMenu] = useState(false);

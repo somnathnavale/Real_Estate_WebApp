@@ -14,7 +14,7 @@ import {
   listingCategory,
   listingType,
 } from "../../utils/constants/filter";
-import { getListings } from "../listings/listingSlice";
+import { getListings } from "../listings/listingService";
 
 const Filter = () => {
   const dispatch = useDispatch();

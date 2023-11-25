@@ -10,7 +10,8 @@ import Listings from "./redux/listings/Listings";
 import AddListings from "./redux/listings/AddListings";
 import ListingPage from "./redux/listings/ListingPage";
 import { useDispatch } from "react-redux";
-import { getCategoryWiseCount, getListings } from "./redux/listings/listingSlice";
+import { getCategoryWiseCount, getListings } from "./redux/listings/listingService";
+import { getEnums } from "./redux/enum/enumService";
 
 export default function App() {
   const callRef=useRef(false);
@@ -20,6 +21,7 @@ export default function App() {
     if(!callRef.current){
       dispatch(getCategoryWiseCount());
       dispatch(getListings())
+      dispatch(getEnums());
       callRef.current=true;
     }
   },[])

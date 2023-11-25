@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getListings } from './listingSlice';
+import { getListings } from './listingService';
 import { useLocation } from 'react-router-dom';
 import PropertyCard from '../../components/PropertyCard';
 
@@ -15,8 +15,8 @@ const AllListings = () => {
       dispatch(getListings());
     }
     if(!callRef.current){
-      fetch();
       callRef.current=true
+      fetch();
     }
   },[dispatch,location])
 

@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { defaultPropertyData, property } from "../../utils/constants/listings";
 import TextInput from '../../components/Inputs/TextInput';
 import Dropdown from "../../components/Inputs/Dropdown";
-import { getEnums } from "../enum/enumSlice";
 import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
 import Snackbar from "../../components/Snackbar";
-import { addListing, updateListingStatus } from "./listingSlice";
+import { updateListingStatus } from "./listingSlice";
+import { addListing } from "./listingService";
 
 const AddListing = () => {
   const [propertyData, setPropertyData] = useState(
@@ -20,12 +20,6 @@ const AddListing = () => {
   const {user}=useSelector(store=>store.user);
   const dispatch=useDispatch();
   const axios=useAxios(axiosPublic);
-
-  useEffect(()=>{
-    if(enumStatus==='idle'){
-      dispatch(getEnums({axios}));
-    }
-  },[enumStatus,dispatch]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

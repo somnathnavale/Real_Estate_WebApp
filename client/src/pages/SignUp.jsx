@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { signUpUser, updateStatus } from "../redux/user/userSlice";
+import { updateStatus } from "../redux/user/userSlice";
 import Snackbar from "../components/Snackbar";
+import { signUpUser } from "../redux/user/userService";
 
 const defaultFormData = {
   username: "",

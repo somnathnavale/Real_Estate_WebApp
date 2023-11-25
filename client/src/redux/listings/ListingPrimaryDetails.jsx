@@ -15,6 +15,7 @@ import { IoMdPricetags } from "react-icons/io";
 import ListingFeature from "../../components/ListingFeature";
 
 const ListingPrimaryDetails = ({ listing }) => {
+  const {enumConst}=useSelector(store=>store.enum);
   const { user } = useSelector((store) => store.user);
   const location = useLocation();
 
@@ -39,9 +40,9 @@ const ListingPrimaryDetails = ({ listing }) => {
             Icon={FaQuestionCircle}
             label="Status"
             value={
-              listing?.status === "Available"
+              listing?.status === enumConst?.status?.AVAILABLE
                 ? "Available"
-                : listing.listingType === "Sale"
+                : listing.listingType === enumConst?.status?.SALE
                 ? "Sold Out"
                 : "Rented out"
             }
@@ -76,7 +77,7 @@ const ListingPrimaryDetails = ({ listing }) => {
                 style: "currency",
                 currency: "INR",
                 maximumFractionDigits: 0,
-              })} ${listing.listingType === "Sale" ? "" : "Per Month"}`:""}
+              })} ${listing.listingType === enumConst?.status?.SALE ? "" : "Per Month"}`:""}
           />
         </div>
         <hr className="mt-4 mb-2" />

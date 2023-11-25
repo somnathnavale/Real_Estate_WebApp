@@ -1,29 +1,18 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { getEnums } from "./enumService";
 
 const initialState = {
   enums: {},
+  enumConst: {},
   error: null,
   status: "idle",
 };
 
-export const getEnums = createAsyncThunk(
-  "enum/get",
-  async ({ axios }, thunkApi) => {
-    try {
-      const response = await axios.get("/api/enums");
-      return response.data;
-    } catch (error) {
-      if (error?.response?.data) throw error?.response?.data;
-      throw error?.message;
-    }
-  }
-);
 
 const enumSlice = createSlice({
   name: "enum",
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(getEnums.pending, (state) => {
@@ -33,6 +22,7 @@ const enumSlice = createSlice({
         state.error = null;
         state.status = "succeeded";
         state.enums = action?.payload?.enums || {};
+        state.enumConst = action?.payload?.enumsConst || {};
       })
       .addCase(getEnums.rejected, (state, action) => {
         state.status = "failed";

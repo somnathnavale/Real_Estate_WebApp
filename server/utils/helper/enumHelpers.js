@@ -10,3 +10,12 @@ export const enumConverter=(data)=>{
     },{})
     return response;
 }
+
+export const enumConstConverter=(data)=>{
+    const response=data.reduce((acc,curr)=>{
+        const {category,...other}=curr._doc;
+        acc[category]={...acc[category],[other.key]:other.value}
+        return acc;
+    },{})
+    return response;
+}

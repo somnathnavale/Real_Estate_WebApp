@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { generateToken, logout } from "../redux/user/userSlice";
+import { generateToken, logout } from "../redux/user/userService";
 import { useEffect } from "react";
 
 const useAxios = (axiosInstance) => {

@@ -40,12 +40,12 @@ const ListingSecondaryDetails = ({listing}) => {
         <ListingFeature Icon={FaCar} label="Parking" value={listing.parking} />
         <ListingFeature
           Icon={FaWater}
-          label="Water Availability"
+          label="Water"
           value={`${listing.waterAvailability} Availabile`}
         />
         <ListingFeature
           Icon={FaBolt}
-          label="Electricity Availability"
+          label="Electricity"
           value={`${listing.electricityAvailability} Availabile`}
         />
       </div>

@@ -1,9 +1,12 @@
 import React from 'react';
 import {useNavigate} from 'react-router-dom';
 import background from '../assets/background.jpg';
+import { useSelector } from 'react-redux';
 
 const PropertyCard = ({ _id, name, address, price, category,listingType,screen }) => {
   const navigate=useNavigate()
+  const {enumConst}=useSelector(store=>store.enum);
+
   return (
     <div
       className="bg-gray-300 overflow-hidden shadow-lg rounded hover:shadow-2xl transition duration-300"
@@ -17,7 +20,7 @@ const PropertyCard = ({ _id, name, address, price, category,listingType,screen }
       <div className="bottom-0 w-full bg-white bg-opacity-75 p-4 h-auto">
         <span
           className={`px-3 py-0.5 font-semibold text-base ${
-            listingType === "Sale"
+            listingType === enumConst?.listingType?.SALE
               ? "text-white bg-slate-700"
               : "text-slate-800 bg-slate-300"
           }`}
@@ -38,7 +41,7 @@ const PropertyCard = ({ _id, name, address, price, category,listingType,screen }
               currency: "INR",
               maximumFractionDigits:0
             })}
-            {listingType === "Sale" ? "" : "/Month"}
+            {listingType === enumConst?.listingType?.SALE ? "" : "/Month"}
           </p>
           <p className="text-base text-slate-700 self-center font-medium">
             {category}

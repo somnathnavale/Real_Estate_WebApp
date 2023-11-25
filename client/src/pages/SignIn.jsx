@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate,useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { signInUser, updateStatus } from "../redux/user/userSlice";
+import { updateStatus } from "../redux/user/userSlice";
 import Snackbar from "../components/Snackbar";
+import { signInUser } from "../redux/user/userService";
 
 const defaultFormData = {
   email: "",
