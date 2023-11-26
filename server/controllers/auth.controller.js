@@ -5,9 +5,9 @@ import CustomError from "../utils/error/CustomError.js";
 import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
 
 const signUp = asyncErrorHandler(async (req, res) => {
-  const { username, email, password ,contactNumber} = req.body;
+  const { password, ...other} = req.body;
   const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({ username, email, password: hashedPassword ,contactNumber});
+  const newUser = new User({password: hashedPassword ,...other});
   await newUser.save();
   res.status(201).json({ success: true, message: "User Created Successfully" });
 });

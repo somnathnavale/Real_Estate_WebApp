@@ -5,7 +5,14 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: [true,"username is required field"],
+      trim:true,
+      maxlength:[20,"username is longer than expected"],
       unique: true,
+    },
+    fullname: {
+      type: String,
+      trim:true,
+      maxlength: [40, "full Name is longer than expected"],
     },
     email: {
       type: String,
@@ -16,7 +23,7 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: [true,"password is required field"],
     },
-    contactNumber:{
+    mobileNo:{
       type:Number,
       validate: {
         validator: function (v) {

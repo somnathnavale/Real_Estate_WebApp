@@ -8,7 +8,7 @@ const updateUser = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.params.id)
     throw new CustomError("Not Allowed To Update Data", 401);
 
-  const allowedFields = ["username", "email", "avatar", "password"];
+  const allowedFields = ["username", "email", "avatar", "password","mobileNo","fullname"];
   let obj = {};
 
   allowedFields.forEach((field) => {

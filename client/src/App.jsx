@@ -12,6 +12,7 @@ import ListingPage from "./redux/listings/ListingPage";
 import { useDispatch } from "react-redux";
 import { getCategoryWiseCount, getListings } from "./redux/listings/listingService";
 import { getEnums } from "./redux/enum/enumService";
+import { updateListingStatus } from "./redux/listings/listingSlice";
 
 export default function App() {
   const callRef=useRef(false);
@@ -23,6 +24,10 @@ export default function App() {
       dispatch(getListings())
       dispatch(getEnums());
       callRef.current=true;
+    }
+
+    return ()=>{
+      dispatch(updateListingStatus('idle'))
     }
   },[])
 

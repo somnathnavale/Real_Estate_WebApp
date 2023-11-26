@@ -7,14 +7,17 @@ import { axiosPublic } from "../api/axios";
 import { updateUser } from "../redux/user/userService";
 
 const defaultFormData = {
+  fullname:"",
   username: "",
   email: "",
   password: "",
+  mobileNo:""
 };
 
 const ProfileForm = () => {
   const { status, error, user } = useSelector((store) => store.user);
   const [formData, setFormData] = useState({ ...defaultFormData, ...user });
+  const [isEdit, setIsEdit] = useState(false);
 
   const dispatch = useDispatch();
   const axios = useAxios(axiosPublic);
@@ -22,17 +25,20 @@ const ProfileForm = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
+
+  const handleClick=async()=>{
+    if(!isEdit){
+      setIsEdit(true)
+      return;
+    }
     const obj = {
       username: formData?.username,
       email: formData?.email,
+      fullname:formData?.fullname,
+      mobileNo:formData?.mobileNo
     };
-    if (formData?.password) {
-      obj.password = formData?.password;
-    }
-    await dispatch(updateUser({id:user._id, userData: obj, axios })).unwrap();
-  };
+    await dispatch(updateUser({ id: user._id, userData: obj, axios })).unwrap();
+  }
 
   const handleSnackbar = () => {
     let message =
@@ -60,52 +66,79 @@ const ProfileForm = () => {
     };
   };
 
+  const returnValue=(val)=>{
+    if(val) return val;
+    return "-not added-"
+  }
+
   return (
-    <div className="p-3 max-w-lg mx-auto">
+    <div className="p-8 border max-w-3xl mx-auto">
       <Snackbar {...handleSnackbar()} />
-      <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form onSubmit={handleUpdate} className="flex flex-col gap-4">
-        <img
-          src={user?.avatar}
-          alt='="profile'
-          className="rounded-full h-24 w-24 object-cover cursor-pointer self-center"
-        />
-        <input
-          type="text"
-          placeholder="username"
-          className="border p-3 rounded-lg"
-          id="username"
-          value={formData?.username}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        <input
-          type="email"
-          placeholder="email"
-          className="border p-3 rounded-lg"
-          id="email"
-          value={formData?.email}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        <input
-          type="password"
-          placeholder="password"
-          className="border p-3 rounded-lg"
-          id="password"
-          value={formData?.password}
-          onChange={handleChange}
-          autoComplete="off"
-        />
-        <button
-          disabled={status === "loading"}
-          className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80"
-        >
-          {status === "loading" ? "Loading..." : "Update"}
-        </button>
-      </form>
+      <div className="max-w-md mx-auto">
+        <h1 className="text-xl font-medium">Profile Details</h1>
+        <hr className="my-4" />
+        {isEdit ? (
+          <form className="grid grid-cols-6 gap-2 gap-y-4 p-4 text-base">
+            <label className="col-span-2 flex text-slate-700 font-light items-center" htmlFor="username">Username *</label>
+            <input
+              type="text"
+              placeholder="username"
+              className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
+              id="username"
+              value={formData?.username}
+              onChange={handleChange}
+              autoComplete="off"
+            />
+            <label className="col-span-2 flex text-slate-700 font-light items-center" htmlFor="fullname">Full Name</label>
+            <input
+              type="text"
+              placeholder="fullname"
+              className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
+              id="fullname"
+              value={formData?.fullname}
+              onChange={handleChange}
+              autoComplete="off"
+            />
+            <label className="col-span-2 flex text-slate-700 font-light items-center" htmlFor="email">Email *</label>
+            <input
+              type="text"
+              placeholder="email"
+              className="border p-2 outline-[#e2e2e2] col-span-4"
+              id="email"
+              value={formData?.email}
+              onChange={handleChange}
+              autoComplete="off"
+            />
+            <label className="col-span-2 flex text-slate-700 font-light items-center" htmlFor="mobileNo">Mobile No.</label>
+            <input
+              type="number"
+              placeholder="mobile no."
+              className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
+              id="mobileNo"
+              value={formData?.mobileNo}
+              onChange={handleChange}
+              autoComplete="off"
+            />
+          </form>
+        ) : (
+          <div className="grid grid-cols-2 gap-2 gap-y-4 p-4 text-base">
+            <div className="text-slate-700 font-light">Full Name</div>
+            <div>{returnValue(user?.fullname)}</div>
+            <div className="text-slate-700 font-light">Username</div>
+            <div>{returnValue(user?.username)}</div>
+            <div className="text-slate-700 font-light">Email</div>
+            <div>{returnValue(user?.email)}</div>
+            <div className="text-slate-700 font-light">Mobile No.</div>
+            <div>{returnValue(user?.mobileNo)}</div>
+          </div>
+        )}
+          <button className="w-full mt-4 bg-slate-700 hover:bg-opacity-95 text-white rounded py-1 text-lg" onClick={handleClick}>
+            {isEdit?"Save":"Edit"}
+          </button>
+      </div>
     </div>
   );
 };
 
 export default ProfileForm;
+

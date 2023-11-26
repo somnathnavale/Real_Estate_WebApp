@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { defaultPropertyData, property } from "../../utils/constants/listings";
 import TextInput from '../../components/Inputs/TextInput';
@@ -20,6 +20,12 @@ const AddListing = () => {
   const {user}=useSelector(store=>store.user);
   const dispatch=useDispatch();
   const axios=useAxios(axiosPublic);
+
+  useEffect(()=>{
+    return ()=>{
+      dispatch(updateListingStatus('idle'));
+    }
+  },[])
 
   const handleChange = (e) => {
     const { name, value } = e.target;

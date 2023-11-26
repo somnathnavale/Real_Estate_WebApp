@@ -26,11 +26,9 @@ const listingSlice = createSlice({
       state.status = action.payload;
     },
     updateMylistings:(state,action)=>{
-      const {flag,data}=action.payload;
+      const {flag}=action.payload;
       if(flag==='clear')
-        state.mylistings=[];
-      else if(flag==='add')
-        state.mylistings=[...state.mylistings,data];
+        state.mylistings=[]
     }
   },
   extraReducers: (builder) => {
@@ -41,6 +39,10 @@ const listingSlice = createSlice({
       .addCase(addListing.fulfilled, (state, action) => {
         state.error = null;
         state.status = "succeeded";
+        const newListing=action.payload.listing;
+        state.recentListings=[newListing,...state.recentListings].slice(0,6);
+        state.mylistings=[newListing,...state.mylistings];
+        state.featuredListings=state.featuredListings.map(lis=>lis.type===newListing.category ? {...lis,count:lis.count+1}:lis);
       })
       .addCase(addListing.rejected, (state, action) => {
         state.status = "failed";
@@ -99,5 +101,5 @@ const listingSlice = createSlice({
   },
 });
 
-export const { updateListingStatus,updateMylistings } = listingSlice.actions;
+export const { updateListingStatus,updateMylistings} = listingSlice.actions;
 export default listingSlice.reducer;

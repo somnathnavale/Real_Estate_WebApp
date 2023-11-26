@@ -8,8 +8,10 @@ export const addListing = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.body.owner)
     throw new CustomError("Not Allowed To Add Property", 401);
   const newListing = new Listing(req.body);
-  await newListing.save();
-  res.status(200).json({ message: "Property Added Successfully" });
+  const response=await newListing.save();
+  const { name, price, category, listingType, address, photos } = response;
+  const listing = { name, price, category, listingType, address, photos };
+  res.status(200).json({ message: "Property Added Successfully",listing });
 });
 
 export const getAllListings = asyncErrorHandler(async (req, res) => {
