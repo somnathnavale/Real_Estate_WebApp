@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getListings } from "./listingService";
 import { useLocation } from "react-router-dom";
 import PropertyCard from "../../components/PropertyCard";
+import { updateListingStatus } from "./listingSlice";
 
 const AllListings = () => {
   const dispatch = useDispatch();
@@ -17,6 +18,10 @@ const AllListings = () => {
     if (!callRef.current) {
       callRef.current = true;
       fetch();
+    }
+
+    return ()=>{
+      dispatch(updateListingStatus('idle'));
     }
   }, [dispatch, location]);
 

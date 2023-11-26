@@ -7,6 +7,7 @@ import ListingSecondaryDetails from "./ListingSecondaryDetails";
 import { useParams } from "react-router-dom";
 import { getListing } from "./listingService";
 import PropertyCard from "../../components/PropertyCard";
+import { updateListingStatus } from "./listingSlice";
 
 const ListingPage = () => {
   const { id } = useParams();
@@ -20,11 +21,11 @@ const ListingPage = () => {
       callRef.current = true;
       dispatch(getListing({ id }));
     }
-  }, [dispatch]);
 
-  useEffect(()=>{
-    console.log("hello");
-  },[])
+    return ()=>{
+      dispatch(updateListingStatus('idle'));
+    }
+  }, [dispatch]);
 
   return (
     <div className="max-w-screen-xl mx-4 xl:mx-auto my-4">

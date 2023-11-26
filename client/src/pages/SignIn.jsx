@@ -4,11 +4,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { updateStatus } from "../redux/user/userSlice";
 import Snackbar from "../components/Snackbar";
 import { signInUser } from "../redux/user/userService";
-
-const defaultFormData = {
-  email: "",
-  password: "",
-};
+import { defaultFormData } from "../utils/constants/user";
 
 const SignIn = () => {
   const [formData, setFormData] = useState(defaultFormData);
@@ -24,7 +20,7 @@ const SignIn = () => {
 
   const handleSignIn = (e) => {
     e.preventDefault();
-    dispatch(signInUser(formData));
+    dispatch(signInUser({email:formData.email,password:formData.password}));
     if (status === "succeeded") {
       setFormData(defaultFormData);
     }

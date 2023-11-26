@@ -78,7 +78,7 @@ const Filter = () => {
           <div>
             <h3 className="font-medium">Category</h3>
             <div>
-              {Object.values(enumConst.category).map((category) => (
+              {Object.values(enumConst?.category || []).map((category) => (
                 <label key={category} className="flex items-center mt-1">
                   <input
                     type="checkbox"
@@ -96,7 +96,7 @@ const Filter = () => {
           <div>
             <h3 className="font-medium">Listing Type</h3>
             <div>
-              {Object.values(enumConst.listingType).map((listingType) => (
+              {Object.values(enumConst?.listingType || []).map((listingType) => (
                 <label key={listingType} className="flex items-center mt-1">
                   <input
                     type="checkbox"
@@ -116,7 +116,7 @@ const Filter = () => {
           <div>
             <h3 className="font-medium">Furnishing</h3>
             <div>
-              {Object.values(enumConst.furnishing).map((item) => (
+              {Object.values(enumConst?.furnishing || []).map((item) => (
                 <label key={item} className="flex items-center mt-1">
                   <input
                     type="checkbox"

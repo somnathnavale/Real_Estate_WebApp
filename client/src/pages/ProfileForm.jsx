@@ -5,14 +5,7 @@ import { updateStatus } from "../redux/user/userSlice";
 import useAxios from "../hooks/useAxios";
 import { axiosPublic } from "../api/axios";
 import { updateUser } from "../redux/user/userService";
-
-const defaultFormData = {
-  fullname:"",
-  username: "",
-  email: "",
-  password: "",
-  mobileNo:""
-};
+import { defaultFormData } from "../utils/constants/user";
 
 const ProfileForm = () => {
   const { status, error, user } = useSelector((store) => store.user);
@@ -25,19 +18,27 @@ const ProfileForm = () => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
-
-  const handleClick=async()=>{
-    if(!isEdit){
-      setIsEdit(true)
+  const handleClick = async () => {
+    if (!isEdit) {
+      setIsEdit(true);
       return;
     }
     const obj = {
       username: formData?.username,
       email: formData?.email,
-      fullname:formData?.fullname,
-      mobileNo:formData?.mobileNo
+      fullname: formData?.fullname,
+      mobileNo: formData?.mobileNo,
     };
     await dispatch(updateUser({ id: user._id, userData: obj, axios })).unwrap();
+  };
+
+  const handleChangePassword= async()=>{
+    if(!formData.password){
+      return ;
+    }
+    dispatch(updateUser({ id: user._id, userData: {password:formData?.password}, axios })).then(()=>{
+      setFormData(prev=>({...prev,password:""}))
+    })
   }
 
   const handleSnackbar = () => {
@@ -66,10 +67,10 @@ const ProfileForm = () => {
     };
   };
 
-  const returnValue=(val)=>{
-    if(val) return val;
-    return "-not added-"
-  }
+  const returnValue = (val) => {
+    if (val) return val;
+    return "-not added-";
+  };
 
   return (
     <div className="p-8 border max-w-3xl mx-auto">
@@ -79,7 +80,12 @@ const ProfileForm = () => {
         <hr className="my-4" />
         {isEdit ? (
           <form className="grid grid-cols-6 gap-2 gap-y-4 p-4 text-base">
-            <label className="col-span-2 flex text-slate-700 font-light items-center" htmlFor="username">Username *</label>
+            <label
+              className="col-span-2 flex text-slate-700 font-light items-center"
+              htmlFor="username"
+            >
+              Username *
+            </label>
             <input
               type="text"
               placeholder="username"
@@ -89,7 +95,12 @@ const ProfileForm = () => {
               onChange={handleChange}
               autoComplete="off"
             />
-            <label className="col-span-2 flex text-slate-700 font-light items-center" htmlFor="fullname">Full Name</label>
+            <label
+              className="col-span-2 flex text-slate-700 font-light items-center"
+              htmlFor="fullname"
+            >
+              Full Name
+            </label>
             <input
               type="text"
               placeholder="fullname"
@@ -99,17 +110,27 @@ const ProfileForm = () => {
               onChange={handleChange}
               autoComplete="off"
             />
-            <label className="col-span-2 flex text-slate-700 font-light items-center" htmlFor="email">Email *</label>
+            <label
+              className="col-span-2 flex text-slate-700 font-light items-center"
+              htmlFor="email"
+            >
+              Email *
+            </label>
             <input
               type="text"
               placeholder="email"
-              className="border p-2 outline-[#e2e2e2] col-span-4"
+              className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
               id="email"
               value={formData?.email}
               onChange={handleChange}
               autoComplete="off"
             />
-            <label className="col-span-2 flex text-slate-700 font-light items-center" htmlFor="mobileNo">Mobile No.</label>
+            <label
+              className="col-span-2 flex text-slate-700 font-light items-center"
+              htmlFor="mobileNo"
+            >
+              Mobile No.
+            </label>
             <input
               type="number"
               placeholder="mobile no."
@@ -132,13 +153,37 @@ const ProfileForm = () => {
             <div>{returnValue(user?.mobileNo)}</div>
           </div>
         )}
-          <button className="w-full mt-4 bg-slate-700 hover:bg-opacity-95 text-white rounded py-1 text-lg" onClick={handleClick}>
-            {isEdit?"Save":"Edit"}
-          </button>
+        <button
+          disabled={status === "loading"}
+          className="w-full mt-4 bg-slate-700 hover:bg-opacity-95 text-white rounded py-1 text-lg disabled:opacity-80"
+          onClick={handleClick}
+        >
+          {isEdit ? "Save" : "Edit"}
+        </button>
+        <hr className="my-6" />
+        <div className="flex justify-between">
+          {/* <h1 className="text-xl font-medium mb-2">Change Password</h1> */}
+          <input
+            type="password"
+            placeholder="new password"
+            className="border px-4 py-1 outline-[#e2e2e2]"
+            id="password"
+            value={formData?.password}
+            onChange={handleChange}
+            autoComplete="off"
+            required
+          />
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            onClick={handleChangePassword}
+            className=" bg-slate-700 hover:bg-opacity-95 text-white rounded px-4 py-2 disabled:opacity-80"
+          >Change Password</button>
+        </div>
       </div>
+
     </div>
   );
 };
 
 export default ProfileForm;
-

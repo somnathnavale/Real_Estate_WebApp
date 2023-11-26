@@ -4,14 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { updateStatus } from "../redux/user/userSlice";
 import Snackbar from "../components/Snackbar";
 import { signUpUser } from "../redux/user/userService";
-
-const defaultFormData = {
-  username: "",
-  email: "",
-  password: "",
-  mobileNo:"",
-  fullname:""
-};
+import { defaultFormData } from "../utils/constants/user";
 
 const SignUp = () => {
   const [formData, setFormData] = useState(defaultFormData);
