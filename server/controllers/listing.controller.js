@@ -71,3 +71,11 @@ export const getCategoryCount=asyncErrorHandler(async(req,res)=>{
   ]);
   res.json({categoryCounts:response})
 })
+
+export const deleteListing = asyncErrorHandler(async (req, res) => {
+  const listing = await Listing.findByIdAndDelete(req.params.id).select("-__v");
+  if(!listing){
+    throw new CustomError("Property With Given Id not found",404);
+  }
+  res.json({ listing });
+});

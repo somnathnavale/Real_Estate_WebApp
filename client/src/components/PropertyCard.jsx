@@ -1,16 +1,17 @@
 import React from 'react';
-import {useNavigate} from 'react-router-dom';
+import {useLocation, useNavigate} from 'react-router-dom';
 import background from '../assets/background.jpg';
 import { useSelector } from 'react-redux';
 
 const PropertyCard = ({ _id, name, address, price, category,listingType,screen }) => {
   const navigate=useNavigate()
+  const location=useLocation();
   const {enumConst}=useSelector(store=>store.enum);
 
   return (
     <div
       className="bg-gray-300 overflow-hidden shadow-lg rounded hover:shadow-2xl transition duration-300"
-      onClick={() => navigate(`/listings/${_id}`)}
+      onClick={() => navigate(`/listings/${_id}`,{state:{from:location}})}
     >
       <img
         className="w-full h-auto cursor-pointer hover:opacity-80"

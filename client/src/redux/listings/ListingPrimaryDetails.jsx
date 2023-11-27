@@ -15,7 +15,7 @@ import { IoMdPricetags } from "react-icons/io";
 import ListingFeature from "../../components/ListingFeature";
 
 const ListingPrimaryDetails = ({ listing }) => {
-  const {enumConst}=useSelector(store=>store.enum);
+  const { enumConst } = useSelector((store) => store.enum);
   const { user } = useSelector((store) => store.user);
   const location = useLocation();
 
@@ -50,15 +50,23 @@ const ListingPrimaryDetails = ({ listing }) => {
           <ListingFeature
             Icon={MdEventAvailable}
             label="Availabile On"
-            value={listing?.createdAt ? `${new Date(
-              new Date(listing.createdAt).getTime() +
-                listing.availability * 24 * 60 * 60 * 1000
-            ).toLocaleDateString("en-GB")}` :""}
+            value={
+              listing?.createdAt
+                ? `${new Date(
+                    new Date(listing.createdAt).getTime() +
+                      listing.availability * 24 * 60 * 60 * 1000
+                  ).toLocaleDateString("en-GB")}`
+                : ""
+            }
           />
           <ListingFeature
             Icon={FaCalendarAlt}
             label="Posted On"
-            value={listing?.createdAt ? new Date(listing.createdAt).toLocaleDateString("en-GB"):""}
+            value={
+              listing?.createdAt
+                ? new Date(listing.createdAt).toLocaleDateString("en-GB")
+                : ""
+            }
           />
           <ListingFeature
             Icon={BiSolidArea}
@@ -73,11 +81,19 @@ const ListingPrimaryDetails = ({ listing }) => {
           <ListingFeature
             Icon={IoMdPricetags}
             label="Price"
-            value={listing.price!==undefined ? `${listing?.price.toLocaleString("en-US", {
-                style: "currency",
-                currency: "INR",
-                maximumFractionDigits: 0,
-              })} ${listing.listingType === enumConst?.status?.SALE ? "" : "Per Month"}`:""}
+            value={
+              listing.price !== undefined
+                ? `${listing?.price.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "INR",
+                    maximumFractionDigits: 0,
+                  })} ${
+                    listing.listingType === enumConst?.status?.SALE
+                      ? ""
+                      : "Per Month"
+                  }`
+                : ""
+            }
           />
         </div>
         <hr className="mt-4 mb-2" />

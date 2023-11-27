@@ -21,9 +21,12 @@ const MyListings = () => {
     }
   }, [dispatch, mylistings]);
 
+  if (status === "loading") {
+    <p className="text-lg text-medium">Fetching Your Properties</p>
+  }
   
   if(mylistings.length===0 && status!=='loading'){
-    return <p className="text-lg text-medium">No listings added</p>
+    return <p className="text-lg text-medium">No Property added</p>
   }
 
   return (

@@ -3,7 +3,7 @@ import { generateToken, logout } from "../redux/user/userService";
 import { useEffect } from "react";
 
 const useAxios = (axiosInstance) => {
-  const { accessToken } = useSelector((state) => state.user.user);
+  const accessToken = useSelector((state) => state?.user?.user?.accessToken);
   const dispatch = useDispatch();
   useEffect(() => {
     const requestInterceptor = axiosInstance.interceptors.request.use(

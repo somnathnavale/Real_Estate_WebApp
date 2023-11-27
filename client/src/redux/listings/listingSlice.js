@@ -6,6 +6,7 @@ import {
   getCategoryWiseCount,
   getListing,
   getMyListing,
+  deleteListing,
 } from "./listingService";
 
 const initialState = {
@@ -95,6 +96,21 @@ const listingSlice = createSlice({
         state.mylistings = action.payload?.listings;
       })
       .addCase(getMyListing.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
+      .addCase(deleteListing.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(deleteListing.fulfilled, (state, action) => {
+        state.error = null;
+        state.status = "succeeded";
+        const {_id,category}=action.payload?.listing;
+        state.recentListings=state.recentListings.filter(lis=>lis._id!==_id).slice(0,6);
+        state.mylistings=state.mylistings.filter(lis=>lis._id!==_id);
+        state.featuredListings=state.featuredListings.filter(lis=>lis.type===category ? {...lis,count:lis.count-1}:lis);
+      })
+      .addCase(deleteListing.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });

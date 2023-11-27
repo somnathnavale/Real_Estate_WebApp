@@ -54,3 +54,12 @@ export const getMyListing = createAsyncThunk(
     return response.data;
   })
 );
+
+export const deleteListing = createAsyncThunk(
+  "listing/delete",
+  asyncHandler(async (props, thunkAPI) => {
+    const { axios, id } = props;
+    const response = await axios.delete(`/api/listings/${id}`);
+    return response.data;
+  })
+);
