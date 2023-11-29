@@ -14,7 +14,9 @@ const AllListings = () => {
 
   useEffect(() => {
     const fetch = () => {
-      dispatch(getListings()).unwrap().catch(()=>{
+      dispatch(getListings()).unwrap().then(()=>{
+        setStatus(STATUS.SUCCEEDED);
+      }).catch(()=>{
         setStatus(STATUS.FAILED);
       });
     };
@@ -25,7 +27,7 @@ const AllListings = () => {
 
   }, [dispatch, location]);
 
-  if(status==STATUS.FAILED){
+  if(status===STATUS.FAILED){
     return (
       <div className="max-w-screen-xl mx-4 xl:mx-auto py-4 h-full flex items-center flex-col">
         <p className="text-lg text-medium text-red-600">{error}</p>
@@ -36,9 +38,10 @@ const AllListings = () => {
   return (
     <div className="flex-grow w-full">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 ">
-        {listings.map((property, index) => (
+        {listings.length ? listings.map((property, index) => (
           <PropertyCard key={index} {...property} screen="listings" />
-        ))}
+        )) :
+        <p className="mt-4 text-lg text-medium text-center col-span-full">No Property Available</p>}
       </div>
     </div>
   );

@@ -98,7 +98,7 @@ const listingSchema = new mongoose.Schema({
       message,
     },
   },
-  bathrooms: { type: Number, min: [0, "provide correct bathrooms count"] },
+  bathroom: { type: Number, min: [0, "provide correct bathrooms count"] },
   bed: { type: Number, min: [0, "provide correct bedrooms count"] },
   balcony: { type: Number, min: [0, "provide correct balcony count"] },
   parking: { type: Number, min: [0, "provide correct parking count"] },
@@ -121,7 +121,7 @@ const listingSchema = new mongoose.Schema({
   timestamps:true
 });
 
-listingSchema.post(["find", "findOne", "findById"], async function (docs) {
+listingSchema.post(["find", "findOne", "findById","findOneAndUpdate"], async function (docs) {
   if (Array.isArray(docs)) {
     await Promise.all(docs.map(async (doc) => doc.populate({ path: "owner", select: "username email" })));
   } else {

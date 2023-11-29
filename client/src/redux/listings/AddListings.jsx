@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useSelector,useDispatch } from "react-redux";
 import { defaultPropertyData, property } from "../../utils/constants/listings";
 import TextInput from '../../components/Inputs/TextInput';

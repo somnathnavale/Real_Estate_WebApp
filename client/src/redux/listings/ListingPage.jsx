@@ -4,26 +4,17 @@ import Carousel from "../../components/Carousel";
 import { useDispatch, useSelector } from "react-redux";
 import ListingPrimaryDetails from "./ListingPrimaryDetails";
 import ListingSecondaryDetails from "./ListingSecondaryDetails";
-import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
-import { deleteListing, getListing } from "./listingService";
+import { Link, useParams } from "react-router-dom";
+import { getListing, getListings } from "./listingService";
 import PropertyCard from "../../components/PropertyCard";
-import { updateListing } from "./listingSlice";
-import { FaEdit, FaTrash } from "react-icons/fa";
-import ConfirmationModal from "../../components/ConfirmationModal";
-import useAxios from "../../hooks/useAxios";
-import { axiosPublic } from "../../api/axios";
 import { STATUS } from "../../utils/constants/common";
-import Snackbar from "../../components/Snackbar";
 
 const ListingPage = () => {
   const [status,setStatus]=useState(STATUS.IDLE);
   const { id } = useParams();
-  const { listing, listings,error } = useSelector((store) => store.listing);
+  const { listing, listings, error } = useSelector((store) => store.listing);
   const dispatch = useDispatch();
   const callRef = useRef(false);
-  const navigate = useNavigate();
-  const axios = useAxios(axiosPublic);
-  const location = useLocation();
 
   useEffect(() => {
     if (!callRef.current) {
@@ -31,11 +22,11 @@ const ListingPage = () => {
       callRef.current = true;
       dispatch(getListing({ id })).unwrap().catch(()=>{
         setStatus(STATUS.FAILED);
-      })
+      });
+      dispatch(getListings()).unwrap().catch(()=>{
+        setStatus(STATUS.FAILED);
+      });
     }
-    return () => {
-      dispatch(updateListing({}));
-    };
   }, [dispatch,id]);
 
   if (!Object.keys(listing).length && status === STATUS.FAILED) {
@@ -59,12 +50,12 @@ const ListingPage = () => {
         </div>
         <hr className="sm:hidden my-4 border" />
         <ListingSecondaryDetails listing={listing} />
-        <hr className="my-4 border" />
-        <div className="mt-2">
+        <hr className="border" />
+        <div className="my-4">
           <h2 className="text-lg lg:text-xl font-semibold">
             Similar Properties
           </h2>
-          <div className="grid grid-cols-1 min-[400px]:grid-cols-2  sm:grid-cols-3  lg:grid-cols-4 gap-8 mt-2">
+          <div className="grid grid-cols-1 min-[400px]:grid-cols-2  sm:grid-cols-3  lg:grid-cols-4 gap-8 mt-4">
             {listings
               .filter(
                 (curr) =>

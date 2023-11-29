@@ -92,6 +92,7 @@ export const updateListing=asyncErrorHandler(async(req,res)=>{
     runValidators: true,
     select: { __v: 0},
   })
+
   if(!listing){
     throw new CustomError("Property With Given Id not found",404);
   }

@@ -7,13 +7,14 @@ import {
   getListing,
   getMyListing,
   deleteListing,
+  updateListing,
 } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
 
 const initialState = {
   listings: [],
   listing: {},
-  mylistings:[],
+  mylistings: [],
   featuredListings: [],
   recentListings: [],
   error: null,
@@ -24,14 +25,10 @@ const listingSlice = createSlice({
   name: "listing",
   initialState,
   reducers: {
-    updateMylistings:(state,action)=>{
-      const {flag}=action.payload;
-      if(flag==='clear')
-        state.mylistings=[]
+    updateMylistings: (state, action) => {
+      const { flag } = action.payload;
+      if (flag === "clear") state.mylistings = [];
     },
-    updateListing:(state,action)=>{
-      state.listing=action.payload;
-    }
   },
   extraReducers: (builder) => {
     builder
@@ -41,10 +38,17 @@ const listingSlice = createSlice({
       })
       .addCase(addListing.fulfilled, (state, action) => {
         state.status = STATUS.IDLE;
-        const newListing=action.payload.listing;
-        state.recentListings=[newListing,...state.recentListings].slice(0,6);
-        state.mylistings=[newListing,...state.mylistings];
-        state.featuredListings=state.featuredListings.map(lis=>lis.type===newListing.category ? {...lis,count:lis.count+1}:lis);
+        const newListing = action.payload.listing;
+        state.recentListings = [newListing, ...state.recentListings].slice(
+          0,
+          6
+        );
+        state.mylistings = [newListing, ...state.mylistings];
+        state.featuredListings = state.featuredListings.map((lis) =>
+          lis.type === newListing.category
+            ? { ...lis, count: lis.count + 1 }
+            : lis
+        );
       })
       .addCase(addListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;
@@ -77,6 +81,7 @@ const listingSlice = createSlice({
         state.error = action.error.message;
       })
       .addCase(getListing.pending, (state) => {
+        state.listing = {};
         state.error = null;
         state.status = STATUS.LOADING;
       })
@@ -106,17 +111,60 @@ const listingSlice = createSlice({
       })
       .addCase(deleteListing.fulfilled, (state, action) => {
         state.status = STATUS.IDLE;
-        const {_id,category}=action.payload?.listing;
-        state.recentListings=state.recentListings.filter(lis=>lis._id!==_id).slice(0,6);
-        state.mylistings=state.mylistings.filter(lis=>lis._id!==_id);
-        state.featuredListings=state.featuredListings.map(lis=>lis.type===category ? {...lis,count:lis.count-1}:lis);
+        const { _id, category } = action.payload?.listing;
+        state.recentListings = state.recentListings
+          .filter((lis) => lis._id !== _id)
+          .slice(0, 6);
+        state.mylistings = state.mylistings.filter((lis) => lis._id !== _id);
+        state.featuredListings = state.featuredListings.map((lis) =>
+          lis.type === category ? { ...lis, count: lis.count - 1 } : lis
+        );
       })
       .addCase(deleteListing.rejected, (state, action) => {
+        state.status = STATUS.FAILED;
+        state.error = action.error.message;
+      })
+      .addCase(updateListing.pending, (state) => {
+        state.error = null;
+        state.status = STATUS.LOADING;
+      })
+      .addCase(updateListing.fulfilled, (state, action) => {
+        try {
+          
+        
+        state.status = STATUS.IDLE;
+        const { _id, ...other } = action.payload.listing;
+        state.recentListings = state.recentListings.map((lis) =>
+          lis._id === _id ? { _id, ...other } : lis
+        );
+        state.mylistings = state.mylistings.map((lis) =>
+          lis._id === _id ? { _id, ...other } : lis
+        );
+        // console.log(other)
+        console.log(state.listing.category);
+        if (state.listing.category !== other.category) {
+          state.featuredListings = state.featuredListings.map((lis) => {
+            if (lis.type === state.listing.category) {
+              return { ...lis, count: lis.count - 1 };
+            } else if (lis.type === other.category) {
+              return { ...lis, count: lis.count + 1 };
+            }
+            return lis;
+          });
+        }
+        state.listing={ _id, ...other };
+        console.log("bye");
+        console.log(state.listing);
+      } catch (error) {
+        console.log(error);   
+      }
+      })
+      .addCase(updateListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;
         state.error = action.error.message;
       });
   },
 });
 
-export const {updateMylistings,updateListing} = listingSlice.actions;
+export const { updateMylistings } = listingSlice.actions;
 export default listingSlice.reducer;

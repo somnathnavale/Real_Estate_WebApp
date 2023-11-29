@@ -1,61 +1,81 @@
 import React, { useEffect, useRef, useState } from "react";
-import { defaultPropertyData } from "../../utils/constants/listings";
+import { defaultPropertyData,property } from "../../utils/constants/listings";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import TextInput from "../../components/Inputs/TextInput";
 import Dropdown from "../../components/Inputs/Dropdown";
 import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
-import { updateListing } from "./listingSlice";
-import { getListing } from "./listingService";
+import { getListing, updateListing } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
+import Snackbar from "../../components/Snackbar";
 
 const UpdateListings = () => {
   const { id } = useParams();
-  const [status,setStatus]=useState('idle');
+  const [status,setStatus]=useState(STATUS.IDLE);
+  const { error } = useSelector(
+    (store) => store.listing
+  );
   const [propertyData, setPropertyData] = useState({
-    ...structuredClone(defaultPropertyData),
+    ...structuredClone(defaultPropertyData)
   });
-  
+
   const {
     enums,
     error: enumError,
     status: enumStatus,
   } = useSelector((store) => store.enum);
 
-  const { status: listingStatus, error: listingError } = useSelector(
-    (store) => store.listing
-  );
-  
   const dispatch = useDispatch();
   const axios = useAxios(axiosPublic);
   const callRef = useRef(false);
 
   useEffect(()=>{
-    if (!callRef.current) {
-        callRef.current = true;
-        dispatch(getListing({ id }));
-      }
-      return () => {
-        dispatch(updateListing({}));
-      };
+    if(!callRef.current){
+      setStatus(STATUS.LOADING)
+      callRef.current = true;
+      dispatch(getListing({ id })).unwrap().then((response)=>{
+        setPropertyData(prev=>({...prev,...structuredClone(response?.listing)}))
+      })
+      .catch(()=>{
+        setStatus(STATUS.FAILED);
+      })
+    }
   },[dispatch])
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setStatus(STATUS.LOADING);
+    dispatch(updateListing({axios,data:{...propertyData,owner:propertyData?.owner?._id}})).then(()=>{
+      setStatus(STATUS.SUCCEEDED);
+    }).catch((e)=>{
+      console.log(error);
+      setStatus(STATUS.FAILED);
+    })
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setPropertyData({ ...propertyData, [name]: value });
+  };
+
   const handleSnackbar = () => {
-    let message = enumStatus === STATUS.FAILED ? enumError : "";
-    let type = enumStatus === STATUS.FAILED ? "error" : "none";
-    let open = enumStatus === STATUS.FAILED;
-    let onClose = () => {};
-    if (listingStatus === STATUS.FAILED) {
-      message = listingError;
-      type = "error";
-      open = listingStatus === STATUS.FAILED;
-    }
-    if (listingStatus === STATUS.SUCCEEDED) {
-      message = "Property Updated Successfully";
-      type = "success";
-      open = listingStatus === STATUS.SUCCEEDED;
-    }
+    let message =
+      status === STATUS.FAILED || enumError
+        ? error || enumError
+        : status === STATUS.SUCCEEDED
+        ? "Property Updated Successfully"
+        : "";
+    let type =
+      status === STATUS.FAILED || enumError
+        ? "error"
+        : status === STATUS.SUCCEEDED
+        ? "success"
+        : "none";
+    let open = status === STATUS.FAILED || status === STATUS.SUCCEEDED || enumError;
+    let onClose = () => {
+      setStatus(STATUS.IDLE);
+    };
     return {
       message,
       type,
