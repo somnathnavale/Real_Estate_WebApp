@@ -22,6 +22,7 @@ function Snackbar({ message, type, open, onClose,time }) {
     success: 'bg-green-500',
     error: 'bg-red-500',
     warning: 'bg-yellow-500',
+    none:'opacity-0'
   };
 
   return (

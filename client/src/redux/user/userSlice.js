@@ -1,10 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { deleteUser, generateToken, logout, signInUser, signUpUser, updateUser } from "./userService";
+import { STATUS } from "../../utils/constants/common";
 
 const initialState = {
   user: null,
   error: null,
-  status: "idle",
+  status: STATUS.IDLE,
 };
 
 
@@ -12,46 +13,43 @@ const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    updateStatus: (state, action) => {
-      state.status = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(signUpUser.pending, (state) => {
-        state.status = "loading";
+        state.status = STATUS.LOADING;
       })
       .addCase(signUpUser.fulfilled, (state, action) => {
         state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         state.user = action.payload;
       })
       .addCase(signUpUser.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(signInUser.pending, (state) => {
-        state.status = "loading";
+        state.status = STATUS.LOADING;
       })
       .addCase(signInUser.fulfilled, (state, action) => {
         state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         state.user = { ...action.payload };
       })
       .addCase(signInUser.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(updateUser.pending, (state) => {
-        state.status = "loading";
+        state.status = STATUS.LOADING;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
         state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         state.user = { ...state.user, ...action.payload };
       })
       .addCase(updateUser.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(generateToken.fulfilled, (state, action) => {
@@ -61,26 +59,26 @@ const userSlice = createSlice({
         state.user = null;
       })
       .addCase(deleteUser.pending, (state) => {
-        state.status = "loading";
+        state.status = STATUS.LOADING;
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
         state.user = null;
-        state.status = "idle";
+        state.status = STATUS.IDLE;
       })
       .addCase(deleteUser.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.user = null;
-        state.status = "idle";
+        state.status = STATUS.IDLE;
       })
       .addCase(logout.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       });
   },
 });
 
-export const { updateStatus } = userSlice.actions;
+export const {  } = userSlice.actions;
 export default userSlice.reducer;

@@ -10,26 +10,26 @@ import Listings from "./redux/listings/Listings";
 import AddListings from "./redux/listings/AddListings";
 import ListingPage from "./redux/listings/ListingPage";
 import { useDispatch } from "react-redux";
-import { getCategoryWiseCount, getListings } from "./redux/listings/listingService";
+import {
+  getCategoryWiseCount,
+  getListings,
+} from "./redux/listings/listingService";
 import { getEnums } from "./redux/enum/enumService";
-import { updateListingStatus } from "./redux/listings/listingSlice";
+import UpdateListings from "./redux/listings/UpdateListings";
+import NotFound from "./pages/NotFound";
 
 export default function App() {
-  const callRef=useRef(false);
-  const dispatch=useDispatch();
+  const callRef = useRef(false);
+  const dispatch = useDispatch();
 
-  useEffect(()=>{
-    if(!callRef.current){
+  useEffect(() => {
+    if (!callRef.current) {
       dispatch(getCategoryWiseCount());
-      dispatch(getListings())
+      dispatch(getListings());
       dispatch(getEnums());
-      callRef.current=true;
+      callRef.current = true;
     }
-
-    return ()=>{
-      dispatch(updateListingStatus('idle'))
-    }
-  },[])
+  }, []);
 
   return (
     <Routes>
@@ -45,8 +45,12 @@ export default function App() {
           <Route path="add" element={<PrivateRoute />}>
             <Route index element={<AddListings />} />
           </Route>
+          <Route path="update/:id" element={<PrivateRoute />}>
+            <Route index element={<UpdateListings />} />
+          </Route>
           <Route path=":id" element={<ListingPage />} />
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
   );

@@ -1,40 +1,137 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMyListing } from "./listingService";
-import PropertyCard from "../../components/PropertyCard";
-import { updateListingStatus } from "./listingSlice";
+import { deleteListing, getMyListing } from "./listingService";
+import { STATUS } from "../../utils/constants/common";
+import background from "../../assets/background.jpg";
+import { FaEdit, FaTrash } from "react-icons/fa";
+import ConfirmationModal from "../../components/ConfirmationModal";
+import { useNavigate } from "react-router-dom";
+import useAxios from "../../hooks/useAxios";
+import { axiosPublic } from "../../api/axios";
 
 const MyListings = () => {
+  const [open, setOpen] = useState(false);
+  const [status, setStatus] = useState(STATUS.IDLE);
+  const [selectedListing, setSelectedListing] = useState(null);
   const { user } = useSelector((store) => store.user);
-  const { mylistings,status } = useSelector((store) => store.listing);
+  const { mylistings, error } = useSelector((store) => store.listing);
   const dispatch = useDispatch();
   const callRef = useRef(false);
+  const navigate = useNavigate();
+  const axios = useAxios(axiosPublic);
 
   useEffect(() => {
-    if (mylistings.length == 0 && !callRef.current) {
+    if (!mylistings.length && !callRef.current) {
+      setStatus(STATUS.LOADING);
       callRef.current = true;
-      dispatch(getMyListing({ userId: user._id }));
-    }
-
-    return ()=>{
-      dispatch(updateListingStatus('idle'));
+      dispatch(getMyListing({ userId: user._id }))
+        .unwrap()
+        .then(() => {
+          setStatus(STATUS.SUCCEEDED);
+        })
+        .catch(() => {
+          setStatus(STATUS.FAILED);
+        });
     }
   }, [dispatch, mylistings]);
 
-  if (status === "loading") {
-    <p className="text-lg text-medium">Fetching Your Properties</p>
-  }
-  
-  if(mylistings.length===0 && status!=='loading'){
-    return <p className="text-lg text-medium">No Property added</p>
-  }
+  const handleDelete = () => {
+    setOpen(false);
+    setStatus(STATUS.LOADING);
+    dispatch(deleteListing({ axios, id: selectedListing }))
+      .unwrap()
+      .then(() => {
+        setStatus(STATUS.SUCCEEDED);
+      })
+      .catch(() => {
+        setStatus(STATUS.FAILED);
+      });
+  };
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 ">
-      {mylistings.map((property, index) => (
-        <PropertyCard key={index} {...property} screen="listings" />
-      ))}
-    </div>
+    <>
+      <ConfirmationModal
+        header="Delete Listing"
+        body="Are you sure you want to delete this property?"
+        open={open}
+        onClose={() => setOpen(false)}
+        onSubmit={handleDelete}
+        submitBtnText="Yes, Delete"
+        warningMsg={
+          "By Deleting this Listing, you won't be able access it again."
+        }
+      />
+      <div className="max-w-4xl ">
+        <h3 className="mb-4 text-xl lg:text-2xl text-center font-semibold text-slate-700">
+          Your Listed Properties
+        </h3>
+        {error && (
+          <p className="text-lg text-medium text-red-600 text-center">
+            {error}
+          </p>
+        )}
+        {mylistings.length ? (
+          mylistings.map((property, index) => (
+            <div
+              className="grid grid-cols-8 rounded p-4 bg-[#f2f2f2] mb-4"
+              key={index}
+              onClick={() => navigate(`/listings/${property._id}`)}
+            >
+              <div className="max-h-48 xs:max-h-24 col-span-full xs:col-span-2 cursor-pointer">
+                <img
+                  src={background}
+                  className="h-full w-full"
+                  alt="property image"
+                />
+              </div>
+              <div className="col-span-full xs:col-span-4 xs:px-4">
+                <p
+                  title={property.name}
+                  className="font-medium text-lg cursor-pointer"
+                >
+                  {property.name.length > 35
+                    ? property.name.slice(0, 33) + "..."
+                    : property.name}
+                </p>
+                <p
+                  title={property.address}
+                  className="text-slate-500 cursor-pointer"
+                >
+                  {property.address.length > 80
+                    ? property.address.slice(0, 78) + "..."
+                    : property.address}
+                </p>
+              </div>
+              <button
+                className="col-span-1 sm:col-span-1 my-2 sm:my-8 mx-1 flex justify-center max-h-10 items-center bg-blue-500 text-white md:px-2 py-1 rounded hover:opacity-90"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate(`/listings/update/${property._id}`);
+                }}
+                title="Edit Property"
+              >
+                <FaEdit className="h-5 w-5 lg:mr-1" />
+                <span className="hidden lg:block"> Edit</span>
+              </button>
+              <button
+                className="col-span-1 sm:col-span-1 my-2 sm:my-8 mx-1 flex justify-center max-h-10 items-center bg-red-500 text-white md:px-2 py-1 rounded hover:opacity-90"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setSelectedListing(property?._id);
+                  setOpen(true);
+                }}
+                title="Delete Property"
+              >
+                <FaTrash className="h-5 w-5 lg:mr-1" />
+                <span className="hidden lg:block"> Delete</span>
+              </button>
+            </div>
+          ))
+        ) : (
+          <p className="text-lg text-medium">No Property added</p>
+        )}
+      </div>
+    </>
   );
 };
 

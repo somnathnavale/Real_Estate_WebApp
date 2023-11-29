@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getEnums } from "./enumService";
+import { STATUS } from "../../utils/constants/common";
 
 const initialState = {
   enums: {},
   enumConst: {},
   error: null,
-  status: "idle",
+  status: STATUS.IDLE,
 };
 
 
@@ -16,16 +17,16 @@ const enumSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getEnums.pending, (state) => {
-        state.status = "loading";
+        state.status = STATUS.LOADING;
       })
       .addCase(getEnums.fulfilled, (state, action) => {
         state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         state.enums = action?.payload?.enums || {};
         state.enumConst = action?.payload?.enumsConst || {};
       })
       .addCase(getEnums.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       });
   },

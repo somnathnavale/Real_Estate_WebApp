@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { updateStatus } from "../redux/user/userSlice";
 import Snackbar from "../components/Snackbar";
 import { signUpUser } from "../redux/user/userService";
 import { defaultFormData } from "../utils/constants/user";
+import { STATUS } from "../utils/constants/common";
 
 const SignUp = () => {
   const [formData, setFormData] = useState(defaultFormData);
-  const { status, error } = useSelector((state) => state.user);
+  const [status,setStatus]=useState(STATUS.IDLE);
+  const { error } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -19,27 +20,31 @@ const SignUp = () => {
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    dispatch(signUpUser(formData));
-    setFormData(defaultFormData);
+    dispatch(signUpUser(formData)).unwrap().then((e)=>{
+      setStatus(STATUS.SUCCEEDED);
+      setFormData(defaultFormData);
+    }).catch(()=>{
+      setStatus(STATUS.SUCCEEDED);
+    })
   };
 
   const handleSnackbar = () => {
     let message =
-      status === "failed"
+      status === STATUS.FAILED
         ? error
-        : status === "succeeded"
+        : status === STATUS.SUCCEEDED
         ? "User Created Successfully"
         : "";
     let type =
-      status === "failed"
+      status === STATUS.FAILED
         ? "error"
-        : status === "succeeded"
+        : status === STATUS.SUCCEEDED
         ? "success"
         : "none";
-    let open = status === "failed" || status === "succeeded";
+    let open = status === STATUS.FAILED || status === STATUS.SUCCEEDED;
     let onClose = () => {
-      status === "succeeded" ? navigate("/sign-in") : null;
-      dispatch(updateStatus("idle"));
+      status === STATUS.SUCCEEDED ? navigate("/sign-in") : null;
+      setStatus(STATUS.IDLE);
     };
     return {
       message,
@@ -136,10 +141,10 @@ const SignUp = () => {
         />
         <button
           type="submit"
-          disabled={status === "loading"}
+          disabled={status === STATUS.LOADING}
           className="col-span-full bg-slate-700 text-white p-2 mt-4 rounded uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {status === "loading" ? "Loading..." : "Sign Up"}
+          {status === STATUS.LOADING ? "Loading..." : "Sign Up"}
         </button>
       </form>
       <div className="flex gap-2">

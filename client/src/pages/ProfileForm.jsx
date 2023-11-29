@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Snackbar from "../components/Snackbar";
-import { updateStatus } from "../redux/user/userSlice";
 import useAxios from "../hooks/useAxios";
 import { axiosPublic } from "../api/axios";
 import { updateUser } from "../redux/user/userService";
 import { defaultFormData } from "../utils/constants/user";
+import { STATUS } from "../utils/constants/common";
 
 const ProfileForm = () => {
-  const { status, error, user } = useSelector((store) => store.user);
+  const [status,setStatus]=useState(STATUS.IDLE);
+  const { error, user } = useSelector((store) => store.user);
   const [formData, setFormData] = useState({ ...defaultFormData, ...user });
   const [isEdit, setIsEdit] = useState(false);
 
@@ -29,34 +30,43 @@ const ProfileForm = () => {
       fullname: formData?.fullname,
       mobileNo: formData?.mobileNo,
     };
-    await dispatch(updateUser({ id: user._id, userData: obj, axios })).unwrap();
+    setStatus(STATUS.IDLE);
+    dispatch(updateUser({ id: user._id, userData: obj, axios })).unwrap().then(()=>{
+      setStatus(STATUS.SUCCEEDED);
+    }).catch(()=>{
+      setStatus(STATUS.FAILED);
+    })
   };
 
-  const handleChangePassword= async()=>{
+  const handleChangePassword= ()=>{
     if(!formData.password){
       return ;
     }
-    dispatch(updateUser({ id: user._id, userData: {password:formData?.password}, axios })).then(()=>{
+    setStatus(STATUS.IDLE);
+    dispatch(updateUser({ id: user._id, userData: {password:formData?.password}, axios })).unwrap().then(()=>{
       setFormData(prev=>({...prev,password:""}))
+      setStatus(STATUS.SUCCEEDED);
+    }).catch(()=>{
+      setStatus(STATUS.FAILED);
     })
   }
 
   const handleSnackbar = () => {
     let message =
-      status === "failed"
+      status === STATUS.FAILED
         ? error
-        : status === "succeeded"
+        : status === STATUS.SUCCEEDED
         ? "User Successfully Updated"
         : "";
     let type =
-      status === "failed"
+      status === STATUS.FAILED
         ? "error"
-        : status === "succeeded"
+        : status === STATUS.SUCCEEDED
         ? "success"
         : "none";
-    let open = status === "failed" || status === "succeeded";
+    let open = status === STATUS.FAILED || status === STATUS.SUCCEEDED;
     let onClose = () => {
-      dispatch(updateStatus("idle"));
+      setStatus(STATUS.IDLE);
     };
     return {
       message,
@@ -154,7 +164,7 @@ const ProfileForm = () => {
           </div>
         )}
         <button
-          disabled={status === "loading"}
+          disabled={status === STATUS.LOADING}
           className="w-full mt-4 bg-slate-700 hover:bg-opacity-95 text-white rounded py-1 text-lg disabled:opacity-80"
           onClick={handleClick}
         >
@@ -175,7 +185,7 @@ const ProfileForm = () => {
           />
           <button
             type="submit"
-            disabled={status === "loading"}
+            disabled={status === STATUS.LOADING}
             onClick={handleChangePassword}
             className=" bg-slate-700 hover:bg-opacity-95 text-white rounded px-4 py-2 disabled:opacity-80"
           >Change Password</button>

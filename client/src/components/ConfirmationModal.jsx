@@ -13,7 +13,7 @@ const ConfirmationModal = ({
     <div
       className={`${
         open ? "block" : "hidden"
-      } fixed w-full h-full z-30  bg-gray-200 bg-opacity-90`}
+      } fixed top-0 left-0 w-full h-full z-30  bg-gray-200 bg-opacity-90`}
     >
       <div className="p-6 min-w-[300px] max-w-sm rounded-lg mx-auto bg-white left-1/2 top-1/3 -translate-x-1/2 -translate-y-1/3 fixed w-full">
         <p className="text-center font-bold text-lg text-slate-700">{header}</p>

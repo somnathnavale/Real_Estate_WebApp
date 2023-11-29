@@ -8,6 +8,7 @@ import {
   getMyListing,
   deleteListing,
 } from "./listingService";
+import { STATUS } from "../../utils/constants/common";
 
 const initialState = {
   listings: [],
@@ -16,106 +17,106 @@ const initialState = {
   featuredListings: [],
   recentListings: [],
   error: null,
-  status: "idle",
+  status: STATUS.IDLE,
 };
 
 const listingSlice = createSlice({
   name: "listing",
   initialState,
   reducers: {
-    updateListingStatus: (state, action) => {
-      state.status = action.payload;
-    },
     updateMylistings:(state,action)=>{
       const {flag}=action.payload;
       if(flag==='clear')
         state.mylistings=[]
+    },
+    updateListing:(state,action)=>{
+      state.listing=action.payload;
     }
   },
   extraReducers: (builder) => {
     builder
       .addCase(addListing.pending, (state) => {
-        state.status = "loading";
+        state.error = null;
+        state.status = STATUS.LOADING;
       })
       .addCase(addListing.fulfilled, (state, action) => {
-        state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         const newListing=action.payload.listing;
         state.recentListings=[newListing,...state.recentListings].slice(0,6);
         state.mylistings=[newListing,...state.mylistings];
         state.featuredListings=state.featuredListings.map(lis=>lis.type===newListing.category ? {...lis,count:lis.count+1}:lis);
       })
       .addCase(addListing.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(getListings.pending, (state) => {
-        state.status = "loading";
+        state.error = null;
+        state.status = STATUS.LOADING;
       })
       .addCase(getListings.fulfilled, (state, action) => {
-        state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         if (state.recentListings.length === 0)
           state.recentListings = action.payload?.listings.slice(0, 6);
         state.listings = action.payload?.listings;
       })
       .addCase(getListings.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(getCategoryWiseCount.pending, (state) => {
-        state.status = "loading";
+        state.error = null;
+        state.status = STATUS.LOADING;
       })
       .addCase(getCategoryWiseCount.fulfilled, (state, action) => {
-        state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         state.featuredListings = action.payload?.categoryCounts;
       })
       .addCase(getCategoryWiseCount.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(getListing.pending, (state) => {
-        state.status = "loading";
+        state.error = null;
+        state.status = STATUS.LOADING;
       })
       .addCase(getListing.fulfilled, (state, action) => {
-        state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         state.listing = action.payload?.listing;
       })
       .addCase(getListing.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(getMyListing.pending, (state) => {
-        state.status = "loading";
+        state.error = null;
+        state.status = STATUS.LOADING;
       })
       .addCase(getMyListing.fulfilled, (state, action) => {
-        state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         state.mylistings = action.payload?.listings;
       })
       .addCase(getMyListing.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       })
       .addCase(deleteListing.pending, (state) => {
-        state.status = "loading";
+        state.error = null;
+        state.status = STATUS.LOADING;
       })
       .addCase(deleteListing.fulfilled, (state, action) => {
-        state.error = null;
-        state.status = "succeeded";
+        state.status = STATUS.IDLE;
         const {_id,category}=action.payload?.listing;
         state.recentListings=state.recentListings.filter(lis=>lis._id!==_id).slice(0,6);
         state.mylistings=state.mylistings.filter(lis=>lis._id!==_id);
-        state.featuredListings=state.featuredListings.filter(lis=>lis.type===category ? {...lis,count:lis.count-1}:lis);
+        state.featuredListings=state.featuredListings.map(lis=>lis.type===category ? {...lis,count:lis.count-1}:lis);
       })
       .addCase(deleteListing.rejected, (state, action) => {
-        state.status = "failed";
+        state.status = STATUS.FAILED;
         state.error = action.error.message;
       });
   },
 });
 
-export const { updateListingStatus,updateMylistings} = listingSlice.actions;
+export const {updateMylistings,updateListing} = listingSlice.actions;
 export default listingSlice.reducer;

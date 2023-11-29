@@ -1,60 +1,61 @@
-import React, { useEffect, useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
-import { defaultPropertyData, property } from "../../utils/constants/listings";
-import TextInput from '../../components/Inputs/TextInput';
+import React, { useEffect, useRef, useState } from "react";
+import { defaultPropertyData } from "../../utils/constants/listings";
+import { useParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import TextInput from "../../components/Inputs/TextInput";
 import Dropdown from "../../components/Inputs/Dropdown";
 import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
-import Snackbar from "../../components/Snackbar";
-import { addListing } from "./listingService";
+import { updateListing } from "./listingSlice";
+import { getListing } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
 
-const AddListing = () => {
-  const [status,setStatus]=useState(STATUS.IDLE);
-  const [propertyData, setPropertyData] = useState(
-    structuredClone(defaultPropertyData)
+const UpdateListings = () => {
+  const { id } = useParams();
+  const [status,setStatus]=useState('idle');
+  const [propertyData, setPropertyData] = useState({
+    ...structuredClone(defaultPropertyData),
+  });
+  
+  const {
+    enums,
+    error: enumError,
+    status: enumStatus,
+  } = useSelector((store) => store.enum);
+
+  const { status: listingStatus, error: listingError } = useSelector(
+    (store) => store.listing
   );
   
-  const {enums,error:enumError}=useSelector(store=>store.enum);
-  const {error}=useSelector(store=>store.listing);
+  const dispatch = useDispatch();
+  const axios = useAxios(axiosPublic);
+  const callRef = useRef(false);
 
-  const {user}=useSelector(store=>store.user);
-  const dispatch=useDispatch();
-  const axios=useAxios(axiosPublic);
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setPropertyData({ ...propertyData, [name]: value });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setStatus(STATUS.LOADING);
-    dispatch(addListing({axios,data:{...propertyData,owner:user._id}})).then(()=>{
-      setStatus(STATUS.SUCCEEDED);
-      setPropertyData(structuredClone(defaultPropertyData));
-    }).catch(()=>{
-      setStatus(STATUS.FAILED);
-    })
-  };
+  useEffect(()=>{
+    if (!callRef.current) {
+        callRef.current = true;
+        dispatch(getListing({ id }));
+      }
+      return () => {
+        dispatch(updateListing({}));
+      };
+  },[dispatch])
 
   const handleSnackbar = () => {
-    let message =
-      status === STATUS.FAILED || enumError
-        ? error || enumError
-        : status === STATUS.SUCCEEDED
-        ? "Property Addeed Successfully"
-        : "";
-    let type =
-      status === STATUS.FAILED || enumError
-        ? "error"
-        : status === STATUS.SUCCEEDED
-        ? "success"
-        : "none";
-    let open = status === STATUS.FAILED || status === STATUS.SUCCEEDED || enumError;
-    let onClose = () => {
-      setStatus(STATUS.IDLE);
-    };
+    let message = enumStatus === STATUS.FAILED ? enumError : "";
+    let type = enumStatus === STATUS.FAILED ? "error" : "none";
+    let open = enumStatus === STATUS.FAILED;
+    let onClose = () => {};
+    if (listingStatus === STATUS.FAILED) {
+      message = listingError;
+      type = "error";
+      open = listingStatus === STATUS.FAILED;
+    }
+    if (listingStatus === STATUS.SUCCEEDED) {
+      message = "Property Updated Successfully";
+      type = "success";
+      open = listingStatus === STATUS.SUCCEEDED;
+    }
     return {
       message,
       type,
@@ -149,7 +150,7 @@ const AddListing = () => {
               data={propertyData}
               field={property.lift}
               onChange={handleChange}
-              options={enums?.lift ||[]}
+              options={enums?.lift || []}
             />
           </div>
           <div>
@@ -228,14 +229,14 @@ const AddListing = () => {
         <div className="mt-6 flex justify-center items-center">
           <button
             type="submit"
-            disabled={status===STATUS.LOADING}
+            disabled={enumStatus === STATUS.LOADING}
             className="bg-slate-700 text-white p-2 px-4 rounded-md hover:opacity-95 disabled:opacity-80"
           >
             Submit
           </button>
           <button
             type="button"
-            disabled={status===STATUS.LOADING}
+            disabled={enumStatus === STATUS.LOADING}
             className="bg-slate-300 text-slate-700 ml-2 p-2 px-4 rounded-md hover:opacity-95 disabled:opacity-80"
           >
             Cancel
@@ -246,4 +247,4 @@ const AddListing = () => {
   );
 };
 
-export default AddListing;
+export default UpdateListings;

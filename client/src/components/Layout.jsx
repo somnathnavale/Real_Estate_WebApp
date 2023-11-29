@@ -4,6 +4,7 @@ import { Outlet } from "react-router-dom";
 import Loader from "./Loader";
 import { useSelector } from "react-redux";
 import Footer from "./Footer";
+import { STATUS } from "../utils/constants/common";
 
 const Layout = () => {
   const enums=useSelector(store=>store.enum);
@@ -12,7 +13,7 @@ const Layout = () => {
   const [loading,setLoading]=useState(false);
 
   useEffect(()=>{
-    const load=[enums.status,user.status,listing.status].find(status=>status==='loading')
+    const load=[enums.status,user.status,listing.status].find(status=>status===STATUS.LOADING)
     if(load){
       setLoading(true);
     }else{

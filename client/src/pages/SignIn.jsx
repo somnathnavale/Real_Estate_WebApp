@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Link, useNavigate,useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { updateStatus } from "../redux/user/userSlice";
 import Snackbar from "../components/Snackbar";
 import { signInUser } from "../redux/user/userService";
 import { defaultFormData } from "../utils/constants/user";
+import { STATUS } from "../utils/constants/common";
 
 const SignIn = () => {
   const [formData, setFormData] = useState(defaultFormData);
-  const { error, status } = useSelector((store) => store.user);
+  const [status,setStatus]=useState(STATUS.IDLE);
+  const { error } = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
@@ -18,31 +19,34 @@ const SignIn = () => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleSignIn = (e) => {
-    e.preventDefault();
-    dispatch(signInUser({email:formData.email,password:formData.password}));
-    if (status === "succeeded") {
+  const handleSignIn =async (e) => {
+    e.preventDefault(); 
+    setStatus(STATUS.LOADING)
+    dispatch(signInUser({email:formData.email,password:formData.password})).unwrap().then(()=>{
+      setStatus(STATUS.SUCCEEDED);
       setFormData(defaultFormData);
-    }
+    }).catch(()=>{
+      setStatus(STATUS.FAILED);
+    })
   };
 
   const handleSnackbar = () => {
     let message =
-      status === "failed"
+      status === STATUS.FAILED
         ? error
-        : status === "succeeded"
-        ? "User Successfully Authenticated"
+        : status === STATUS.SUCCEEDED
+        ? "User Authenticated Successfully"
         : "";
     let type =
-      status === "failed"
+      status === STATUS.FAILED
         ? "error"
-        : status === "succeeded"
+        : status === STATUS.SUCCEEDED
         ? "success"
         : "none";
-    let open = status === "failed" || status === "succeeded";
+    let open = status === STATUS.FAILED || status === STATUS.SUCCEEDED;
     let onClose = () => {
-      status === "succeeded" ? navigate(location?.state?.from || '/') : null;
-      dispatch(updateStatus("idle", { extra: { name: "somnath" } }));
+      status === STATUS.SUCCEEDED ? navigate(location?.state?.from || '/') : null;
+      setStatus(STATUS.IDLE);
     };
     return {
       message,
@@ -79,10 +83,10 @@ const SignIn = () => {
         />
         <button
           type="submit"
-          disabled={status === "loading"}
+          disabled={status === STATUS.LOADING}
           className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
         >
-          {status === "loading" ? "Loading..." : "Sign In"}
+          {status === STATUS.LOADING ? "Loading..." : "Sign In"}
         </button>
       </form>
       <div className="flex gap-2 mt-5">
