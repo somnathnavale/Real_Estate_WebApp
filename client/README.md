@@ -11,7 +11,8 @@ Currently, two official plugins are available:
 1) what data should i store, what should be project structure should i use, do in need redux , if then how to use it. 
 2) how to store images (should i use multer or any other solution is there)
 3) filtering functionality, how to implement at frontend and for how to write mongoose query
- 
+4) how to improve functionality for pagination, starting i was making api calls for each page change then i started storing that data same listings variable and show data from listings depend upon page from (page*limit-1 to page*limit) but problem with approach is that when 1 switched to random pages eg, from page 1 to 7 then i am storing page 7 data just after page 1 data, and if now i open page 2 the that data will be stored after page 7 data in listings so on page 2 also i was seeing page 7 data so thst was issue, to solve that i have created cache state which store backend api results against search query if same query exists then return same data if query not present in cache then api call is made and that data is stored in cache for future use that whole thing improve user experience. from pagination i was creating my own pagination component i was thinking of showing only 5 page buttons so there i face little difficullty while showing them
+5) i faced some challenge in getting categorywise data if data is not present for any category so that was little challenging
 
 //issues to solve
 
