@@ -1,14 +1,43 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getListings } from "../redux/listings/listingService";
 import {updatePage} from "../redux/filter/filterSlice";
 
 const Pagination = () => {
-  const { count ,listings} = useSelector((store) => store.listing);
+  const { count } = useSelector((store) => store.listing);
   const { limit, page } = useSelector((store) => store.filter);
-
+  const [limits,setLimits]=useState([]);
   const dispatch = useDispatch();
   const pages = Math.ceil(count / limit);
+
+  useEffect(()=>{
+    const generatePageNumbers = () => {
+      const pageNumbers = [];
+      const numPagesToShow = 5;
+  
+      if (pages <= numPagesToShow) {
+        for (let i = 1; i <= pages; i++) {
+          pageNumbers.push(i);
+        }
+      } else {
+        let startPage = Math.max(1, page - 2);
+        let endPage = Math.min(pages, page + 2);
+        if (endPage - startPage + 1 < numPagesToShow) {
+          if (page < pages / 2) {
+            endPage = startPage + numPagesToShow - 1;
+          } else {
+            startPage = endPage - numPagesToShow + 1;
+          }
+        }
+        for (let i = startPage; i <= endPage; i++) {
+          pageNumbers.push(i);
+        }
+      }
+      setLimits(pageNumbers);
+    };
+  
+    generatePageNumbers();
+  },[page,pages])
 
   const handleChange=(val)=>{
     dispatch(updatePage(val));
@@ -25,17 +54,17 @@ const Pagination = () => {
       >
         Prev
       </span>
-      {[...Array(pages)].map((_, id) => (
+      {limits.map((id) => (
         <span
           key={id}
-          onClick={() => handleChange(id+1)}
+          onClick={() => handleChange(id)}
           className={`${
-            id + 1 === page ? "bg-slate-700 text-white" : "bg-white"
+            id  === page ? "bg-slate-700 text-white" : "bg-white"
           } px-4 py-2 cursor-pointer hover:bg-slate-${
-            id + 1 === page ? "700" : "200"
+            id === page ? "700" : "200"
           } border border-gray-300`}
         >
-          {id + 1}
+          {id }
         </span>
       ))}
       <span
