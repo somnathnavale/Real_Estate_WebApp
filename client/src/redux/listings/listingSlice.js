@@ -9,7 +9,7 @@ import {
   deleteListing,
   updateListing,
 } from "./listingService";
-import { STATUS } from "../../utils/constants/common";
+import {  STATUS } from "../../utils/constants/common";
 
 const initialState = {
   listings: [],
@@ -19,6 +19,8 @@ const initialState = {
   recentListings: [],
   error: null,
   status: STATUS.IDLE,
+  count:0,
+  cache:{}
 };
 
 const listingSlice = createSlice({
@@ -59,10 +61,17 @@ const listingSlice = createSlice({
         state.status = STATUS.LOADING;
       })
       .addCase(getListings.fulfilled, (state, action) => {
+        const {listings,count,cacheKey}=action.payload;
+        
         state.status = STATUS.IDLE;
-        if (state.recentListings.length === 0)
-          state.recentListings = action.payload?.listings.slice(0, 6);
-        state.listings = action.payload?.listings;
+        state.count=count;
+        
+        if(state.recentListings.length===0){           
+          state.recentListings = listings.slice(0, 6);
+        }
+        
+        state.cache[cacheKey]=listings;       //cacheing listings with key for better user experience
+        state.listings=listings;                
       })
       .addCase(getListings.rejected, (state, action) => {
         state.status = STATUS.FAILED;
@@ -88,6 +97,7 @@ const listingSlice = createSlice({
       .addCase(getListing.fulfilled, (state, action) => {
         state.status = STATUS.IDLE;
         state.listing = action.payload?.listing;
+        state.count=action.payload?.count;
       })
       .addCase(getListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;
@@ -129,9 +139,6 @@ const listingSlice = createSlice({
         state.status = STATUS.LOADING;
       })
       .addCase(updateListing.fulfilled, (state, action) => {
-        try {
-          
-        
         state.status = STATUS.IDLE;
         const { _id, ...other } = action.payload.listing;
         state.recentListings = state.recentListings.map((lis) =>
@@ -140,8 +147,6 @@ const listingSlice = createSlice({
         state.mylistings = state.mylistings.map((lis) =>
           lis._id === _id ? { _id, ...other } : lis
         );
-        // console.log(other)
-        console.log(state.listing.category);
         if (state.listing.category !== other.category) {
           state.featuredListings = state.featuredListings.map((lis) => {
             if (lis.type === state.listing.category) {
@@ -153,11 +158,6 @@ const listingSlice = createSlice({
           });
         }
         state.listing={ _id, ...other };
-        console.log("bye");
-        console.log(state.listing);
-      } catch (error) {
-        console.log(error);   
-      }
       })
       .addCase(updateListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;

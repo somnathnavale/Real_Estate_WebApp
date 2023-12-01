@@ -50,6 +50,7 @@ export const generateQuery = (query, req) => {
   }
   
   query=query.find(queryObj);
+  const countQuery=query.clone().count();
 
   if (sort) {
     query.sort(sort);
@@ -58,10 +59,10 @@ export const generateQuery = (query, req) => {
   }
 
   page = page * 1 || 1;
-  limit = limit * 1 || 10;
+  limit = limit * 1 || 6;
 
   const skip = (page - 1) * limit;
   query.skip(skip).limit(limit).select("name price category listingType address photos");
 
-  return query;
+  return {query,countQuery};
 };

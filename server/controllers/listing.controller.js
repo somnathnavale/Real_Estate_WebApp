@@ -15,9 +15,10 @@ export const addListing = asyncErrorHandler(async (req, res) => {
 });
 
 export const getAllListings = asyncErrorHandler(async (req, res) => {
-  const filteredQuery=generateQuery(Listing.find(),req);
+  const {query:filteredQuery,countQuery}=generateQuery(Listing.find(),req);
+  const count=await countQuery;
   const response = await filteredQuery;
-  res.json({ listings: response });
+  res.json({ listings: response,count });
 });
 
 export const getListing = asyncErrorHandler(async (req, res) => {

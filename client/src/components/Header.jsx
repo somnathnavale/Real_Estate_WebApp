@@ -43,7 +43,7 @@ const Header = () => {
             <form className="bg-slate-100 p-3 rounded-lg flex items-center" onSubmit={handleSearch}>
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="search by cities, description..."
               className="bg-transparent focus:outline-none w-24 sm:w-64"
               name="searchText"
               value={filter.searchText}

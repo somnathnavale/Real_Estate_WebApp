@@ -8,6 +8,8 @@ const initialState = {
   furnishing:[],
   price: structuredClone(priceRange),
   amenities: [],
+  page:1,
+  limit:6
 };
 
 const filterSlice = createSlice({
@@ -15,7 +17,7 @@ const filterSlice = createSlice({
   initialState,
   reducers: {
     setFilter: (state, action) => {
-      return { ...state, ...action.payload };
+      return { ...state, ...action.payload ,page:1};
     },
     addField:(state,action)=>{
       const { field, value } = action.payload;
@@ -23,6 +25,7 @@ const filterSlice = createSlice({
     },
     toggleCheckbox(state, action) {
       const { field, value } = action.payload;
+      state.page=1;
       if (state[field].includes(value)) {
         state[field] = state[field].filter((item) => item !== value);
       } else {
@@ -31,15 +34,19 @@ const filterSlice = createSlice({
     },
     togglePriceCheckbox(state, action) {
       const id = action.payload;
+      state.page=1;
       state.price[id].checked = !state.price[id].checked;
     },
     clearFilters(state) {
       return initialState;
     },
+    updatePage(state,action){
+      state.page=action.payload
+    }
   },
 });
 
 export default filterSlice.reducer;
-export const { setFilter, toggleCheckbox, togglePriceCheckbox, clearFilters,addField } =
+export const { setFilter, toggleCheckbox, togglePriceCheckbox, clearFilters,addField,updatePage } =
   filterSlice.actions;
 export const selectFilter = (store) => store.filter;

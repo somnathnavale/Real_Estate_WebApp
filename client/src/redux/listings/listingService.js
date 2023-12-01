@@ -16,12 +16,22 @@ export const getListings = createAsyncThunk(
   "listing/getAll",
   asyncHandler(async (props, thunkAPI) => {
     const { getState } = thunkAPI;
+
+    const {cache,count}=getState().listing;
     const filter = getState().filter;
+    
     const query = createFilterQuery(filter);
+    const cacheKey=JSON.stringify({query,count});         
+    
+    if(cache[cacheKey]){            //cheking whether for same query cache data is present
+      const newCount=JSON.parse(cacheKey).count;
+      return {listings:cache[cacheKey],count:newCount,cacheKey}
+    }
+
     const response = await axiosPublic.get("/api/listings", {
       params: query,
     });
-    return response.data;
+    return {listings:response.data.listings,count:response.data.count,cacheKey};
   })
 );
 

@@ -42,7 +42,7 @@ const Filter = () => {
           >
             <input
               type="text"
-              placeholder="Search..."
+              placeholder="search by cities, description..."
               className="bg-transparent focus:outline-none cursor-pointer w-full"
               name="searchText"
               value={searchFilter.searchText}

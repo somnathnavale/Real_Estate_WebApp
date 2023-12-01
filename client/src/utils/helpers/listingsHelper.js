@@ -19,6 +19,7 @@ export const createFilterQuery=(filter)=>{
         },{})
         query={...query,...res}
     }
+    query={...query,page:filter.page}
     const priceBand=filter.price.filter(item=>item.checked);
     if(priceBand.length){
         query.minPrice=priceBand[0].min;

@@ -7,7 +7,7 @@ import ListingSecondaryDetails from "./ListingSecondaryDetails";
 import { Link, useParams } from "react-router-dom";
 import { getListing, getListings } from "./listingService";
 import PropertyCard from "../../components/PropertyCard";
-import { STATUS } from "../../utils/constants/common";
+import {  STATUS } from "../../utils/constants/common";
 
 const ListingPage = () => {
   const [status,setStatus]=useState(STATUS.IDLE);
