@@ -18,7 +18,7 @@ Currently, two official plugins are available:
 
 1) seperate error state for each api calls from like getAll, getOne, add,deleteOne pagewise different
 2) reload generate token on reload  
-3) add pagination and improve filter functionality
+3) add pagination and improve filter functionality - done 
 4) add city as an option 
 5) email notifications for forgot password, user validation once successfull entry,
 6) add google maps
