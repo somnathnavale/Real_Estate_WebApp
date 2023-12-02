@@ -26,7 +26,7 @@ const Header = () => {
       navigate('listings');
       return;
     }
-    dispatch(getListings());
+    dispatch(getListings()).unwrap();
   }
 
   return (

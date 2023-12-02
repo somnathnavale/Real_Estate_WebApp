@@ -46,10 +46,9 @@ const UpdateListings = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus(STATUS.LOADING);
-    dispatch(updateListing({axios,data:{...propertyData,owner:propertyData?.owner?._id}})).then(()=>{
+    dispatch(updateListing({axios,data:{...propertyData,owner:propertyData?.owner?._id}})).unwrap().then((e)=>{
       setStatus(STATUS.SUCCEEDED);
     }).catch((e)=>{
-      console.log(error);
       setStatus(STATUS.FAILED);
     })
   };
@@ -81,7 +80,7 @@ const UpdateListings = () => {
       type,
       open,
       onClose,
-      time: 1500,
+      time: type==="error"?6000:1500
     };
   };
 

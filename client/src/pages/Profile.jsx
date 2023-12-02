@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { deleteUser, logout } from "../redux/user/userService";
 import useAxios from "../hooks/useAxios";
 import { axiosPublic } from "../api/axios";
-import { updateMylistings } from "../redux/listings/listingSlice";
 import MyListings from "../redux/listings/MyListings";
 import { STATUS } from "../utils/constants/common";
 import ConfirmationModal from "../components/ConfirmationModal";
@@ -52,13 +51,13 @@ const Profile = () => {
   }, [option, status, user]);
 
   const handleLogout = () => {
+    setOpen(false);
     dispatch(logout());
-    dispatch(updateMylistings({ flag: "clear" }));
   };
 
   const handleDelete = () => {
-    dispatch(deleteUser({ id: user._id, axios }));
-    dispatch(updateMylistings({ flag: "clear" }));
+    setOpen(false);
+    dispatch(deleteUser({ id: user._id, axios })).unwrap();
   };
 
   return (

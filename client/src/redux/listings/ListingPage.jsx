@@ -23,9 +23,6 @@ const ListingPage = () => {
       dispatch(getListing({ id })).unwrap().catch(()=>{
         setStatus(STATUS.FAILED);
       });
-      dispatch(getListings()).unwrap().catch(()=>{
-        setStatus(STATUS.FAILED);
-      });
     }
   }, [dispatch,id]);
 

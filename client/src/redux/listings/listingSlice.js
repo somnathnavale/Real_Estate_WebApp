@@ -27,10 +27,12 @@ const listingSlice = createSlice({
   name: "listing",
   initialState,
   reducers: {
-    updateMylistings: (state, action) => {
-      const { flag } = action.payload;
-      if (flag === "clear") state.mylistings = [];
+    clearListingsState:(state,action)=>{
+      return structuredClone(initialState)
     },
+    clearMyListings:(state,action)=>{
+      state.mylistings=[];
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -166,5 +168,5 @@ const listingSlice = createSlice({
   },
 });
 
-export const { updateMylistings } = listingSlice.actions;
+export const { clearListingsState,clearMyListings } = listingSlice.actions;
 export default listingSlice.reducer;

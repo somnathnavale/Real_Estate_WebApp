@@ -78,7 +78,7 @@ export const updateListing = createAsyncThunk(
   "listing/update",
   asyncHandler(async (props, thunkAPI) => {
     const { axios, data } = props;
-    const response = await axios.put(`/api/listings/${data._id}`, data);
-    return response.data;
+    const response = await axios.put(`/api/listings/${data?._id}`, data);
+    return response?.data;
   })
 );

@@ -41,7 +41,7 @@ const Pagination = () => {
 
   const handleChange=(val)=>{
     dispatch(updatePage(val));
-    dispatch(getListings());
+    dispatch(getListings()).unwrap();
   }
 
   return (

@@ -25,9 +25,9 @@ export default function App() {
 
   useEffect(() => {
     if (!callRef.current) {
-      dispatch(getCategoryWiseCount());
-      dispatch(getListings());
-      dispatch(getEnums());
+      dispatch(getCategoryWiseCount()).unwrap();
+      dispatch(getListings()).unwrap();
+      dispatch(getEnums()).unwrap();
       callRef.current = true;
     }
   }, []);

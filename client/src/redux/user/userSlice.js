@@ -80,8 +80,7 @@ const userSlice = createSlice({
         state.error = action.payload.message;
       })
       .addCase(logout.fulfilled, (state, action) => {
-        state.user = null;
-        state.status = STATUS.IDLE;
+        return initialState;
       })
       .addCase(logout.rejected, (state, action) => {
         state.status = STATUS.FAILED;

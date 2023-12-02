@@ -33,8 +33,13 @@ const useAxios = (axiosInstance) => {
           !error.config?.prevRequest
         ) {
           error.config.prevRequest = true;
-          dispatch(generateToken())
-          return axiosInstance(error.config);
+          await dispatch(generateToken()).unwrap().then((data)=>{
+            // error.config.headers.Authorization=data?.accessToken;
+            // return axiosInstance(error.config);
+            return Promise.reject(error);
+          }).catch((e)=>{
+            return Promise.reject(e);
+          })
         }
         return Promise.reject(error);
       }

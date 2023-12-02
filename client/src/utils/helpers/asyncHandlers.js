@@ -21,6 +21,15 @@ export const asyncHandler = (fn) => {
     } catch (error) {
       const {rejectWithValue}=thunkAPI;
       const errObj=ErrorHandler(error);
+      if(errObj.statusCode===403){
+        try {
+          return await fn(props, thunkAPI);
+        } catch (err) {
+          const {rejectWithValue}=thunkAPI;
+          const innerErrObj=ErrorHandler(error);
+          throw rejectWithValue(innerErrObj);
+        }
+      }
       throw rejectWithValue(errObj);
     }
   };
