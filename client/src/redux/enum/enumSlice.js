@@ -27,7 +27,7 @@ const enumSlice = createSlice({
       })
       .addCase(getEnums.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       });
   },
 });

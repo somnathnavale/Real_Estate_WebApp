@@ -18,6 +18,7 @@ const userSlice = createSlice({
     builder
       .addCase(signUpUser.pending, (state) => {
         state.status = STATUS.LOADING;
+        state.error=null;
       })
       .addCase(signUpUser.fulfilled, (state, action) => {
         state.error = null;
@@ -26,9 +27,10 @@ const userSlice = createSlice({
       })
       .addCase(signUpUser.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(signInUser.pending, (state) => {
+        state.error=null;
         state.status = STATUS.LOADING;
       })
       .addCase(signInUser.fulfilled, (state, action) => {
@@ -38,9 +40,10 @@ const userSlice = createSlice({
       })
       .addCase(signInUser.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(updateUser.pending, (state) => {
+        state.error=null;
         state.status = STATUS.LOADING;
       })
       .addCase(updateUser.fulfilled, (state, action) => {
@@ -50,15 +53,22 @@ const userSlice = createSlice({
       })
       .addCase(updateUser.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
+      })
+      .addCase(generateToken.pending, (state, action) => {
+        state.error=null;
+        state.status=STATUS.LOADING
       })
       .addCase(generateToken.fulfilled, (state, action) => {
-        state.user.accessToken = action.payload.token;
+        state.user ={...state.user,...action.payload};
+        state.status=STATUS.IDLE
       })
       .addCase(generateToken.rejected, (state, action) => {
         state.user = null;
+        state.status=STATUS.FAILED;
       })
       .addCase(deleteUser.pending, (state) => {
+        state.error=null;
         state.status = STATUS.LOADING;
       })
       .addCase(deleteUser.fulfilled, (state, action) => {
@@ -67,7 +77,7 @@ const userSlice = createSlice({
       })
       .addCase(deleteUser.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(logout.fulfilled, (state, action) => {
         state.user = null;
@@ -75,7 +85,7 @@ const userSlice = createSlice({
       })
       .addCase(logout.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       });
   },
 });

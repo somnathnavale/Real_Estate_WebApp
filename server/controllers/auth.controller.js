@@ -74,7 +74,7 @@ const google = asyncErrorHandler(async (req, res) => {
   res.status(200).json({ user: userInfo });
 });
 
-const generateToken = asyncErrorHandler((req, res, next) => {
+const generateToken = asyncErrorHandler(async(req, res, next) => {
   const cookies = req.cookies.refreshToken;
   if (!cookies) {
     throw new CustomError("Unauthorized Access", 401);
@@ -83,7 +83,8 @@ const generateToken = asyncErrorHandler((req, res, next) => {
   const token = jwt.sign({ id: decoded.id }, process.env.JWT_SECRET, {
     expiresIn: "1h",
   });
-  return res.status(200).json({ token });
+  const user=await User.findById(decoded.id,{__v:0,password:0,createdAt:0,updatedAt:0});
+  return res.status(200).json({ accessToken:token,...user._doc });
 });
 
 const logoutUser = asyncErrorHandler((req, res, next) => {

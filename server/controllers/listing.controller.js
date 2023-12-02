@@ -7,6 +7,15 @@ import { generateQuery } from "../utils/helper/listingHelpers.js";
 export const addListing = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.body.owner)
     throw new CustomError("Not Allowed To Add Property", 401);
+  
+    //this removes empty enums fields
+  const enumsFields=["category","listingType","status","furnishing","facing","lift","waterAvailability","electricityAvailability"];
+  enumsFields.forEach((field)=>{
+    if(req.body[field]==""){
+      delete req.body[field];
+    }
+  })
+   
   const newListing = new Listing(req.body);
   const response=await newListing.save();
   const { _id,name, price, category, listingType, address, photos } = response;
@@ -87,7 +96,15 @@ export const updateListing=asyncErrorHandler(async(req,res)=>{
 
   if (req.user.id !== req.body.owner)
     throw new CustomError("Not Allowed To Update Property", 401);
-
+  
+  //this removes empty enum fields 
+  const enumsFields=["category","listingType","status","furnishing","facing","lift","waterAvailability","electricityAvailability"];
+  enumsFields.forEach((field)=>{
+    if(req.body[field]==""){
+      delete req.body[field];
+    }
+  })
+  
   const listing=await Listing.findOneAndUpdate({_id:req.params.id,owner:req.user.id},req.body, {
     new: true,
     runValidators: true,

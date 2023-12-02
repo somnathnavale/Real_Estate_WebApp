@@ -54,7 +54,7 @@ const listingSlice = createSlice({
       })
       .addCase(addListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(getListings.pending, (state) => {
         state.error = null;
@@ -75,7 +75,7 @@ const listingSlice = createSlice({
       })
       .addCase(getListings.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(getCategoryWiseCount.pending, (state) => {
         state.error = null;
@@ -87,7 +87,7 @@ const listingSlice = createSlice({
       })
       .addCase(getCategoryWiseCount.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(getListing.pending, (state) => {
         state.listing = {};
@@ -101,7 +101,7 @@ const listingSlice = createSlice({
       })
       .addCase(getListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(getMyListing.pending, (state) => {
         state.error = null;
@@ -113,7 +113,7 @@ const listingSlice = createSlice({
       })
       .addCase(getMyListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(deleteListing.pending, (state) => {
         state.error = null;
@@ -132,7 +132,7 @@ const listingSlice = createSlice({
       })
       .addCase(deleteListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       })
       .addCase(updateListing.pending, (state) => {
         state.error = null;
@@ -161,7 +161,7 @@ const listingSlice = createSlice({
       })
       .addCase(updateListing.rejected, (state, action) => {
         state.status = STATUS.FAILED;
-        state.error = action.error.message;
+        state.error = action.payload.message;
       });
   },
 });

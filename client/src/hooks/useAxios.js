@@ -1,10 +1,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import { generateToken, logout } from "../redux/user/userService";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const useAxios = (axiosInstance) => {
   const accessToken = useSelector((state) => state?.user?.user?.accessToken);
   const dispatch = useDispatch();
+  const navigate=useNavigate();
   useEffect(() => {
     const requestInterceptor = axiosInstance.interceptors.request.use(
       (config) => {
@@ -31,7 +33,7 @@ const useAxios = (axiosInstance) => {
           !error.config?.prevRequest
         ) {
           error.config.prevRequest = true;
-          await dispatch(generateToken()).unwrap();
+          dispatch(generateToken())
           return axiosInstance(error.config);
         }
         return Promise.reject(error);

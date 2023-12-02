@@ -30,10 +30,10 @@ const AddListing = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus(STATUS.LOADING);
-    dispatch(addListing({axios,data:{...propertyData,owner:user._id}})).then(()=>{
+    dispatch(addListing({axios,data:{...propertyData,owner:user._id}})).unwrap().then((res)=>{
       setStatus(STATUS.SUCCEEDED);
       setPropertyData(structuredClone(defaultPropertyData));
-    }).catch(()=>{
+    }).catch((e)=>{
       setStatus(STATUS.FAILED);
     })
   };
@@ -60,7 +60,7 @@ const AddListing = () => {
       type,
       open,
       onClose,
-      time: 1500,
+      time: type==="error"?6000:1500,
     };
   };
 

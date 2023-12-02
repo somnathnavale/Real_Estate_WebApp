@@ -17,6 +17,7 @@ import {
 import { getEnums } from "./redux/enum/enumService";
 import UpdateListings from "./redux/listings/UpdateListings";
 import NotFound from "./pages/NotFound";
+import PersistedLogin from "./components/PersistedLogin";
 
 export default function App() {
   const callRef = useRef(false);
@@ -34,19 +35,19 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<Home />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route element={<PrivateRoute />}>
-          <Route path="/profile" element={<Profile />} />
-        </Route>
-        <Route path="/listings">
-          <Route index element={<Listings />} />
-          <Route path="add" element={<PrivateRoute />}>
-            <Route index element={<AddListings />} />
+        <Route element={<PersistedLogin />}>
+          <Route index element={<Home />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route element={<PrivateRoute />}>
+            <Route path="/profile" element={<Profile />} />
           </Route>
-          <Route path="update/:id" element={<PrivateRoute />}>
-            <Route index element={<UpdateListings />} />
+          <Route path="/listings">
+            <Route index element={<Listings />} />
+            <Route element={<PrivateRoute />}>
+              <Route path="add" element={<AddListings />} />
+              <Route path="update/:id" element={<UpdateListings />} />
+            </Route>
           </Route>
           <Route path=":id" element={<ListingPage />} />
         </Route>
