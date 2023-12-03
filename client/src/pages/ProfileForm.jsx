@@ -172,7 +172,6 @@ const ProfileForm = () => {
         </button>
         <hr className="my-6" />
         <div className="flex justify-between">
-          {/* <h1 className="text-xl font-medium mb-2">Change Password</h1> */}
           <input
             type="password"
             placeholder="new password"

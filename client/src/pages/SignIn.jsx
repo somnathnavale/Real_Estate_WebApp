@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useNavigate,useLocation } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Snackbar from "../components/Snackbar";
 import { signInUser } from "../redux/user/userService";
@@ -8,26 +8,29 @@ import { STATUS } from "../utils/constants/common";
 
 const SignIn = () => {
   const [formData, setFormData] = useState(defaultFormData);
-  const [status,setStatus]=useState(STATUS.IDLE);
+  const [status, setStatus] = useState(STATUS.IDLE);
   const { error } = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
-  const location =useLocation();
+  const location = useLocation();
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
-  const handleSignIn =async (e) => {
-    e.preventDefault(); 
-    setStatus(STATUS.LOADING)
-    dispatch(signInUser({email:formData.email,password:formData.password})).unwrap().then(()=>{
-      setStatus(STATUS.SUCCEEDED);
-      setFormData(defaultFormData);
-    }).catch(()=>{
-      setStatus(STATUS.FAILED);
-    })
+  const handleSignIn = async (e) => {
+    e.preventDefault();
+    setStatus(STATUS.LOADING);
+    dispatch(signInUser({ email: formData.email, password: formData.password }))
+      .unwrap()
+      .then(() => {
+        setStatus(STATUS.SUCCEEDED);
+        setFormData(defaultFormData);
+      })
+      .catch(() => {
+        setStatus(STATUS.FAILED);
+      });
   };
 
   const handleSnackbar = () => {
@@ -45,7 +48,9 @@ const SignIn = () => {
         : "none";
     let open = status === STATUS.FAILED || status === STATUS.SUCCEEDED;
     let onClose = () => {
-      status === STATUS.SUCCEEDED ? navigate(location?.state?.from || '/') : null;
+      status === STATUS.SUCCEEDED
+        ? navigate(location?.state?.from || "/")
+        : null;
       setStatus(STATUS.IDLE);
     };
     return {
@@ -89,10 +94,15 @@ const SignIn = () => {
           {status === STATUS.LOADING ? "Loading..." : "Sign In"}
         </button>
       </form>
-      <div className="flex gap-2 mt-5">
-        <p>Don't Have An Account?</p>
-        <Link to="/sign-up" className="text-blue-700">
-          Sign UP
+      <div className="flex justify-between mt-5 flex-row">
+        <div className="flex gap-2">
+          <p>Don't Have An Account?</p>
+          <Link to="/sign-up" className="text-blue-700">
+            Sign UP
+          </Link>
+        </div>
+        <Link to="/forgot-password" className="text-blue-700">
+          Forgot Password
         </Link>
       </div>
     </div>

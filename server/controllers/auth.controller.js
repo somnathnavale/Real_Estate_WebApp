@@ -3,6 +3,8 @@ import User from "../models/user.model.js";
 import jwt from "jsonwebtoken";
 import CustomError from "../utils/error/CustomError.js";
 import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
+import Token from "../models/token.model.js";
+import { forgotPasswordEmail, userRegistrationEmail } from "../services/email.service.js";
 
 const signUp = asyncErrorHandler(async (req, res) => {
   const { password, ...other} = req.body;
@@ -10,6 +12,7 @@ const signUp = asyncErrorHandler(async (req, res) => {
   const newUser = new User({password: hashedPassword ,...other});
   await newUser.save();
   res.status(201).json({ success: true, message: "User Created Successfully" });
+  await userRegistrationEmail(newUser?.email,newUser?.fullname || newUser?.username || newUser?.email )
 });
 
 const signIn = asyncErrorHandler(async (req, res) => {
@@ -92,4 +95,97 @@ const logoutUser = asyncErrorHandler((req, res, next) => {
   res.status(200).json({ message: "user logout successfully" });
 });
 
-export { signUp, signIn, google, generateToken, logoutUser };
+const forgotPasswordHandler=(req,res,next)=>{
+  const STEPS={
+    SENDOTP:"SENDOTP",
+    VERIFYOTP:"VERIFYOTP",
+    UPDATEPASSWORD:"UPDATEPASSWORD"
+  }
+
+  const {step}=req.query;
+  if(step==STEPS.SENDOTP)
+    return forgotPassword(req,res,next);
+  else if(step==STEPS.VERIFYOTP)
+    return verifyOTP(req,res,next);
+  else if(step===STEPS.UPDATEPASSWORD)
+    return updatePassword(req,res,next);
+  return res.status(400).json({message:"Bad Request"}); 
+}
+
+const forgotPassword = asyncErrorHandler(async(req, res, next) => {
+  const {email}=req.body;
+  if(!email)
+    throw new CustomError("Please provide email address",400);
+
+    const user=await User.findOne({email})
+  if(!user)
+    throw new CustomError("No User with given email present, please consider registering first",400)
+
+  const otp=Math.floor(100000 + Math.random() * 900000)
+
+  const newToken=new Token({userId:user._id,otp});
+  await newToken.save();
+
+  res
+    .cookie("tokenId", newToken._id, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 15 * 60 * 1000,
+    })
+  
+  const emailResponse=await forgotPasswordEmail(email,otp);
+  
+  if(emailResponse?.success){
+    return res.status(200).json({ message: "OTP Sent Successfully" });
+  }else{
+    throw new CustomError("Something Went Wrong",500);
+  }
+
+});
+
+const verifyOTP=asyncErrorHandler(async(req,res,next)=>{
+  const {otp}=req.body;
+  if(!otp)
+    throw new CustomError("Please provide OTP",400);
+  
+  const tokenId = req.cookies?.tokenId;
+  if (!tokenId)
+    throw new CustomError("OTP expired, consider sending it agian", 400);
+  
+  const matchedToken=await Token.findById(tokenId);
+  if(!matchedToken)
+    throw new CustomError("OTP expired, consider sending it again", 400);
+  
+  if(parseInt(matchedToken?.otp)!==parseInt(otp))
+    throw new CustomError("incorrect OTP entered", 400);
+
+  await Token.findByIdAndDelete(tokenId);
+
+  res.clearCookie("tokenId");
+  res
+    .cookie("userId", matchedToken.userId, {
+      httpOnly: true,
+      secure: true,
+      sameSite: "None",
+      maxAge: 15 * 60 * 1000,
+    })
+  
+  res.status(200).json({message:"OTP verified Successfully, Now update password"});
+})
+
+const updatePassword=asyncErrorHandler(async(req,res,next)=>{
+  const {password}=req.body;
+  if(!password)
+    throw new CustomError("Please provide password",400);
+  
+  const userId = req.cookies?.userId;
+  if (!userId)
+    throw new CustomError("OTP expired, consider sending it again", 400);
+  
+  const hashedPassword=bcryptjs.hashSync(password, 10)
+  const user=await User.findByIdAndUpdate(userId,{password:hashedPassword},{runValidators:true});
+  res.status(200).json({message:"Password Successfully Updated"});
+})
+
+export { signUp, signIn, google, generateToken, logoutUser,forgotPasswordHandler};

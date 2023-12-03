@@ -39,6 +39,8 @@ const deleteUser = asyncErrorHandler(async (req, res) => {
     throw new CustomError('User With Given Id Not Found',404);
   await Listing.deleteMany({owner:req.user.id});
   res.clearCookie("refreshToken");
+  res.clearCookie("userId");
+  res.clearCookie("tokenId");
   res.status(200).json({ message: "account deleted successfully" });
 });
 

@@ -1,16 +1,17 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 import app from "./app.js";
+import logger from "./log/logger.js";
 
 dotenv.config();
 
-process.on('unhandledRejection',err=>{
-  console.log('unhandledRejection  cause shutdown');
+process.on('unhandledRejection',(promise,reason)=>{
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
   process.exit(1);
 })
 
-process.on('uncaughtException',err=>{
-  console.log('uncaughtException cause shutdown');
+process.on('uncaughtException',error=>{
+  logger.error('Uncaught Exception:', error);
   process.exit(1);
 })
 

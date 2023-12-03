@@ -18,6 +18,7 @@ import { getEnums } from "./redux/enum/enumService";
 import UpdateListings from "./redux/listings/UpdateListings";
 import NotFound from "./pages/NotFound";
 import PersistedLogin from "./components/PersistedLogin";
+import ForgotPassword from "./pages/ForgotPassword";
 
 export default function App() {
   const callRef = useRef(false);
@@ -39,6 +40,7 @@ export default function App() {
           <Route index element={<Home />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
           </Route>

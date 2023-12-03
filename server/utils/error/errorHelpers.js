@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 import CustomError from "./CustomError.js";
+import logger from "../../log/logger.js";
 
 function devError(res, err) {
   const statusCode = err.statusCode || 500;
   const status = err.status || "error";
   const message = err.message || "Internal Server Error";
-  
+  logger.error(`${message}, status - ${status}, statusCode - ${statusCode}`)
   res.status(statusCode).json({
     status,
     message,
@@ -18,7 +19,7 @@ function prodError(res, err) {
   const statusCode = err.statusCode || 500;
   const status = err.status || "error";
   const message = err.message || "Internal Server Error";
-  
+  logger.error(`${message}, status - ${status}, statusCode - ${statusCode}`)
   err?.isOperational
     ? res.status(statusCode).json({
         status,
@@ -66,7 +67,6 @@ export const asyncErrorHandler = (func) => {
     try {
       await func(req, res, next);
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };

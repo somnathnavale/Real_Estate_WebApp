@@ -9,6 +9,7 @@ import listingRouter from "./routes/listing.route.js";
 
 import CustomError from "./utils/error/CustomError.js";
 import { globalErrorHandler } from "./utils/error/errorHelpers.js";
+import logger from "./log/logger.js";
 
 const app = express();
 app.use(
@@ -21,6 +22,11 @@ app.use(
 app.use(express.json());
 app.use(cookieParser());
 
+app.use((req, res, next) => {
+  logger.info(`${req.method} ${req.url}`);
+  next();
+});
+
 app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/enums", enumRouter);
@@ -29,6 +35,7 @@ app.use("/api/listings", listingRouter);
 
 app.use('*',(req,res,next)=>{
   const err=new CustomError(`Can't find ${req.originalUrl} on the server!`,404);
+  logger.error(`message-${err.message}, type-${err.name}`);
   next(err);
 })
 

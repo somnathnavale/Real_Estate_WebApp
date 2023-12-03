@@ -24,15 +24,15 @@ const ConfirmationModal = ({
           <h4 className="text-[#791808] font-semibold">Warning</h4>
           <h4 className="text-orange-600 text-sm ">{warningMsg}</h4>
         </div>
-        <div className="flex justify-between mt-4">
+        <div className="flex justify-between mt-8">
           <button
-            className="px-2 py-1 border-2 text-white border-transparent bg-slate-700 font-semibold hover:bg-opacity-95 hover:bg-white hover:text-slate-700 hover:border-slate-700"
+            className="px-2 py-1 border rounded-lg text-white border-slate-700 bg-slate-700 font-semibold hover:bg-opacity-95 hover:bg-white hover:text-slate-700 hover:border-slate-700"
             onClick={onClose}
           >
             No, Cancel
           </button>
           <button
-            className="px-2 py-1 border-2 text-slate-700 border-slate-700 font-semibold hover:bg-slate-700 hover:text-white"
+            className="px-2 py-1 border rounded-lg text-slate-700 border-slate-700 font-semibold hover:bg-slate-700 hover:text-white"
             onClick={onSubmit}
           >
             {submitBtnText}

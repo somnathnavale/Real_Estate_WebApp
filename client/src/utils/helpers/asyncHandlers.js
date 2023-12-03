@@ -1,4 +1,4 @@
-const ErrorHandler=(error)=>{
+export const ErrorHandler=(error)=>{
   if(error.isAxiosError){
     if(error.response){
       const {message,status}=error.response.data;
