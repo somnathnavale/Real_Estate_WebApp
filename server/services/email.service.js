@@ -26,7 +26,7 @@ const mailSender = async (emailDetails) => {
       message: "Email Sent Successfully",
     };
   } catch (error) {
-    logger.log(`Error:- ${error?.message}`,{emailError:true})
+    logger.error(`Error:- ${error?.message}`,{emailError:true})
     throw error;
   }
 };
