@@ -26,5 +26,5 @@ Currently, two official plugins are available:
 7) think about locality wise data showing
 8) images from google firebase
 9) placeholders for add listings 
-10) if possile add login using google
+10) if possile add login using google 
 11) wishlist listings

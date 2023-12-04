@@ -1,6 +1,7 @@
 import winston from "winston";
 
 const logger = winston.createLogger({
+  levels: winston.config.syslog.levels,
   level: 'info',
   format: winston.format.combine(
     winston.format.timestamp(),
@@ -10,12 +11,8 @@ const logger = winston.createLogger({
     new winston.transports.Console(),
     new winston.transports.File({ filename: './log/error.log', level: 'error' }),
     new winston.transports.File({ filename: './log/combined.log' }),
-    new winston.transports.File({ filename: './log/email-error.log', level: 'error', filter: isEmailError }),
+    new winston.transports.File({ filename: './log/email-error.log', level: 'crit' }),
   ],
 });
-
-function isEmailError(info) {
-  return info.emailError === true;
-}
 
 export default logger;
