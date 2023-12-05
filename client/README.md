@@ -20,11 +20,11 @@ Currently, two official plugins are available:
 1) seperate error state for each api calls from like getAll, getOne, add,deleteOne pagewise different- review
 2) reload generate token on reload  - done
 3) add pagination and improve filter functionality - done 
+5) email notifications for forgot password, user validation once successfull entry, -done
+8) images from google firebase - done
 4) add city as an option 
-5) email notifications for forgot password, user validation once successfull entry,
 6) add google maps
 7) think about locality wise data showing
-8) images from google firebase
 9) placeholders for add listings 
 10) if possile add login using google 
 11) wishlist listings

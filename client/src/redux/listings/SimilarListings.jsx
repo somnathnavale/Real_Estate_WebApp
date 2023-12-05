@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { axiosPublic } from "../../api/axios";
 import PropertyCard from "../../components/PropertyCard";
 import { ErrorHandler } from "../../utils/helpers/asyncHandlers";
@@ -6,6 +6,7 @@ import { ErrorHandler } from "../../utils/helpers/asyncHandlers";
 const SimilarListings = ({ listing }) => {
   const [listings, setListings] = useState([]);
   const [error, setError] = useState("");
+  const callRef = useRef(false);
 
   useEffect(() => {
     const fetch = async () => {
@@ -24,9 +25,14 @@ const SimilarListings = ({ listing }) => {
       } catch (error) {
         const err = ErrorHandler(error);
         setError(err?.message);
+      } finally {
+        callRef.current = false;
       }
     };
-    fetch();
+    if (listing._id && !callRef.current) {
+      callRef.current = true;
+      fetch();
+    }
   }, [listing?._id]);
 
   return (

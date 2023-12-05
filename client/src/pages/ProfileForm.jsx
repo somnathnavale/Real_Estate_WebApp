@@ -8,7 +8,7 @@ import { defaultFormData } from "../utils/constants/user";
 import { STATUS } from "../utils/constants/common";
 
 const ProfileForm = () => {
-  const [status,setStatus]=useState(STATUS.IDLE);
+  const [status, setStatus] = useState(STATUS.IDLE);
   const { error, user } = useSelector((store) => store.user);
   const [formData, setFormData] = useState({ ...defaultFormData, ...user });
   const [isEdit, setIsEdit] = useState(false);
@@ -31,25 +31,38 @@ const ProfileForm = () => {
       mobileNo: formData?.mobileNo,
     };
     setStatus(STATUS.IDLE);
-    dispatch(updateUser({ id: user._id, userData: obj, axios })).unwrap().then(()=>{
-      setStatus(STATUS.SUCCEEDED);
-    }).catch(()=>{
-      setStatus(STATUS.FAILED);
-    })
+    dispatch(updateUser({ id: user._id, userData: obj, axios }))
+      .unwrap()
+      .then(() => {
+        setStatus(STATUS.SUCCEEDED);
+      })
+      .catch(() => {
+        setStatus(STATUS.FAILED);
+      });
   };
 
-  const handleChangePassword= ()=>{
-    if(!formData.password){
-      return ;
+  const handleChangePassword = (e) => {
+    e.preventDefault();
+    if (!formData.password) {
+      return;
     }
     setStatus(STATUS.IDLE);
-    dispatch(updateUser({ id: user._id, userData: {password:formData?.password}, axios })).unwrap().then(()=>{
-      setFormData(prev=>({...prev,password:""}))
-      setStatus(STATUS.SUCCEEDED);
-    }).catch(()=>{
-      setStatus(STATUS.FAILED);
-    })
-  }
+    dispatch(
+      updateUser({
+        id: user._id,
+        userData: { password: formData?.password },
+        axios,
+      })
+    )
+      .unwrap()
+      .then(() => {
+        setFormData((prev) => ({ ...prev, password: "" }));
+        setStatus(STATUS.SUCCEEDED);
+      })
+      .catch(() => {
+        setStatus(STATUS.FAILED);
+      });
+  };
 
   const handleSnackbar = () => {
     let message =
@@ -171,11 +184,11 @@ const ProfileForm = () => {
           {isEdit ? "Save" : "Edit"}
         </button>
         <hr className="my-6" />
-        <div className="flex justify-between">
+        <form className="flex justify-between" onSubmit={handleChangePassword}>
           <input
             type="password"
             placeholder="new password"
-            className="border px-4 py-1 outline-[#e2e2e2]"
+            className="border px-4 py-1 outline-[#e2e2e2] rounded"
             id="password"
             value={formData?.password}
             onChange={handleChange}
@@ -185,12 +198,12 @@ const ProfileForm = () => {
           <button
             type="submit"
             disabled={status === STATUS.LOADING}
-            onClick={handleChangePassword}
-            className=" bg-slate-700 hover:bg-opacity-95 text-white rounded px-4 py-2 disabled:opacity-80"
-          >Change Password</button>
-        </div>
+            className=" w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto disabled:opacity-80"
+          >
+            Change Password
+          </button>
+        </form>
       </div>
-
     </div>
   );
 };

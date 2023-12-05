@@ -96,20 +96,22 @@ const Filter = () => {
           <div>
             <h3 className="font-medium">Listing Type</h3>
             <div>
-              {Object.values(enumConst?.listingType || []).map((listingType) => (
-                <label key={listingType} className="flex items-center mt-1">
-                  <input
-                    type="checkbox"
-                    name="listingType"
-                    checked={searchFilter.listingType.includes(listingType)}
-                    onChange={(e) =>
-                      handleCheckboxChange("listingType", listingType)
-                    }
-                    className="mr-2 h-4 w-4"
-                  />
-                  {listingType}
-                </label>
-              ))}
+              {Object.values(enumConst?.listingType || []).map(
+                (listingType) => (
+                  <label key={listingType} className="flex items-center mt-1">
+                    <input
+                      type="checkbox"
+                      name="listingType"
+                      checked={searchFilter.listingType.includes(listingType)}
+                      onChange={(e) =>
+                        handleCheckboxChange("listingType", listingType)
+                      }
+                      className="mr-2 h-4 w-4"
+                    />
+                    {listingType}
+                  </label>
+                )
+              )}
             </div>
           </div>
           <div className="border-b-2 border-slate-300 my-2" />
@@ -175,13 +177,13 @@ const Filter = () => {
         <div className="border-b-2 border-slate-300 my-2" />
         <div className="mt-2">
           <button
-            className="bg-slate-700 text-white px-2 py-1 rounded-lg mr-2 hover:opacity-90"
+            className="rounded-md border border-transparent shadow-sm px-2 py-1 bg-slate-700 text-base font-medium text-white hover:bg-slate-800 focus:outline-none mr-2"
             onClick={handleSearch}
           >
             Apply
           </button>
           <button
-            className="bg-slate-300 text-slate-700 px-2 py-1 rounded-lg hover:opacity-90"
+            className="rounded-md border border-transparent shadow-sm px-2 py-1 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none"
             onClick={() => {
               dispatch(clearFilters());
               handleSearch();

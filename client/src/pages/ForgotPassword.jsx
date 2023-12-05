@@ -17,11 +17,29 @@ const defaultInput = {
   confirmPassword: "",
 };
 
-const STEPS={
-  SENDOTP:"SENDOTP",
-  VERIFYOTP:"VERIFYOTP",
-  UPDATEPASSWORD:"UPDATEPASSWORD"
-}
+const STEPS = {
+  SENDOTP: "SENDOTP",
+  VERIFYOTP: "VERIFYOTP",
+  UPDATEPASSWORD: "UPDATEPASSWORD",
+};
+
+
+const Input = ({ input, setInput, type, placeholder, id, field }) => {
+  return (
+    <input
+      type={type}
+      placeholder={placeholder}
+      className="border px-4 py-2 outline-[#e2e2e2] rounded-lg mt-2"
+      id={id}
+      value={input[field]}
+      onChange={(e) =>
+        setInput((prev) => ({ ...prev, [field]: e.target.value }))
+      }
+      autoComplete="off"
+      required={true}
+    />
+  );
+};
 
 const ForgotPassword = () => {
   const [input, setInput] = useState(defaultInput);
@@ -29,9 +47,12 @@ const ForgotPassword = () => {
   const [error, setError] = useState(defaultError);
   const [step, setStep] = useState(STEPS.SENDOTP);
 
-  const forgotPasswordRequest = async (data,nextStep) => {
+  const forgotPasswordRequest = async (data, nextStep) => {
     try {
-      const response = await axiosPublic.post(`/api/auth/forgot-password?step=${step}`, data);
+      const response = await axiosPublic.post(
+        `/api/auth/forgot-password?step=${step}`,
+        data
+      );
       setError({
         message: response?.data?.message,
         type: "success",
@@ -48,9 +69,9 @@ const ForgotPassword = () => {
     setLoading(true);
     try {
       if (step === STEPS.SENDOTP) {
-        await forgotPasswordRequest({email:input.email},STEPS.VERIFYOTP);
+        await forgotPasswordRequest({ email: input.email }, STEPS.VERIFYOTP);
       } else if (step === STEPS.VERIFYOTP) {
-        await forgotPasswordRequest({otp:input.otp},STEPS.UPDATEPASSWORD)
+        await forgotPasswordRequest({ otp: input.otp }, STEPS.UPDATEPASSWORD);
       } else if (step === STEPS.UPDATEPASSWORD) {
         if (input.password !== input.confirmPassword) {
           setError({
@@ -60,7 +81,10 @@ const ForgotPassword = () => {
           setInput((prev) => ({ ...prev, password: "", confirmPassword: "" }));
           return;
         }
-        await forgotPasswordRequest({password:input.password},STEPS.SENDOTP);
+        await forgotPasswordRequest(
+          { password: input.password },
+          STEPS.SENDOTP
+        );
       }
     } catch (error) {
       const { message } = ErrorHandler(error);
@@ -133,7 +157,7 @@ const ForgotPassword = () => {
         <button
           type="submit"
           disabled={loading}
-          className=" bg-slate-700 hover:bg-opacity-95 text-white rounded-lg px-4 py-2 disabled:opacity-80 mx-auto"
+          className=" bg-slate-700 text-base font-medium text-white hover:bg-slate-800 rounded-lg px-4 py-2 disabled:opacity-80 mx-auto"
         >
           {step === STEPS.SENDOTP
             ? "Get OTP"
@@ -154,7 +178,7 @@ const ForgotPassword = () => {
       </div>
       <div className="flex gap-2 mt-5">
         <p>Have An Account?</p>
-        <Link to="/sign-in" className="text-blue-700">
+        <Link to="/sign-in" className="text-blue-700 hover:text-blue-500">
           Sign In
         </Link>
       </div>
@@ -164,19 +188,3 @@ const ForgotPassword = () => {
 
 export default ForgotPassword;
 
-const Input = ({ input, setInput, type, placeholder, id, field }) => {
-  return (
-    <input
-      type={type}
-      placeholder={placeholder}
-      className="border px-4 py-2 outline-[#e2e2e2] rounded-lg mt-2"
-      id={id}
-      value={input[field]}
-      onChange={(e) =>
-        setInput((prev) => ({ ...prev, [field]: e.target.value }))
-      }
-      autoComplete="off"
-      required={true}
-    />
-  );
-};

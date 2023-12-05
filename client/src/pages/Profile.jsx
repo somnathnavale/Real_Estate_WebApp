@@ -25,7 +25,7 @@ const optionRenderer = (label, value, option, setOption) => {
     <li
       key={label}
       className={`block p-1 sm:p-2 cursor-pointer ${
-        option === value ? "bg-slate-700 text-white" : ""
+        option === value ? "bg-slate-700 text-white" : "hover:text-slate-500"
       } rounded`}
       onClick={() => setOption(value)}
     >

@@ -8,7 +8,7 @@ import { STATUS } from "../utils/constants/common";
 
 const SignUp = () => {
   const [formData, setFormData] = useState(defaultFormData);
-  const [status,setStatus]=useState(STATUS.IDLE);
+  const [status, setStatus] = useState(STATUS.IDLE);
   const { error } = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
@@ -20,12 +20,15 @@ const SignUp = () => {
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    dispatch(signUpUser(formData)).unwrap().then((e)=>{
-      setStatus(STATUS.SUCCEEDED);
-      setFormData(defaultFormData);
-    }).catch(()=>{
-      setStatus(STATUS.SUCCEEDED);
-    })
+    dispatch(signUpUser(formData))
+      .unwrap()
+      .then((e) => {
+        setStatus(STATUS.SUCCEEDED);
+        setFormData(defaultFormData);
+      })
+      .catch(() => {
+        setStatus(STATUS.SUCCEEDED);
+      });
   };
 
   const handleSnackbar = () => {
@@ -59,7 +62,10 @@ const SignUp = () => {
     <div className="p-3 max-w-lg mx-auto">
       <Snackbar {...handleSnackbar()} />
       <h1 className="text-3xl text-center font-semibold mt-6 mb-4">Sign Up</h1>
-      <form className="grid grid-cols-8 gap-2 gap-y-4 p-4 text-base" onSubmit={handleSignUp}>
+      <form
+        className="grid grid-cols-8 gap-2 gap-y-4 p-4 text-base"
+        onSubmit={handleSignUp}
+      >
         <label
           className="col-span-2 flex text-slate-700 font-light items-center"
           htmlFor="username"
@@ -142,14 +148,14 @@ const SignUp = () => {
         <button
           type="submit"
           disabled={status === STATUS.LOADING}
-          className="col-span-full bg-slate-700 text-white p-2 mt-4 rounded uppercase hover:opacity-95 disabled:opacity-80"
+          className="col-span-full bg-slate-700 text-white p-2 mt-4 rounded uppercase hover:bg-slate-800 disabled:opacity-80"
         >
           {status === STATUS.LOADING ? "Loading..." : "Sign Up"}
         </button>
       </form>
       <div className="flex gap-2">
         <p>Have an account?</p>
-        <Link to="/sign-in" className="text-blue-700">
+        <Link to="/sign-in" className="text-blue-700 hover:text-blue-500">
           Sign in
         </Link>
       </div>

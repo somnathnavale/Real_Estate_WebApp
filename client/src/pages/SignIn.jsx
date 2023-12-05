@@ -89,7 +89,7 @@ const SignIn = () => {
         <button
           type="submit"
           disabled={status === STATUS.LOADING}
-          className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:opacity-95 disabled:opacity-80"
+          className="bg-slate-700 text-white p-3 rounded-lg uppercase hover:bg-slate-800 disabled:opacity-80"
         >
           {status === STATUS.LOADING ? "Loading..." : "Sign In"}
         </button>
@@ -97,11 +97,14 @@ const SignIn = () => {
       <div className="flex justify-between mt-5 flex-row">
         <div className="flex gap-2">
           <p>Don't Have An Account?</p>
-          <Link to="/sign-up" className="text-blue-700">
+          <Link to="/sign-up" className="text-blue-700 hover:text-blue-500">
             Sign UP
           </Link>
         </div>
-        <Link to="/forgot-password" className="text-blue-700">
+        <Link
+          to="/forgot-password"
+          className="text-blue-700 hover:text-blue-500"
+        >
           Forgot Password
         </Link>
       </div>

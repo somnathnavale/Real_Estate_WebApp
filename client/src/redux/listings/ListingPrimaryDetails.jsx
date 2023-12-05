@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
@@ -13,14 +13,21 @@ import { BiSolidArea, BiSolidCategory } from "react-icons/bi";
 import { GiSofa } from "react-icons/gi";
 import { IoMdPricetags } from "react-icons/io";
 import ListingFeature from "../../components/ListingFeature";
+import InformationModal from "../../components/InformationModal";
 
 const ListingPrimaryDetails = ({ listing }) => {
+  const [open, setOpen] = useState(false);
   const { enumConst } = useSelector((store) => store.enum);
   const { user } = useSelector((store) => store.user);
   const location = useLocation();
 
   return (
     <>
+      <InformationModal
+        open={open}
+        onClose={() => setOpen(false)}
+        owner={listing?.owner}
+      />
       <h1 className="text-2xl lg:text-3xl font-bold">{listing.name}</h1>
       <p className="text-gray-500">{listing.address}</p>
       <hr className="my-4 " />
@@ -97,20 +104,22 @@ const ListingPrimaryDetails = ({ listing }) => {
           />
         </div>
         <hr className="mt-4 mb-2" />
-        <div className="flex flex-col lg:items-center lg:flex-row">
+        <div className="flex items-center flex-row">
           <div className="flex items-center lg:mr-2">
             <FaCrown className="mr-2 h-6 w-6 text-slate-400" />
-            <span className="font-normal text-gray-500">Owner Details</span>
-            <span className="hidden lg:inline lg:ml-1 text-slate-700 font-bold">
-              :-
-            </span>
+            <span className="font-normal text-gray-500">Owner Details :- </span>
           </div>
           {user ? (
-            <p className="font-bold text-slate-700 ml:2">{`${listing?.owner?.username} (${listing?.owner?.email})`}</p>
+            <button
+              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
+              onClick={() => setOpen(true)}
+            >
+              View Details
+            </button>
           ) : (
             <Link
               to="/sign-in"
-              className=" text-green-700 underline underline-offset-2 hover:text-green-500"
+              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
               state={{ from: location }}
             >
               Login First

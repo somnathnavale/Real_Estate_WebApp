@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { defaultPropertyData, property } from "../../utils/constants/listings";
-import TextInput from '../../components/Inputs/TextInput';
+import TextInput from "../../components/Inputs/TextInput";
 import Dropdown from "../../components/Inputs/Dropdown";
 import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
@@ -11,17 +11,17 @@ import { STATUS } from "../../utils/constants/common";
 import UploadImage from "../../components/Inputs/UploadImage";
 
 const AddListing = () => {
-  const [status,setStatus]=useState(STATUS.IDLE);
+  const [status, setStatus] = useState(STATUS.IDLE);
   const [propertyData, setPropertyData] = useState(
     structuredClone(defaultPropertyData)
   );
-  
-  const {enums,error:enumError}=useSelector(store=>store.enum);
-  const {error}=useSelector(store=>store.listing);
 
-  const {user}=useSelector(store=>store.user);
-  const dispatch=useDispatch();
-  const axios=useAxios(axiosPublic);
+  const { enums, error: enumError } = useSelector((store) => store.enum);
+  const { error } = useSelector((store) => store.listing);
+
+  const { user } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+  const axios = useAxios(axiosPublic);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,12 +31,15 @@ const AddListing = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus(STATUS.LOADING);
-    dispatch(addListing({axios,data:{...propertyData,owner:user._id}})).unwrap().then((res)=>{
-      setStatus(STATUS.SUCCEEDED);
-      setPropertyData(structuredClone(defaultPropertyData));
-    }).catch((e)=>{
-      setStatus(STATUS.FAILED);
-    })
+    dispatch(addListing({ axios, data: { ...propertyData, owner: user._id } }))
+      .unwrap()
+      .then((res) => {
+        setStatus(STATUS.SUCCEEDED);
+        setPropertyData(structuredClone(defaultPropertyData));
+      })
+      .catch((e) => {
+        setStatus(STATUS.FAILED);
+      });
   };
 
   const handleSnackbar = () => {
@@ -52,7 +55,8 @@ const AddListing = () => {
         : status === STATUS.SUCCEEDED
         ? "success"
         : "none";
-    let open = status === STATUS.FAILED || status === STATUS.SUCCEEDED || enumError;
+    let open =
+      status === STATUS.FAILED || status === STATUS.SUCCEEDED || enumError;
     let onClose = () => {
       setStatus(STATUS.IDLE);
     };
@@ -61,7 +65,7 @@ const AddListing = () => {
       type,
       open,
       onClose,
-      time: type==="error"?6000:1500,
+      time: type === "error" ? 6000 : 1500,
     };
   };
 
@@ -150,7 +154,7 @@ const AddListing = () => {
               data={propertyData}
               field={property.lift}
               onChange={handleChange}
-              options={enums?.lift ||[]}
+              options={enums?.lift || []}
             />
           </div>
           <div>
@@ -226,21 +230,27 @@ const AddListing = () => {
             />
           </div>
           <div className="col-span-full">
-            <UploadImage propertyData={propertyData} setPropertyData={setPropertyData}/>
+            <UploadImage
+              propertyData={propertyData}
+              setPropertyData={setPropertyData}
+            />
           </div>
         </div>
-        <div className="mt-6 flex justify-center items-center">
+        <div className="mt-3 flex justify-center items-center">
           <button
             type="submit"
-            disabled={status===STATUS.LOADING}
-            className="bg-slate-700 text-white p-2 px-4 rounded-md hover:opacity-95 disabled:opacity-80"
+            disabled={status === STATUS.LOADING}
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto disabled:opacity-80"
           >
             Submit
           </button>
           <button
             type="button"
-            disabled={status===STATUS.LOADING}
-            className="bg-slate-300 text-slate-700 ml-2 p-2 px-4 rounded-md hover:opacity-95 disabled:opacity-80"
+            disabled={status === STATUS.LOADING}
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-600 text-base font-medium text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 sm:ml-3 sm:w-auto disabled:opacity-80"
+            onClick={() =>
+              setPropertyData(structuredClone(defaultPropertyData))
+            }
           >
             Cancel
           </button>

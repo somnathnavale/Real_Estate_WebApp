@@ -12,9 +12,9 @@ import { MdBalcony } from "react-icons/md";
 import { GiStairs, GiLift } from "react-icons/gi";
 import ListingFeature from "../../components/ListingFeature";
 
-const ListingSecondaryDetails = ({listing}) => {
+const ListingSecondaryDetails = ({ listing }) => {
   return (
-    <div className="w-full p-0 lg:p-4 mt-4 lg:0">
+    <div className="w-full p-0 lg:p-4 mt-2 lg:0">
       <h2 className="text-lg lg:text-xl font-semibold">More details</h2>
       <p className="mt-1 indent-4">{listing.description}</p>
       <hr className="my-2 border" />

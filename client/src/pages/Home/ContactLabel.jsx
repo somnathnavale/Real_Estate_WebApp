@@ -13,7 +13,7 @@ const ContactLabel = () => {
           </p>
         </div>
         <div>
-          <button className="rounded-full bg-green-500 px-4 sm:px-6 py-2 text-base sm:text-xl font-medium text-white">
+          <button className="rounded-full bg-green-500 hover:bg-green-600 px-4 sm:px-6 py-2 text-base sm:text-xl font-medium text-white">
             <a href="mailto:navalesomnath1@gmail.com">Contact Us Now</a>
           </button>
         </div>

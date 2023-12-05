@@ -123,10 +123,10 @@ const listingSchema = new mongoose.Schema({
 
 listingSchema.post(["find", "findOne", "findById","findOneAndUpdate"], async function (docs) {
   if (Array.isArray(docs)) {
-    await Promise.all(docs.map(async (doc) => doc.populate({ path: "owner", select: "username email" })));
+    await Promise.all(docs.map(async (doc) => doc.populate({ path: "owner", select: "username fullname email mobileNo" })));
   } else {
     if(docs)
-      await docs.populate({ path: "owner", select: "username email" });
+      await docs.populate({ path: "owner", select: "username fullname email mobileNo" });
   }
 });
 

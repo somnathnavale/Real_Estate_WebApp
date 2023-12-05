@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { defaultPropertyData,property } from "../../utils/constants/listings";
+import { defaultPropertyData, property } from "../../utils/constants/listings";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import TextInput from "../../components/Inputs/TextInput";
@@ -13,12 +13,10 @@ import UploadImage from "../../components/Inputs/UploadImage";
 
 const UpdateListings = () => {
   const { id } = useParams();
-  const [status,setStatus]=useState(STATUS.IDLE);
-  const { error } = useSelector(
-    (store) => store.listing
-  );
+  const [status, setStatus] = useState(STATUS.IDLE);
+  const { error } = useSelector((store) => store.listing);
   const [propertyData, setPropertyData] = useState({
-    ...structuredClone(defaultPropertyData)
+    ...structuredClone(defaultPropertyData),
   });
 
   const {
@@ -31,27 +29,45 @@ const UpdateListings = () => {
   const axios = useAxios(axiosPublic);
   const callRef = useRef(false);
 
-  useEffect(()=>{
-    if(!callRef.current){
-      setStatus(STATUS.LOADING)
-      callRef.current = true;
-      dispatch(getListing({ id })).unwrap().then((response)=>{
-        setPropertyData(prev=>({...prev,...structuredClone(response?.listing)}))
-      })
-      .catch(()=>{
-        setStatus(STATUS.FAILED);
-      })
+  useEffect(() => {
+    if (!callRef.current) {
+      fetch();
     }
-  },[dispatch])
+  }, [dispatch]);
+
+  function fetch() {
+    setStatus(STATUS.LOADING);
+    callRef.current = true;
+    dispatch(getListing({ id }))
+      .unwrap()
+      .then((response) => {
+        setPropertyData((prev) => ({
+          ...prev,
+          ...structuredClone(response?.listing),
+        }));
+        setStatus(STATUS.IDLE);
+      })
+      .catch(() => {
+        setStatus(STATUS.FAILED);
+      });
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setStatus(STATUS.LOADING);
-    dispatch(updateListing({axios,data:{...propertyData,owner:propertyData?.owner?._id}})).unwrap().then((e)=>{
-      setStatus(STATUS.SUCCEEDED);
-    }).catch((e)=>{
-      setStatus(STATUS.FAILED);
-    })
+    dispatch(
+      updateListing({
+        axios,
+        data: { ...propertyData, owner: propertyData?.owner?._id },
+      })
+    )
+      .unwrap()
+      .then((e) => {
+        setStatus(STATUS.SUCCEEDED);
+      })
+      .catch((e) => {
+        setStatus(STATUS.FAILED);
+      });
   };
 
   const handleChange = (e) => {
@@ -72,7 +88,8 @@ const UpdateListings = () => {
         : status === STATUS.SUCCEEDED
         ? "success"
         : "none";
-    let open = status === STATUS.FAILED || status === STATUS.SUCCEEDED || enumError;
+    let open =
+      status === STATUS.FAILED || status === STATUS.SUCCEEDED || enumError;
     let onClose = () => {
       setStatus(STATUS.IDLE);
     };
@@ -81,7 +98,7 @@ const UpdateListings = () => {
       type,
       open,
       onClose,
-      time: type==="error"?6000:1500
+      time: type === "error" ? 6000 : 1500,
     };
   };
 
@@ -246,21 +263,25 @@ const UpdateListings = () => {
             />
           </div>
           <div className="col-span-full">
-            <UploadImage propertyData={propertyData} setPropertyData={setPropertyData}/>
+            <UploadImage
+              propertyData={propertyData}
+              setPropertyData={setPropertyData}
+            />
           </div>
         </div>
         <div className="mt-6 flex justify-center items-center">
           <button
             type="submit"
-            disabled={enumStatus === STATUS.LOADING}
-            className="bg-slate-700 text-white p-2 px-4 rounded-md hover:opacity-95 disabled:opacity-80"
+            disabled={status === STATUS.LOADING}
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto disabled:opacity-80"
           >
-            Submit
+            Update
           </button>
           <button
             type="button"
-            disabled={enumStatus === STATUS.LOADING}
-            className="bg-slate-300 text-slate-700 ml-2 p-2 px-4 rounded-md hover:opacity-95 disabled:opacity-80"
+            disabled={status === STATUS.LOADING}
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-600 text-base font-medium text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 sm:ml-3 sm:w-auto disabled:opacity-80"
+            onClick={() => fetch()}
           >
             Cancel
           </button>
