@@ -8,6 +8,7 @@ import { axiosPublic } from "../../api/axios";
 import Snackbar from "../../components/Snackbar";
 import { addListing } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
+import UploadImage from "../../components/Inputs/UploadImage";
 
 const AddListing = () => {
   const [status,setStatus]=useState(STATUS.IDLE);
@@ -223,6 +224,9 @@ const AddListing = () => {
               field={property.description}
               onChange={handleChange}
             />
+          </div>
+          <div className="col-span-full">
+            <UploadImage propertyData={propertyData} setPropertyData={setPropertyData}/>
           </div>
         </div>
         <div className="mt-6 flex justify-center items-center">

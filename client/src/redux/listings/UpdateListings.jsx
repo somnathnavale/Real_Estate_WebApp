@@ -9,6 +9,7 @@ import { axiosPublic } from "../../api/axios";
 import { getListing, updateListing } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
 import Snackbar from "../../components/Snackbar";
+import UploadImage from "../../components/Inputs/UploadImage";
 
 const UpdateListings = () => {
   const { id } = useParams();
@@ -243,6 +244,9 @@ const UpdateListings = () => {
               field={property.description}
               onChange={handleChange}
             />
+          </div>
+          <div className="col-span-full">
+            <UploadImage propertyData={propertyData} setPropertyData={setPropertyData}/>
           </div>
         </div>
         <div className="mt-6 flex justify-center items-center">

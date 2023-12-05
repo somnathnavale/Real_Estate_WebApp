@@ -1,28 +1,23 @@
 import React, { useState } from 'react';
 import { GrPrevious,GrNext } from "react-icons/gr";
 
-const Carousel = () => {
+const Carousel = ({photos}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const images = [
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcROKQ6J37tNhd02-H-EQ1kG0buMCyjySnkAuRG5DL_JM__yst5BLmHjr8zPeC-rqvrvaMg&usqp=CAU',
-    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQdQcdqHy6VlcVNnjtcCIEFkmLXlgC3QbU2gA&usqp=CAU',
-    'https://placekitten.com/602/600',
-    'https://placekitten.com/603/300',
-  ];
-
-  const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length);
+  const nextSlide = (e) => {
+    e.stopPropagation();
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % photos.length);
   };
 
-  const prevSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex - 1 + images.length) % images.length);
+  const prevSlide = (e) => {
+    e.stopPropagation();
+    setCurrentIndex((prevIndex) => (prevIndex - 1 + photos.length) % photos.length);
   };
 
   return (
     <div className="relative overflow-hidden h-full max-h-[40vh] bg-[#f3f3f3] bg-opacity-40 border border-slate-300">
-      <div className="flex transition-transform ease-in-out duration-300 transform translate-x-full h-full" style={{ width: `${images.length * 100}%`, transform: `translateX(-${(currentIndex / images.length) * 100}%)` }}>
-        {images.map((image, index) => (
+      <div className="flex transition-transform ease-in-out duration-300 transform translate-x-full h-full" style={{ width: `${photos.length * 100}%`, transform: `translateX(-${(currentIndex / photos.length) * 100}%)` }}>
+        {photos.map((image, index) => (
           <div key={index} className="h-full w-full flex items-center justify-center bg-slate-50 bg-opacity-20">
             <img className="h-full" src={image} alt={`Slide ${index}`} />
           </div>

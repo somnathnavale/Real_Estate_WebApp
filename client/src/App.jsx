@@ -50,8 +50,8 @@ export default function App() {
               <Route path="add" element={<AddListings />} />
               <Route path="update/:id" element={<UpdateListings />} />
             </Route>
+            <Route path=":id" element={<ListingPage />} />
           </Route>
-          <Route path=":id" element={<ListingPage />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Route>

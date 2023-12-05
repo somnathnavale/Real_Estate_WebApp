@@ -3,7 +3,7 @@ import {useLocation, useNavigate} from 'react-router-dom';
 import background from '../assets/background.jpg';
 import { useSelector } from 'react-redux';
 
-const PropertyCard = ({ _id, name, address, price, category,listingType,screen }) => {
+const PropertyCard = ({ _id, name, address, price, category,listingType, photos }) => {
   const navigate=useNavigate()
   const location=useLocation();
   const {enumConst}=useSelector(store=>store.enum);
@@ -14,8 +14,8 @@ const PropertyCard = ({ _id, name, address, price, category,listingType,screen }
       onClick={() => navigate(`/listings/${_id}`,{state:{from:location}})}
     >
       <img
-        className="w-full h-auto cursor-pointer hover:opacity-80"
-        src={background}
+        className="mx-auto w-auto h-64 cursor-pointer hover:opacity-80"
+        src={photos[0] || background}
         alt={name}
       />
       <div className="bottom-0 w-full bg-white bg-opacity-75 p-4 h-auto">

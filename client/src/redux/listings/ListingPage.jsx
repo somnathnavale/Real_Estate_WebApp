@@ -5,14 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import ListingPrimaryDetails from "./ListingPrimaryDetails";
 import ListingSecondaryDetails from "./ListingSecondaryDetails";
 import { Link, useParams } from "react-router-dom";
-import { getListing, getListings } from "./listingService";
-import PropertyCard from "../../components/PropertyCard";
+import { getListing } from "./listingService";
 import {  STATUS } from "../../utils/constants/common";
+import SimilarListings from "./SimilarListings";
 
 const ListingPage = () => {
   const [status,setStatus]=useState(STATUS.IDLE);
   const { id } = useParams();
-  const { listing, listings, error } = useSelector((store) => store.listing);
+  const { listing, error } = useSelector((store) => store.listing);
   const dispatch = useDispatch();
   const callRef = useRef(false);
 
@@ -39,7 +39,7 @@ const ListingPage = () => {
       <div className="max-w-screen-xl mx-4 xl:mx-auto py-4 h-full">
         <div className="flex flex-col gap-4 sm:gap-0 sm:flex-row">
           <div className="w-full lg:w-1/2 sm:p-4">
-            <Carousel />
+            <Carousel photos={listing?.photos || []}/>
           </div>
           <div className="w-full lg:w-1/2 sm:p-4">
             <ListingPrimaryDetails listing={listing} />
@@ -48,23 +48,7 @@ const ListingPage = () => {
         <hr className="sm:hidden my-4 border" />
         <ListingSecondaryDetails listing={listing} />
         <hr className="border" />
-        <div className="my-4">
-          <h2 className="text-lg lg:text-xl font-semibold">
-            Similar Properties
-          </h2>
-          <div className="grid grid-cols-1 min-[400px]:grid-cols-2  sm:grid-cols-3  lg:grid-cols-4 gap-8 mt-4">
-            {listings
-              .filter(
-                (curr) =>
-                  curr._id !== id &&
-                  curr.category === listing.category &&
-                  curr.listingType == listing.listingType
-              )
-              .map((property, index) => (
-                <PropertyCard key={index} {...property} screen="listings" />
-              ))}
-          </div>
-        </div>
+        <SimilarListings listing={listing}/>
       </div>
   );
 };
