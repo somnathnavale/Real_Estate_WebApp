@@ -168,5 +168,5 @@ const listingSlice = createSlice({
   },
 });
 
-export const { clearListingsState,clearMyListings } = listingSlice.actions;
+export const { clearListingsState,clearMyListings} = listingSlice.actions;
 export default listingSlice.reducer;

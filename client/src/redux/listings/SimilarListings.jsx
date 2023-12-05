@@ -27,7 +27,7 @@ const SimilarListings = ({ listing }) => {
       }
     };
     fetch();
-  }, [listing]);
+  }, [listing?._id]);
 
   return (
     <div className="my-4">

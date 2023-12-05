@@ -24,6 +24,10 @@ const ListingPage = () => {
         setStatus(STATUS.FAILED);
       });
     }
+    return ()=>{
+      callRef.current=false;
+    }
+
   }, [dispatch,id]);
 
   if (!Object.keys(listing).length && status === STATUS.FAILED) {
