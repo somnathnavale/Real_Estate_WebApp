@@ -1,7 +1,7 @@
 import React from 'react';
 import {useLocation, useNavigate} from 'react-router-dom';
-import background from '../assets/background.jpg';
 import { useSelector } from 'react-redux';
+import Carousel from './Carousel';
 
 const PropertyCard = ({ _id, name, address, price, category,listingType, photos }) => {
   const navigate=useNavigate()
@@ -13,11 +13,14 @@ const PropertyCard = ({ _id, name, address, price, category,listingType, photos 
       className="bg-gray-300 overflow-hidden shadow-lg rounded hover:shadow-2xl transition duration-300"
       onClick={() => navigate(`/listings/${_id}`,{state:{from:location}})}
     >
-      <img
+      {/* <img
         className="mx-auto w-auto h-64 cursor-pointer hover:opacity-80"
         src={photos[0] || background}
         alt={name}
-      />
+      /> */}
+      <div className="mx-auto w-auto h-64 cursor-pointer hover:opacity-80">
+        <Carousel photos={photos}/>
+      </div>
       <div className="bottom-0 w-full bg-white bg-opacity-75 p-4 h-auto">
         <span
           className={`px-3 py-0.5 font-semibold text-base ${

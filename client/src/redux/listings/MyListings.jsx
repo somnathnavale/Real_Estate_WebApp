@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteListing, getMyListing } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
-import background from "../../assets/background.jpg";
+import noimage from "../../assets/noimage.jpg";
 import { FaEdit, FaTrash } from "react-icons/fa";
 import ConfirmationModal from "../../components/ConfirmationModal";
 import { useNavigate } from "react-router-dom";
@@ -79,7 +79,7 @@ const MyListings = () => {
             >
               <div className="max-h-48 xs:max-h-24 col-span-full xs:col-span-2 cursor-pointer">
                 <img
-                  src={background}
+                  src={property?.photos[0] || noimage}
                   className="h-full w-full"
                   alt="property image"
                 />
