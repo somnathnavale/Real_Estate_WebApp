@@ -83,6 +83,6 @@ app.use(globalErrorHandler);
 
 mongoose.connection.once("open",()=>{
   app.listen(process.env.PORT, () => {
-    console.log("server is running...");
+    console.log(`server is running on port ${process.env.PORT}`);
   });
 })
