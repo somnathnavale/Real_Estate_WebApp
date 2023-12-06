@@ -1,4 +1,4 @@
-export const listings = [
+const listings = [
   {
     name: "Modern 1BHK Apartment",
     address: "Prestige Towers, Koregaon Park, 411001, Pune, Maharashtra",
@@ -940,3 +940,5 @@ export const listings = [
     owner: "656570d3c05d7d768a052c30",
   },
 ];
+
+module.exports={listings}

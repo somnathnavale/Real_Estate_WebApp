@@ -1,10 +1,10 @@
-import Enum from "../models/enum.model.js";
-import Listing from "../models/listing.model.js";
-import CustomError from "../utils/error/CustomError.js";
-import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
-import { generateQuery } from "../utils/helper/listingHelpers.js";
+const Enum = require("../models/enum.model.js");
+const Listing = require("../models/listing.model.js");
+const CustomError = require("../utils/error/CustomError.js");
+const { asyncErrorHandler } = require("../utils/error/errorHelpers.js");
+const { generateQuery } = require("../utils/helper/listingHelpers.js");
 
-export const addListing = asyncErrorHandler(async (req, res) => {
+const addListing = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.body.owner)
     throw new CustomError("Not Allowed To Add Property", 401);
   
@@ -23,14 +23,14 @@ export const addListing = asyncErrorHandler(async (req, res) => {
   res.status(200).json({ message: "Property Added Successfully",listing });
 });
 
-export const getAllListings = asyncErrorHandler(async (req, res) => {
+const getAllListings = asyncErrorHandler(async (req, res) => {
   const {query:filteredQuery,countQuery}=generateQuery(Listing.find(),req);
   const count=await countQuery;
   const response = await filteredQuery;
   res.json({ listings: response,count });
 });
 
-export const getListing = asyncErrorHandler(async (req, res) => {
+const getListing = asyncErrorHandler(async (req, res) => {
   const listing = await Listing.findById(req.params.id).select("-__v");
   if(!listing){
     throw new CustomError("Property With Given Id not found",404);
@@ -38,7 +38,7 @@ export const getListing = asyncErrorHandler(async (req, res) => {
   res.json({ listing });
 });
 
-export const getCategoryCount=asyncErrorHandler(async(req,res)=>{
+const getCategoryCount=asyncErrorHandler(async(req,res)=>{
   const response=await Enum.aggregate([
     {
       $match: {
@@ -82,7 +82,7 @@ export const getCategoryCount=asyncErrorHandler(async(req,res)=>{
   res.json({categoryCounts:response})
 })
 
-export const deleteListing = asyncErrorHandler(async (req, res) => {
+const deleteListing = asyncErrorHandler(async (req, res) => {
   const listing = await Listing.findOneAndDelete({_id:req.params.id,owner:req.user.id}).select("-__v");
   if(!listing){
     throw new CustomError("Property With Given Id not found",404);
@@ -90,7 +90,7 @@ export const deleteListing = asyncErrorHandler(async (req, res) => {
   res.json({ listing });
 });
 
-export const updateListing=asyncErrorHandler(async(req,res)=>{
+const updateListing=asyncErrorHandler(async(req,res)=>{
   if(req.body._id!==req.params.id)
     throw new CustomError("Mismatch in the Property Id",400);
 
@@ -116,3 +116,12 @@ export const updateListing=asyncErrorHandler(async(req,res)=>{
   }
   res.json({ listing });
 })
+
+module.exports = {
+  addListing,
+  getAllListings,
+  getListing,
+  getCategoryCount,
+  deleteListing,
+  updateListing,
+};

@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
-import CustomError from "./CustomError.js";
-import logger from "../../log/logger.js";
+const mongoose = require("mongoose");
+const CustomError = require("./CustomError.js");
+const logger = require("../../log/logger.js");
 
 function devError(res, err) {
   const statusCode = err.statusCode || 500;
@@ -53,7 +53,7 @@ function handleMongooseError(error) {
   return error;
 }
 
-export const globalErrorHandler = (err, req, res, next) => {
+const globalErrorHandler = (err, req, res, next) => {
   if (process.env.NODE_ENV === "development") {
     devError(res, err);
   } else if (process.env.NODE_ENV === "production") {
@@ -62,7 +62,7 @@ export const globalErrorHandler = (err, req, res, next) => {
   }
 };
 
-export const asyncErrorHandler = (func) => {
+const asyncErrorHandler = (func) => {
   return async (req, res, next) => {
     try {
       await func(req, res, next);
@@ -71,3 +71,5 @@ export const asyncErrorHandler = (func) => {
     }
   };
 };
+
+module.exports={globalErrorHandler,asyncErrorHandler};

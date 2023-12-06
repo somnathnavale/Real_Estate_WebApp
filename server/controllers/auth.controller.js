@@ -1,10 +1,10 @@
-import bcryptjs from "bcryptjs";
-import User from "../models/user.model.js";
-import jwt from "jsonwebtoken";
-import CustomError from "../utils/error/CustomError.js";
-import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
-import Token from "../models/token.model.js";
-import { forgotPasswordEmail, userRegistrationEmail } from "../services/email.service.js";
+const bcryptjs = require("bcryptjs");
+const User = require("../models/user.model.js");
+const CustomError = require("../utils/error/CustomError.js");
+const Token = require("../models/token.model.js");
+const jwt = require("jsonwebtoken");
+const { asyncErrorHandler } = require("../utils/error/errorHelpers.js");
+const { forgotPasswordEmail, userRegistrationEmail } = require("../services/email.service.js");
 
 const signUp = asyncErrorHandler(async (req, res) => {
   const { password, ...other} = req.body;
@@ -188,4 +188,4 @@ const updatePassword=asyncErrorHandler(async(req,res,next)=>{
   res.status(200).json({message:"Password Successfully Updated"});
 })
 
-export { signUp, signIn, google, generateToken, logoutUser,forgotPasswordHandler};
+module.exports = { signUp, signIn, google, generateToken, logoutUser,forgotPasswordHandler};

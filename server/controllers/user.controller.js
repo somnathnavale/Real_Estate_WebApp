@@ -1,8 +1,8 @@
-import User from "../models/user.model.js";
-import bcryptjs from "bcryptjs";
-import CustomError from "../utils/error/CustomError.js";
-import { asyncErrorHandler } from "../utils/error/errorHelpers.js";
-import Listing from "../models/listing.model.js";
+const User = require("../models/user.model.js");
+const Listing = require("../models/listing.model.js");
+const bcryptjs = require("bcryptjs");
+const CustomError = require("../utils/error/CustomError.js");
+const { asyncErrorHandler } = require("../utils/error/errorHelpers.js");
 
 const updateUser = asyncErrorHandler(async (req, res) => {
   if (req.user.id !== req.params.id)
@@ -44,4 +44,4 @@ const deleteUser = asyncErrorHandler(async (req, res) => {
   res.status(200).json({ message: "account deleted successfully" });
 });
 
-export { updateUser, deleteUser };
+module.exports = { updateUser, deleteUser };

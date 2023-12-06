@@ -1,4 +1,4 @@
-export const generateQuery = (query, req) => {
+const generateQuery = (query, req) => {
   let queryObj = {};
 
   let {
@@ -66,3 +66,5 @@ export const generateQuery = (query, req) => {
 
   return {query,countQuery};
 };
+
+module.exports={generateQuery}

@@ -1,4 +1,4 @@
-export const enumConverter=(data)=>{
+const enumConverter=(data)=>{
     const response=data.reduce((acc,curr)=>{
         const {category,...other}=curr._doc;
         if(acc[category]!==undefined){
@@ -11,7 +11,7 @@ export const enumConverter=(data)=>{
     return response;
 }
 
-export const enumConstConverter=(data)=>{
+const enumConstConverter=(data)=>{
     const response=data.reduce((acc,curr)=>{
         const {category,...other}=curr._doc;
         acc[category]={...acc[category],[other.key]:other.value}
@@ -19,3 +19,5 @@ export const enumConstConverter=(data)=>{
     },{})
     return response;
 }
+
+module.exports={enumConverter,enumConstConverter}

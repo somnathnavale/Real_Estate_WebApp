@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const enumSchema = new mongoose.Schema({
     category: { type: String, required: true },
@@ -8,5 +8,5 @@ const enumSchema = new mongoose.Schema({
   
   const Enum = mongoose.model("Enum", enumSchema);
 
-export default Enum;
+module.exports=Enum;
   

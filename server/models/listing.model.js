@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+const mongoose = require("mongoose");
 
 const message = "value `{VALUE}` is not allowed for `{PATH}` field";
 
@@ -132,7 +132,7 @@ listingSchema.post(["find", "findOne", "findById","findOneAndUpdate"], async fun
 
 const Listing = mongoose.model("Listing", listingSchema);
 
-export default Listing;
+module.exports = Listing;
 
 // const listingSchema = new mongoose.Schema({
 //   name: {

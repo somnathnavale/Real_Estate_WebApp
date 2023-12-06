@@ -1,19 +1,18 @@
-import express from "express";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import mongoose from "mongoose";
-import dotenv from "dotenv"
-import {resolve, dirname} from "path";
-import { fileURLToPath } from 'url';
+const express = require("express");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
+const path = require("path");
 
-import userRouter from "./routes/user.route.js";
-import authRouter from "./routes/auth.route.js";
-import enumRouter from "./routes/enum.route.js";
-import listingRouter from "./routes/listing.route.js";
+const userRouter = require("./routes/user.route.js");
+const authRouter = require("./routes/auth.route.js");
+const enumRouter = require("./routes/enum.route.js");
+const listingRouter = require("./routes/listing.route.js");
 
-import CustomError from "./utils/error/CustomError.js";
-import { globalErrorHandler } from "./utils/error/errorHelpers.js";
-import logger from "./log/logger.js";
+const CustomError = require("./utils/error/CustomError.js");
+const { globalErrorHandler } = require("./utils/error/errorHelpers.js");
+const logger = require("./log/logger.js");
 
 dotenv.config();
 
@@ -60,12 +59,10 @@ app.use("/api/listings", listingRouter);
 
 
 if (process.env.NODE_ENV === "production") {
-  const __filename = fileURLToPath(import.meta.url);
-  const __dirname = dirname(__filename);
 
-  app.use(express.static(resolve(__dirname, 'public')));
+  app.use(express.static(path.resolve(__dirname, 'public')));
   app.get("*", (req, res) => {
-      res.sendFile(resolve(__dirname, 'public', 'index.html'),function (err) {
+      res.sendFile(path.resolve(__dirname, 'public', 'index.html'),function (err) {
           if(err) {
               res.status(500).send(err)
           }
@@ -82,7 +79,7 @@ app.use('*',(req,res,next)=>{
 app.use(globalErrorHandler);
 
 mongoose.connection.once("open",()=>{
-  app.listen(process.env.PORT, () => {
+  app.listen(process.env.PORT || 5000, () => {
     console.log(`server is running on port ${process.env.PORT}`);
   });
 })

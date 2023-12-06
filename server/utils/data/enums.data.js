@@ -1,4 +1,4 @@
-export const enums = [
+const enums = [
   { category: "waterAvailability", key: "ALWAYS", value: "Always" },
   { category: "waterAvailability", key: "MOSTLY", value: "Mostly" },
   { category: "waterAvailability", key: "PERIODICALLY", value: "Periodically" },
@@ -35,3 +35,5 @@ export const enums = [
   { category: "lift", key: "YES", value: "Yes" },
   { category: "lift", key: "NO", value: "No" },
 ];
+
+module.exports={enums};

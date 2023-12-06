@@ -1,11 +1,12 @@
-import mongoose from "mongoose";
-import dotenv from "dotenv";
-dotenv.config({ path: "../../.env" });
+const mongoose = require("mongoose");
+const dotenv = require("dotenv");
 
-import Enum from "../../models/enum.model.js";
-import Listing from "../../models/listing.model.js";
-import { enums } from "../data/enums.data.js";
-import { listings } from "../data/listings.data.js";
+const Enum = require("../../models/enum.model.js");
+const Listing = require("../../models/listing.model.js");
+const { enums } = require("../data/enums.data.js");
+const { listings } = require("../data/listings.data.js");
+
+dotenv.config({ path: "../../.env" });
 
 mongoose
   .connect(process.env.MONGO_URI)

@@ -1,9 +1,9 @@
-import mailer from "nodemailer";
-import {
+const mailer = require("nodemailer");
+const {
   UserRegistrationMailContent,
   forgotPasswordMailContent,
-} from "../utils/constants/emailConstants.js";
-import logger from "../log/logger.js";
+} = require("../utils/constants/emailConstants.js");
+const logger = require("../log/logger.js");
 
 let mailTransporterCreater = () =>
   mailer.createTransport({
@@ -31,7 +31,7 @@ const mailSender = async (emailDetails) => {
   }
 };
 
-export const forgotPasswordEmail = async (userEmail, otp) => {
+const forgotPasswordEmail = async (userEmail, otp) => {
   try {
     forgotPasswordMailContent.to = userEmail;
     forgotPasswordMailContent.from = {
@@ -49,7 +49,7 @@ export const forgotPasswordEmail = async (userEmail, otp) => {
   }
 };
 
-export const userRegistrationEmail = async (userEmail, username) => {
+const userRegistrationEmail = async (userEmail, username) => {
   try {
     UserRegistrationMailContent.to = userEmail;
     UserRegistrationMailContent.from = {
@@ -66,3 +66,5 @@ export const userRegistrationEmail = async (userEmail, username) => {
     throw error;
   }
 };
+
+module.exports={forgotPasswordEmail,userRegistrationEmail};

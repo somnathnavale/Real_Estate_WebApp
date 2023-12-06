@@ -1,6 +1,6 @@
-import express from 'express';
-import verifyJWT from '../middleware/verifyJWT.js';
-import { addListing,deleteListing,getAllListings, getCategoryCount, getListing, updateListing } from '../controllers/listing.controller.js';
+const express = require('express');
+const verifyJWT =require('../middleware/verifyJWT.js');
+const { addListing,deleteListing,getAllListings, getCategoryCount, getListing, updateListing } = require('../controllers/listing.controller.js');
 
 const router=express.Router();
 
@@ -11,4 +11,5 @@ router.get('/',getAllListings)
     .put('/:id',verifyJWT,updateListing);
 
 router.get('/category/count',getCategoryCount);
-export default router;
+
+module.exports=router;

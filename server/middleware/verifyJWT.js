@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import CustomError from "../utils/error/CustomError.js";
+const jwt = require("jsonwebtoken");
+const CustomError = require("../utils/error/CustomError.js");
 
 const verifyJWT = async (req, res, next) => {
   const authHeader = req.headers.authorization || req.headers.Authorization;
@@ -14,4 +14,4 @@ const verifyJWT = async (req, res, next) => {
   });
 };
 
-export default verifyJWT;
+module.exports = verifyJWT;
