@@ -3,6 +3,9 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import mongoose from "mongoose";
 import dotenv from "dotenv"
+import {resolve, dirname} from "path";
+import { fileURLToPath } from 'url';
+
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import enumRouter from "./routes/enum.route.js";
@@ -37,7 +40,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: process.env.ORIGIN,
+    origin: [process.env.ORIGIN,"/"],
     credentials: true,
   })
 );
@@ -54,6 +57,21 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/enums", enumRouter);
 app.use("/api/listings", listingRouter);
+
+
+if (process.env.NODE_ENV === "production") {
+  const __filename = fileURLToPath(import.meta.url);
+  const __dirname = dirname(__filename);
+
+  app.use(express.static(resolve(__dirname, 'public')));
+  app.get("*", (req, res) => {
+      res.sendFile(resolve(__dirname, 'public', 'index.html'),function (err) {
+          if(err) {
+              res.status(500).send(err)
+          }
+      });
+  })
+}
 
 app.use('*',(req,res,next)=>{
   const err=new CustomError(`Can't find ${req.originalUrl} on the server!`,404);

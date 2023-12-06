@@ -2,6 +2,10 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { addField } from "../../redux/filter/filterSlice";
 import { useNavigate } from "react-router-dom";
+import apartment from '../../assets/apartment.png';
+import commercial from '../../assets/commercial.png';
+import house from '../../assets/house.png';
+import condo from '../../assets/condo.png';
 
 const FeaturedProperty = () => {
   const { featuredListings } = useSelector((store) => store.listing);
@@ -12,6 +16,16 @@ const FeaturedProperty = () => {
     dispatch(addField({ field: "category", value }));
     navigate("/listings");
   };
+
+  const serveImage=(name)=>{
+    switch (name){
+      case "apartment": return apartment 
+      case "commercial": return commercial
+      case "house" : return house
+      case "condo" : return condo
+      default : return ""
+    }
+  }
 
   return (
     <section className="bg-[#F7F9FC] py-8 sm:py-16">
@@ -32,7 +46,7 @@ const FeaturedProperty = () => {
               onClick={() => handleClick(property.type)}
             >
               <img
-                src={`/src/assets/${property.type.toLowerCase()}.png`}
+                src={serveImage(property.type.toLowerCase())}
                 alt={property.type}
                 className="w-12 h-12 object-cover rounded-lg"
               />

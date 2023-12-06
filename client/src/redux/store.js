@@ -11,4 +11,5 @@ export const store = configureStore({
     listing:listingReducer,
     filter:filterReducer
   },
+  devTools: process.env.NODE_ENV !== 'production',
 });
