@@ -17,7 +17,7 @@ const ListingSecondaryDetails = ({ listing }) => {
     <div className="w-full p-0 lg:p-4 mt-2 lg:0">
       <h2 className="text-lg lg:text-xl font-semibold">More details</h2>
       <p className="mt-1 indent-4">{listing.description}</p>
-      <hr className="my-2 border" />
+      <hr className="my-4 border" />
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-4 mt-2">
         <ListingFeature Icon={GiStairs} label="Floor" value={listing.floor} />
         <ListingFeature

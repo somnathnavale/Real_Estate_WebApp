@@ -63,11 +63,11 @@ const SignUp = () => {
       <Snackbar {...handleSnackbar()} />
       <h1 className="text-3xl text-center font-semibold mt-6 mb-4">Sign Up</h1>
       <form
-        className="grid grid-cols-8 gap-2 gap-y-4 p-4 text-base"
+        className="grid grid-cols-6 gap-2 gap-y-4 p-4 text-base"
         onSubmit={handleSignUp}
       >
         <label
-          className="col-span-2 flex text-slate-700 font-light items-center"
+          className="text-sm sm:text-base font-medium col-span-2 flex text-slate-700 items-center"
           htmlFor="username"
         >
           Username *
@@ -75,7 +75,7 @@ const SignUp = () => {
         <input
           type="text"
           placeholder="username"
-          className="border px-4 py-2 outline-[#e2e2e2] col-span-6"
+          className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
           id="username"
           value={formData?.username}
           onChange={handleChange}
@@ -83,7 +83,7 @@ const SignUp = () => {
           required
         />
         <label
-          className="col-span-2 flex text-slate-700 font-light items-center"
+          className="text-sm sm:text-base font-medium col-span-2 flex text-slate-700 items-center"
           htmlFor="password"
         >
           Password *
@@ -91,7 +91,7 @@ const SignUp = () => {
         <input
           type="password"
           placeholder="password"
-          className="border px-4 py-2 outline-[#e2e2e2] col-span-6"
+          className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
           id="password"
           value={formData?.password}
           onChange={handleChange}
@@ -99,7 +99,7 @@ const SignUp = () => {
           required
         />
         <label
-          className="col-span-2 flex text-slate-700 font-light items-center"
+          className="text-sm sm:text-base font-medium col-span-2 flex text-slate-700 items-center"
           htmlFor="fullname"
         >
           Full Name
@@ -107,14 +107,14 @@ const SignUp = () => {
         <input
           type="text"
           placeholder="fullname"
-          className="border px-4 py-2 outline-[#e2e2e2] col-span-6"
+          className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
           id="fullname"
           value={formData?.fullname}
           onChange={handleChange}
           autoComplete="off"
         />
         <label
-          className="col-span-2 flex text-slate-700 font-light items-center"
+          className="text-sm sm:text-base font-medium col-span-2 flex text-slate-700 items-center"
           htmlFor="email"
         >
           Email *
@@ -122,7 +122,7 @@ const SignUp = () => {
         <input
           type="text"
           placeholder="email"
-          className="border px-4 py-2 outline-[#e2e2e2] col-span-6"
+          className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
           id="email"
           value={formData?.email}
           onChange={handleChange}
@@ -130,7 +130,7 @@ const SignUp = () => {
           required
         />
         <label
-          className="col-span-2 flex text-slate-700 font-light items-center"
+          className="text-sm sm:text-base font-medium col-span-2 flex text-slate-700 items-center"
           htmlFor="mobileNo"
         >
           Mobile No. *
@@ -138,7 +138,7 @@ const SignUp = () => {
         <input
           type="number"
           placeholder="mobile no."
-          className="border px-4 py-2 outline-[#e2e2e2] col-span-6"
+          className="border px-4 py-2 outline-[#e2e2e2] col-span-4"
           id="mobileNo"
           value={formData?.mobileNo}
           onChange={handleChange}
@@ -153,7 +153,7 @@ const SignUp = () => {
           {status === STATUS.LOADING ? "Loading..." : "Sign Up"}
         </button>
       </form>
-      <div className="flex gap-2">
+      <div className="flex gap-2 px-4 my-2">
         <p>Have an account?</p>
         <Link to="/sign-in" className="text-blue-700 hover:text-blue-500">
           Sign in

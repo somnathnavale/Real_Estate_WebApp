@@ -262,28 +262,28 @@ const UpdateListings = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="col-span-full">
+          <div className="col-span-full my-2 sm:my-0">
             <UploadImage
               propertyData={propertyData}
               setPropertyData={setPropertyData}
             />
           </div>
         </div>
-        <div className="mt-6 flex justify-center items-center">
-          <button
-            type="submit"
-            disabled={status === STATUS.LOADING}
-            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto disabled:opacity-80"
-          >
-            Update
-          </button>
+        <div className="mt-6 flex justify-center items-center gap-4">
           <button
             type="button"
             disabled={status === STATUS.LOADING}
-            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-600 text-base font-medium text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 sm:ml-3 sm:w-auto disabled:opacity-80"
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-slate-600 text-base font-medium text-white hover:bg-slate-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-500 sm:w-auto disabled:opacity-80"
             onClick={() => fetch()}
           >
             Cancel
+          </button>
+          <button
+            type="submit"
+            disabled={status === STATUS.LOADING}
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:w-auto disabled:opacity-80"
+          >
+            Update
           </button>
         </div>
       </form>

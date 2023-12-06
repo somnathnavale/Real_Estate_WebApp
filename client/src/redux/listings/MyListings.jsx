@@ -8,15 +8,15 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
-import {storage} from "../../firebase";
-import {ref, deleteObject } from "firebase/storage"
+import { storage } from "../../firebase";
+import { ref, deleteObject } from "firebase/storage";
 import Pagination from "../../components/Pagination";
 
 const MyListings = () => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(STATUS.IDLE);
-  const [page,setPage]=useState(1);
-  const [count,setCount]=useState(0);
+  const [page, setPage] = useState(1);
+  const [count, setCount] = useState(0);
   const [selectedListing, setSelectedListing] = useState({});
   const { user } = useSelector((store) => store.user);
   const { mylistings, error } = useSelector((store) => store.listing);
@@ -29,7 +29,7 @@ const MyListings = () => {
     if (!callRef.current) {
       setStatus(STATUS.LOADING);
       callRef.current = true;
-      const filter={ userId: user._id,page};
+      const filter = { userId: user._id, page };
       dispatch(getMyListing(filter))
         .unwrap()
         .then((data) => {
@@ -38,34 +38,34 @@ const MyListings = () => {
         })
         .catch(() => {
           setStatus(STATUS.FAILED);
-        }).finally(()=>{
-          callRef.current=false;
         })
+        .finally(() => {
+          callRef.current = false;
+        });
     }
-  }, [dispatch, mylistings,page]);
+  }, [dispatch, mylistings, page]);
 
-  const handleDeleteImage=async(urls)=>{
+  const handleDeleteImage = async (urls) => {
     const deletePromise = urls.map((url, index) => {
-        const delRef = ref(storage, url);
-        return deleteObject(delRef);
-      }
-    );
+      const delRef = ref(storage, url);
+      return deleteObject(delRef);
+    });
     try {
       await Promise.all(deletePromise);
     } catch (error) {
-        throw error
+      throw error;
     }
-  }
+  };
 
   const handleDelete = () => {
     setOpen(false);
-    handleDeleteImage(selectedListing?.photos)
+    handleDeleteImage(selectedListing?.photos);
     setStatus(STATUS.LOADING);
     dispatch(deleteListing({ axios, id: selectedListing?._id }))
       .unwrap()
-      .then(async() => {
+      .then(async () => {
         try {
-          await handleDeleteImage(selectedListing?.photos)
+          await handleDeleteImage(selectedListing?.photos);
           setStatus(STATUS.SUCCEEDED);
         } catch (error) {
           throw error;
@@ -99,68 +99,76 @@ const MyListings = () => {
           </p>
         )}
         {mylistings.length ? (
-          mylistings.map((property, index) => (
-            <div
-              className="grid grid-cols-8 rounded p-4 bg-[#f2f2f2] mb-4"
-              key={index}
-              onClick={() => navigate(`/listings/${property._id}`)}
-            >
-              <div className="max-h-48 xs:max-h-24 col-span-full xs:col-span-2 cursor-pointer">
-                <img
-                  src={property?.photos[0] || noimage}
-                  className="h-full w-full"
-                  alt="property image"
-                />
-              </div>
-              <div className="col-span-full xs:col-span-4 xs:px-4">
-                <p
-                  title={property.name}
-                  className="font-medium text-lg cursor-pointer"
-                >
-                  {property.name.length > 35
-                    ? property.name.slice(0, 33) + "..."
-                    : property.name}
-                </p>
-                <p
-                  title={property.address}
-                  className="text-slate-500 cursor-pointer"
-                >
-                  {property.address.length > 80
-                    ? property.address.slice(0, 78) + "..."
-                    : property.address}
-                </p>
-              </div>
-              <button
-                disabled={status}
-                className="col-span-1 sm:col-span-1 my-2 sm:my-8 mx-1 flex justify-center max-h-10 items-center bg-blue-500 text-white md:px-2 py-1 rounded hover:opacity-90"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  navigate(`/listings/update/${property._id}`);
-                }}
-                title="Edit Property"
+          <>
+            {mylistings.map((property, index) => (
+              <div
+                className="grid grid-cols-8 rounded p-4 bg-[#f2f2f2] mb-4"
+                key={index}
+                onClick={() => navigate(`/listings/${property._id}`)}
               >
-                <FaEdit className="h-5 w-5 lg:mr-1" />
-                <span className="hidden lg:block"> Edit</span>
-              </button>
-              <button
-                className="col-span-1 sm:col-span-1 my-2 sm:my-8 mx-1 flex justify-center max-h-10 items-center bg-red-500 text-white md:px-2 py-1 rounded hover:opacity-90"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedListing(property);
-                  setOpen(true);
-                }}
-                title="Delete Property"
-              >
-                <FaTrash className="h-5 w-5 lg:mr-1" />
-                <span className="hidden lg:block"> Delete</span>
-              </button>
-            </div>
-          ))
+                <div className="max-h-48 xs:max-h-24 col-span-full xs:col-span-2 cursor-pointer">
+                  <img
+                    src={property?.photos[0] || noimage}
+                    className="h-full w-full"
+                    alt="property image"
+                  />
+                </div>
+                <div className="col-span-full xs:col-span-4 xs:px-4">
+                  <p
+                    title={property.name}
+                    className="font-medium text-lg cursor-pointer"
+                  >
+                    {property.name.length > 35
+                      ? property.name.slice(0, 33) + "..."
+                      : property.name}
+                  </p>
+                  <p
+                    title={property.address}
+                    className="text-slate-500 cursor-pointer"
+                  >
+                    {property.address.length > 80
+                      ? property.address.slice(0, 78) + "..."
+                      : property.address}
+                  </p>
+                </div>
+                <button
+                  disabled={status === STATUS.LOADING}
+                  className="col-span-1 sm:col-span-1 my-2 sm:my-8 mx-1 flex justify-center max-h-10 items-center bg-blue-500 text-white md:px-2 py-1 rounded hover:opacity-90"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(`/listings/update/${property._id}`);
+                  }}
+                  title="Edit Property"
+                >
+                  <FaEdit className="h-5 w-5 lg:mr-1" />
+                  <span className="hidden lg:block"> Edit</span>
+                </button>
+                <button
+                  disabled={status === STATUS.LOADING}
+                  className="col-span-1 sm:col-span-1 my-2 sm:my-8 mx-1 flex justify-center max-h-10 items-center bg-red-500 text-white md:px-2 py-1 rounded hover:opacity-90"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setSelectedListing(property);
+                    setOpen(true);
+                  }}
+                  title="Delete Property"
+                >
+                  <FaTrash className="h-5 w-5 lg:mr-1" />
+                  <span className="hidden lg:block"> Delete</span>
+                </button>
+              </div>
+            ))}
+            <Pagination
+              page={page}
+              limit={6}
+              handleChange={(val) => setPage(val)}
+              count={count}
+            />
+          </>
         ) : (
-          <p className="text-lg text-medium">No Property added</p>
+          <p className="text-lg text-medium text-center">No Property added</p>
         )}
       </div>
-      <Pagination page={page} limit={6} handleChange={(val)=>setPage(val)} count={count}/>
     </>
   );
 };

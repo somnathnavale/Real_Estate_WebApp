@@ -60,7 +60,7 @@ const ListingPage = () => {
       </div>
       <hr className="sm:hidden my-4 border" />
       <ListingSecondaryDetails listing={listing} />
-      <hr className="border" />
+      <hr className="border my-4" />
       <SimilarListings listing={listing} />
     </div>
   );

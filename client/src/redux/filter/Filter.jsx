@@ -30,7 +30,7 @@ const Filter = () => {
   };
 
   return (
-    <div className="w-full md:w-auto relative md:block">
+    <div className="w-full md:w-auto relative md:block z-10 sm:z-0">
       <div className="w-full flex justify-between md:hidden">
         <div className="grow mr-2">
           <form
@@ -175,21 +175,21 @@ const Filter = () => {
           </div>
         </div>
         <div className="border-b-2 border-slate-300 my-2" />
-        <div className="mt-2">
+        <div className="grid grid-cols-2 mt-2 gap-4">
           <button
-            className="rounded-md border border-transparent shadow-sm px-2 py-1 bg-slate-700 text-base font-medium text-white hover:bg-slate-800 focus:outline-none mr-2"
-            onClick={handleSearch}
-          >
-            Apply
-          </button>
-          <button
-            className="rounded-md border border-transparent shadow-sm px-2 py-1 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none"
+            className=" rounded-md border border-transparent shadow-sm px-2 py-1 bg-slate-700 text-base font-medium text-white hover:bg-slate-800 focus:outline-none"
             onClick={() => {
               dispatch(clearFilters());
               handleSearch();
             }}
           >
             Clear
+          </button>
+          <button
+            className="rounded-md border border-transparent shadow-sm px-2 py-1 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none"
+            onClick={handleSearch}
+          >
+            Apply
           </button>
         </div>
       </div>

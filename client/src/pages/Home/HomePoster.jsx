@@ -11,9 +11,7 @@ const HomePoster = () => {
         <div className="sm:w-[60%] flex flex-col justify-center gap-3 sm:gap-0 items-center sm:items-start text-center sm:text-left">
           <h1 className="text-xl sm:text-2xl md:text-3xl font-semibold lg:text-4xl sm:mb-6 sm:w-[70%] text-slate-800">
             Ultimate Platform for Your Next Dream{" "}
-            <span className="underline underline-offset-3 text-green-500 font-serif">
-              Home
-            </span>
+            <span className=" text-green-500 font-serif">Home</span>
           </h1>
           <p className="text-base md:text-lg lg:text-xl md:w-[100%] text-slate-600">
             This is your premier destination for property listings. explore,

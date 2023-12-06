@@ -96,13 +96,13 @@ const ProfileForm = () => {
   };
 
   return (
-    <div className="p-8 border max-w-3xl mx-auto">
+    <div className="p-4 sm:p-8 border max-w-3xl mx-auto">
       <Snackbar {...handleSnackbar()} />
       <div className="max-w-md mx-auto">
         <h1 className="text-xl font-medium">Profile Details</h1>
         <hr className="my-4" />
         {isEdit ? (
-          <form className="grid grid-cols-6 gap-2 gap-y-4 p-4 text-base">
+          <form className="grid grid-cols-6 gap-2 gap-y-4 sm:p-4 text-base">
             <label
               className="col-span-2 flex text-slate-700 font-light items-center"
               htmlFor="username"
@@ -165,15 +165,19 @@ const ProfileForm = () => {
             />
           </form>
         ) : (
-          <div className="grid grid-cols-2 gap-2 gap-y-4 p-4 text-base">
-            <div className="text-slate-700 font-light">Full Name</div>
-            <div>{returnValue(user?.fullname)}</div>
-            <div className="text-slate-700 font-light">Username</div>
-            <div>{returnValue(user?.username)}</div>
-            <div className="text-slate-700 font-light">Email</div>
-            <div>{returnValue(user?.email)}</div>
-            <div className="text-slate-700 font-light">Mobile No.</div>
-            <div>{returnValue(user?.mobileNo)}</div>
+          <div className="grid grid-cols-6 gap-2 gap-y-4 sm:p-4 text-base">
+            <div className="text-slate-700 font-light col-span-2">
+              Full Name
+            </div>
+            <div className="col-span-4">{returnValue(user?.fullname)}</div>
+            <div className="text-slate-700 font-light col-span-2">Username</div>
+            <div className="col-span-4">{returnValue(user?.username)}</div>
+            <div className="text-slate-700 font-light col-span-2">Email</div>
+            <div className="col-span-4">{returnValue(user?.email)}</div>
+            <div className="text-slate-700 font-light col-span-2">
+              Mobile No.
+            </div>
+            <div className="col-span-4">{returnValue(user?.mobileNo)}</div>
           </div>
         )}
         <button
@@ -184,11 +188,14 @@ const ProfileForm = () => {
           {isEdit ? "Save" : "Edit"}
         </button>
         <hr className="my-6" />
-        <form className="flex justify-between" onSubmit={handleChangePassword}>
+        <form
+          className="flex justify-between gap-4 sm:gap-8"
+          onSubmit={handleChangePassword}
+        >
           <input
             type="password"
             placeholder="new password"
-            className="border px-4 py-1 outline-[#e2e2e2] rounded"
+            className="border px-4 py-1 flex-grow outline-[#e2e2e2] rounded"
             id="password"
             value={formData?.password}
             onChange={handleChange}
@@ -198,7 +205,7 @@ const ProfileForm = () => {
           <button
             type="submit"
             disabled={status === STATUS.LOADING}
-            className=" w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto disabled:opacity-80"
+            className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-sm sm:font-normal sm:w-auto disabled:opacity-80"
           >
             Change Password
           </button>

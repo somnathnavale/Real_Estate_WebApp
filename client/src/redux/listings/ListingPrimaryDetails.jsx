@@ -104,14 +104,16 @@ const ListingPrimaryDetails = ({ listing }) => {
           />
         </div>
         <hr className="mt-4 mb-2" />
-        <div className="flex items-center flex-row">
-          <div className="flex items-center lg:mr-2">
+        <div className="grid grid-cols-2 sm:grid-cols-3">
+          <div className="flex items-center">
             <FaCrown className="mr-2 h-6 w-6 text-slate-400" />
-            <span className="font-normal text-gray-500">Owner Details :- </span>
+            <span className="font-normal text-gray-500 flex-grow">
+              Owner Details :-{" "}
+            </span>
           </div>
           {user ? (
             <button
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:ml-3 sm:w-auto sm:text-sm"
+              className="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 sm:w-fit bg-green-600 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 sm:text-base"
               onClick={() => setOpen(true)}
             >
               View Details
@@ -119,7 +121,7 @@ const ListingPrimaryDetails = ({ listing }) => {
           ) : (
             <Link
               to="/sign-in"
-              className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm"
+              className="inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 sm:w-fit bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-base"
               state={{ from: location }}
             >
               Login First
