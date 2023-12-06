@@ -12,7 +12,7 @@ const listingRouter = require("./routes/listing.route.js");
 
 const CustomError = require("./utils/error/CustomError.js");
 const { globalErrorHandler } = require("./utils/error/errorHelpers.js");
-const logger = require("./log/logger.js");
+//const logger = require("./log/logger.js");
 
 dotenv.config();
 

@@ -3,7 +3,7 @@ const {
   UserRegistrationMailContent,
   forgotPasswordMailContent,
 } = require("../utils/constants/emailConstants.js");
-const logger = require("../log/logger.js");
+//const logger = require("../log/logger.js");
 
 let mailTransporterCreater = () =>
   mailer.createTransport({

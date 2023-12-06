@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const CustomError = require("./CustomError.js");
-const logger = require("../../log/logger.js");
+//const logger = require("../../log/logger.js");
 
 function devError(res, err) {
   const statusCode = err.statusCode || 500;
