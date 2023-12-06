@@ -18,11 +18,11 @@ import logger from "./log/logger.js";
 dotenv.config();
 
 process.on('unhandledRejection',(promise,reason)=>{
-  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  //logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
   process.exit(1);
 })
 process.on('uncaughtException',error=>{
-  logger.error('Uncaught Exception:', error);
+  //logger.error('Uncaught Exception:', error);
   process.exit(1);
 })
 
@@ -75,7 +75,7 @@ if (process.env.NODE_ENV === "production") {
 
 app.use('*',(req,res,next)=>{
   const err=new CustomError(`Can't find ${req.originalUrl} on the server!`,404);
-  logger.error(`message-${err.message}, type-${err.name}`);
+  //logger.error(`message-${err.message}, type-${err.name}`);
   next(err);
 })
 

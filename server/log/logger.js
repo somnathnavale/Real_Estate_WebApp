@@ -9,9 +9,9 @@ const logger = winston.createLogger({
   ),
   transports: [
     new winston.transports.Console(),
-    new winston.transports.File({ filename: './log/error.log', level: 'error' }),
-    new winston.transports.File({ filename: './log/combined.log' }),
-    new winston.transports.File({ filename: './log/email-error.log', level: 'crit' }),
+    // new winston.transports.File({ filename: './log/error.log', level: 'error' }),
+    // new winston.transports.File({ filename: './log/combined.log' }),
+    // new winston.transports.File({ filename: './log/email-error.log', level: 'crit' }),
   ],
 });
 
