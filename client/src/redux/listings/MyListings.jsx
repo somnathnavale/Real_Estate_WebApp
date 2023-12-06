@@ -8,11 +8,16 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
+import {storage} from "../../firebase";
+import {ref, deleteObject } from "firebase/storage"
+import Pagination from "../../components/Pagination";
 
 const MyListings = () => {
   const [open, setOpen] = useState(false);
   const [status, setStatus] = useState(STATUS.IDLE);
-  const [selectedListing, setSelectedListing] = useState(null);
+  const [page,setPage]=useState(1);
+  const [count,setCount]=useState(0);
+  const [selectedListing, setSelectedListing] = useState({});
   const { user } = useSelector((store) => store.user);
   const { mylistings, error } = useSelector((store) => store.listing);
   const dispatch = useDispatch();
@@ -21,27 +26,50 @@ const MyListings = () => {
   const axios = useAxios(axiosPublic);
 
   useEffect(() => {
-    if (!mylistings.length && !callRef.current) {
+    if (!callRef.current) {
       setStatus(STATUS.LOADING);
       callRef.current = true;
-      dispatch(getMyListing({ userId: user._id }))
+      const filter={ userId: user._id,page};
+      dispatch(getMyListing(filter))
         .unwrap()
-        .then(() => {
+        .then((data) => {
           setStatus(STATUS.SUCCEEDED);
+          setCount(data?.count);
         })
         .catch(() => {
           setStatus(STATUS.FAILED);
-        });
+        }).finally(()=>{
+          callRef.current=false;
+        })
     }
-  }, [dispatch, mylistings]);
+  }, [dispatch, mylistings,page]);
+
+  const handleDeleteImage=async(urls)=>{
+    const deletePromise = urls.map((url, index) => {
+        const delRef = ref(storage, url);
+        return deleteObject(delRef);
+      }
+    );
+    try {
+      await Promise.all(deletePromise);
+    } catch (error) {
+        throw error
+    }
+  }
 
   const handleDelete = () => {
     setOpen(false);
+    handleDeleteImage(selectedListing?.photos)
     setStatus(STATUS.LOADING);
-    dispatch(deleteListing({ axios, id: selectedListing }))
+    dispatch(deleteListing({ axios, id: selectedListing?._id }))
       .unwrap()
-      .then(() => {
-        setStatus(STATUS.SUCCEEDED);
+      .then(async() => {
+        try {
+          await handleDeleteImage(selectedListing?.photos)
+          setStatus(STATUS.SUCCEEDED);
+        } catch (error) {
+          throw error;
+        }
       })
       .catch(() => {
         setStatus(STATUS.FAILED);
@@ -103,6 +131,7 @@ const MyListings = () => {
                 </p>
               </div>
               <button
+                disabled={status}
                 className="col-span-1 sm:col-span-1 my-2 sm:my-8 mx-1 flex justify-center max-h-10 items-center bg-blue-500 text-white md:px-2 py-1 rounded hover:opacity-90"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -117,7 +146,7 @@ const MyListings = () => {
                 className="col-span-1 sm:col-span-1 my-2 sm:my-8 mx-1 flex justify-center max-h-10 items-center bg-red-500 text-white md:px-2 py-1 rounded hover:opacity-90"
                 onClick={(e) => {
                   e.stopPropagation();
-                  setSelectedListing(property?._id);
+                  setSelectedListing(property);
                   setOpen(true);
                 }}
                 title="Delete Property"
@@ -131,6 +160,7 @@ const MyListings = () => {
           <p className="text-lg text-medium">No Property added</p>
         )}
       </div>
+      <Pagination page={page} limit={6} handleChange={(val)=>setPage(val)} count={count}/>
     </>
   );
 };

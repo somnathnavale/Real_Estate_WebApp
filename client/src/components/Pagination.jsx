@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { getListings } from "../redux/listings/listingService";
-import {updatePage} from "../redux/filter/filterSlice";
 
-const Pagination = () => {
-  const { count } = useSelector((store) => store.listing);
-  const { limit, page } = useSelector((store) => store.filter);
+const Pagination = ({count,limit,page,handleChange}) => {
   const [limits,setLimits]=useState([]);
-  const dispatch = useDispatch();
   const pages = Math.ceil(count / limit);
 
   useEffect(()=>{
@@ -38,11 +32,6 @@ const Pagination = () => {
   
     generatePageNumbers();
   },[page,pages])
-
-  const handleChange=(val)=>{
-    dispatch(updatePage(val));
-    dispatch(getListings()).unwrap();
-  }
 
   return (
     <div className="mt-4 flex justify-center text-lg">

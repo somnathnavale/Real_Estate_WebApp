@@ -5,12 +5,15 @@ import { useLocation } from "react-router-dom";
 import PropertyCard from "../../components/PropertyCard";
 import {  STATUS } from "../../utils/constants/common";
 import Pagination from "../../components/Pagination";
+import { updatePage } from "../filter/filterSlice";
 
 const AllListings = () => {
   const [status, setStatus] = useState(STATUS.IDLE);
   const dispatch = useDispatch();
   const callRef = useRef(false);
-  const { listings, error } = useSelector(store => store.listing);
+  const { listings, error,count } = useSelector(store => store.listing);
+  const { limit, page } = useSelector((store) => store.filter);
+
   const location = useLocation();
 
   useEffect(() => {
@@ -22,13 +25,19 @@ const AllListings = () => {
         })
         .catch(() => {
           setStatus(STATUS.FAILED);
+        }).finally(()=>{
+          callRef.current=false;
         });
     };
     if (!callRef.current) {
       callRef.current = true;
       fetch();
     }
-  }, [dispatch, location]);
+  }, [dispatch, location,page]);
+
+  const handleChange=(val)=>{
+    dispatch(updatePage(val));
+  }
 
   if (status === STATUS.FAILED) {
     return (
@@ -47,7 +56,7 @@ const AllListings = () => {
               <PropertyCard key={index} {...property} screen="listings" />
             ))}
           </div>
-          <Pagination />
+          <Pagination count={count} limit={limit} page={page} handleChange={handleChange}/>
         </div>
       ) : (
         <p className="mt-4 text-lg text-medium text-center col-span-full">
