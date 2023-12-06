@@ -19,5 +19,3 @@ export const UserRegistrationMailContent={
     to:"" 
 }
 
-console.log(forgotPasswordMailContent);
-
