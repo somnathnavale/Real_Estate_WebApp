@@ -1,7 +1,8 @@
 import express from "express";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-
+import mongoose from "mongoose";
+import dotenv from "dotenv"
 import userRouter from "./routes/user.route.js";
 import authRouter from "./routes/auth.route.js";
 import enumRouter from "./routes/enum.route.js";
@@ -11,10 +12,32 @@ import CustomError from "./utils/error/CustomError.js";
 import { globalErrorHandler } from "./utils/error/errorHelpers.js";
 import logger from "./log/logger.js";
 
+dotenv.config();
+
+process.on('unhandledRejection',(promise,reason)=>{
+  logger.error('Unhandled Rejection at:', promise, 'reason:', reason);
+  process.exit(1);
+})
+process.on('uncaughtException',error=>{
+  logger.error('Uncaught Exception:', error);
+  process.exit(1);
+})
+
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("connected to mongodb");
+  })
+  .catch((err) => {
+    console.log(err);
+    process.exit(1);
+  });
+
 const app = express();
+
 app.use(
   cors({
-    origin: "http://127.0.0.1:5173",
+    origin: process.env.ORIGIN,
     credentials: true,
   })
 );
@@ -23,7 +46,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use((req, res, next) => {
-  logger.info(`${req.method} ${req.url}`);
+  //logger.info(`${req.method} ${req.url}`);
   next();
 });
 
@@ -31,7 +54,6 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/enums", enumRouter);
 app.use("/api/listings", listingRouter);
-
 
 app.use('*',(req,res,next)=>{
   const err=new CustomError(`Can't find ${req.originalUrl} on the server!`,404);
@@ -41,4 +63,8 @@ app.use('*',(req,res,next)=>{
 
 app.use(globalErrorHandler);
 
-export default app;
+mongoose.connection.once("open",()=>{
+  app.listen(process.env.PORT, () => {
+    console.log("server is running...");
+  });
+})
