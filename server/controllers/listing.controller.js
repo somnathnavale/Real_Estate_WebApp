@@ -1,5 +1,7 @@
 const Enum = require("../models/enum.model.js");
 const Listing = require("../models/listing.model.js");
+const User = require("../models/user.model.js");
+const { propertyRegistrationEmail } = require("../services/email.service.js");
 const CustomError = require("../utils/error/CustomError.js");
 const { asyncErrorHandler } = require("../utils/error/errorHelpers.js");
 const { generateQuery } = require("../utils/helper/listingHelpers.js");
@@ -15,11 +17,19 @@ const addListing = asyncErrorHandler(async (req, res) => {
       delete req.body[field];
     }
   })
-   
+  
+  const user=await User.findById(req.user.id);
+  if(!user)
+    throw new CustomError("Not Allowed To Add Property", 401);
+  
   const newListing = new Listing(req.body);
   const response=await newListing.save();
+  
   const { _id,name, price, category, listingType, address, photos } = response;
   const listing = {_id, name, price, category, listingType, address, photos };
+
+  await propertyRegistrationEmail(user?.email, user?.fullname || user?.username ,name,category,address,price);
+  
   res.status(200).json({ message: "Property Added Successfully",listing });
 });
 
