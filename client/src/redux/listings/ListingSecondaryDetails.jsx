@@ -30,7 +30,7 @@ const ListingSecondaryDetails = ({ listing }) => {
         <ListingFeature
           Icon={FaBath}
           label="Bathrooms"
-          value={listing.bathrooms}
+          value={listing.bathroom}
         />
         <ListingFeature
           Icon={MdBalcony}
