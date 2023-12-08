@@ -8,9 +8,8 @@ import ConfirmationModal from "../../components/ConfirmationModal";
 import { useNavigate } from "react-router-dom";
 import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
-import { storage } from "../../firebase";
-import { ref, deleteObject } from "firebase/storage";
 import Pagination from "../../components/Pagination";
+import useFile from "../../hooks/useFile";
 
 const MyListings = () => {
   const [open, setOpen] = useState(false);
@@ -24,6 +23,7 @@ const MyListings = () => {
   const callRef = useRef(false);
   const navigate = useNavigate();
   const axios = useAxios(axiosPublic);
+  const {handleFileDelete}=useFile();
 
   useEffect(() => {
     if (!callRef.current) {
@@ -45,27 +45,14 @@ const MyListings = () => {
     }
   }, [dispatch, mylistings, page]);
 
-  const handleDeleteImage = async (urls) => {
-    const deletePromise = urls.map((url, index) => {
-      const delRef = ref(storage, url);
-      return deleteObject(delRef);
-    });
-    try {
-      await Promise.all(deletePromise);
-    } catch (error) {
-      throw error;
-    }
-  };
-
   const handleDelete = () => {
     setOpen(false);
-    handleDeleteImage(selectedListing?.photos);
     setStatus(STATUS.LOADING);
     dispatch(deleteListing({ axios, id: selectedListing?._id }))
       .unwrap()
       .then(async () => {
         try {
-          await handleDeleteImage(selectedListing?.photos);
+          await handleFileDelete(selectedListing?.photos);
           setStatus(STATUS.SUCCEEDED);
         } catch (error) {
           throw error;

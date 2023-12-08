@@ -8,6 +8,8 @@ import { axiosPublic } from "../api/axios";
 import MyListings from "../redux/listings/MyListings";
 import { STATUS } from "../utils/constants/common";
 import ConfirmationModal from "../components/ConfirmationModal";
+import { getMyListing } from "../redux/listings/listingService";
+import useFile from "../hooks/useFile";
 
 const renderer = (option) => {
   switch (option) {
@@ -40,7 +42,7 @@ const Profile = () => {
   const { status, user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const axios = useAxios(axiosPublic);
-
+  const {handleFileDelete}=useFile();
   useEffect(() => {
     if (status === STATUS.LOADING) return;
     else if (option === "logout") {
@@ -55,9 +57,19 @@ const Profile = () => {
     dispatch(logout());
   };
 
-  const handleDelete = () => {
-    setOpen(false);
-    dispatch(deleteUser({ id: user._id, axios })).unwrap();
+  const handleDelete = async () => {
+    try {
+      const filter = { userId: user._id, limit:1000 };
+      const allListings=await dispatch(getMyListing(filter)).unwrap();
+      await dispatch(deleteUser({ id: user._id, axios })).unwrap();
+      const urls=[];
+      allListings?.listings.forEach((listing)=>{
+        urls.push(...listing.photos)
+      });
+      await handleFileDelete(urls);
+    } catch (error) {
+      console.log(error)
+    }
   };
 
   return (

@@ -42,6 +42,7 @@ const AddListing = () => {
           setStatus(STATUS.IDLE);
           return;
         }
+        setSelectedFiles([]);
         addedPhotos = response.filesUrls;
       }
       setPropertyData((prev) => ({ ...prev, photos: addedPhotos }));
@@ -53,7 +54,6 @@ const AddListing = () => {
       ).unwrap();
       setStatus(STATUS.SUCCEEDED);
       setPropertyData(structuredClone(defaultPropertyData));
-      setSelectedFiles([]);
     } catch (error) {
       setStatus(STATUS.FAILED);
     }

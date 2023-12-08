@@ -49,7 +49,7 @@ const ListingPrimaryDetails = ({ listing }) => {
             value={
               listing?.status === enumConst?.status?.AVAILABLE
                 ? "Available"
-                : listing.listingType === enumConst?.status?.SALE
+                : listing.listingType === enumConst?.listingType?.SALE
                 ? "Sold Out"
                 : "Rented out"
             }
@@ -95,7 +95,7 @@ const ListingPrimaryDetails = ({ listing }) => {
                     currency: "INR",
                     maximumFractionDigits: 0,
                   })} ${
-                    listing.listingType === enumConst?.status?.SALE
+                    listing.listingType === enumConst?.listingType?.SALE
                       ? ""
                       : "Per Month"
                   }`
