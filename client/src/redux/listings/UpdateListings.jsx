@@ -67,6 +67,7 @@ const UpdateListings = () => {
           setStatus(STATUS.IDLE);
           return;
         }
+        setSelectedFiles([]);
         addedPhotos = response.filesUrls;
       }
       setPropertyData((prev) => ({
