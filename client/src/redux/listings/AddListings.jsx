@@ -9,12 +9,14 @@ import Snackbar from "../../components/Snackbar";
 import { addListing } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
 import UploadImage from "../../components/Inputs/UploadImage";
+import useFile from "../../hooks/useFile";
 
 const AddListing = () => {
   const [status, setStatus] = useState(STATUS.IDLE);
   const [propertyData, setPropertyData] = useState(
     structuredClone(defaultPropertyData)
   );
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const { enums, error: enumError } = useSelector((store) => store.enum);
   const { error } = useSelector((store) => store.listing);
@@ -22,24 +24,39 @@ const AddListing = () => {
   const { user } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const axios = useAxios(axiosPublic);
+  const { handleFileUpload } = useFile();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setPropertyData({ ...propertyData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus(STATUS.LOADING);
-    dispatch(addListing({ axios, data: { ...propertyData, owner: user._id } }))
-      .unwrap()
-      .then((res) => {
-        setStatus(STATUS.SUCCEEDED);
-        setPropertyData(structuredClone(defaultPropertyData));
-      })
-      .catch((e) => {
-        setStatus(STATUS.FAILED);
-      });
+    try {
+      setStatus(STATUS.LOADING);
+      let addedPhotos = [];
+      if (selectedFiles.length) {
+        const response = await handleFileUpload(selectedFiles);
+        if (!response.success) {
+          setStatus(STATUS.IDLE);
+          return;
+        }
+        addedPhotos = response.filesUrls;
+      }
+      setPropertyData((prev) => ({ ...prev, photos: addedPhotos }));
+      await dispatch(
+        addListing({
+          axios,
+          data: { ...propertyData, photos: addedPhotos, owner: user._id },
+        })
+      ).unwrap();
+      setStatus(STATUS.SUCCEEDED);
+      setPropertyData(structuredClone(defaultPropertyData));
+      setSelectedFiles([]);
+    } catch (error) {
+      setStatus(STATUS.FAILED);
+    }
   };
 
   const handleSnackbar = () => {
@@ -233,6 +250,10 @@ const AddListing = () => {
             <UploadImage
               propertyData={propertyData}
               setPropertyData={setPropertyData}
+              selectedFiles={selectedFiles}
+              setSelectedFiles={setSelectedFiles}
+              status={status}
+              setStatus={setStatus}
             />
           </div>
         </div>

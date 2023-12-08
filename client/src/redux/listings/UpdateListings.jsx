@@ -10,6 +10,7 @@ import { getListing, updateListing } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
 import Snackbar from "../../components/Snackbar";
 import UploadImage from "../../components/Inputs/UploadImage";
+import useFile from "../../hooks/useFile";
 
 const UpdateListings = () => {
   const { id } = useParams();
@@ -18,16 +19,19 @@ const UpdateListings = () => {
   const [propertyData, setPropertyData] = useState({
     ...structuredClone(defaultPropertyData),
   });
+  const [selectedFiles, setSelectedFiles] = useState([]);
 
   const {
     enums,
     error: enumError,
     status: enumStatus,
   } = useSelector((store) => store.enum);
+  const { user } = useSelector((store) => store.user);
 
   const dispatch = useDispatch();
   const axios = useAxios(axiosPublic);
   const callRef = useRef(false);
+  const { handleFileUpload } = useFile();
 
   useEffect(() => {
     if (!callRef.current) {
@@ -52,22 +56,39 @@ const UpdateListings = () => {
       });
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus(STATUS.LOADING);
-    dispatch(
-      updateListing({
-        axios,
-        data: { ...propertyData, owner: propertyData?.owner?._id },
-      })
-    )
-      .unwrap()
-      .then((e) => {
-        setStatus(STATUS.SUCCEEDED);
-      })
-      .catch((e) => {
-        setStatus(STATUS.FAILED);
-      });
+    try {
+      setStatus(STATUS.LOADING);
+      let addedPhotos = [];
+      if (selectedFiles.length) {
+        const response = await handleFileUpload(selectedFiles);
+        if (!response.success) {
+          setStatus(STATUS.IDLE);
+          return;
+        }
+        addedPhotos = response.filesUrls;
+      }
+      setPropertyData((prev) => ({
+        ...prev,
+        photos: [...addedPhotos, ...prev?.photos],
+      }));
+      await dispatch(
+        updateListing({
+          axios,
+          data: {
+            ...propertyData,
+            photos: [...addedPhotos, ...propertyData?.photos],
+            owner: user._id,
+          },
+        })
+      ).unwrap();
+      setStatus(STATUS.SUCCEEDED);
+      setSelectedFiles([]);
+    } catch (error) {
+      console.log(error);
+      setStatus(STATUS.FAILED);
+    }
   };
 
   const handleChange = (e) => {
@@ -266,6 +287,10 @@ const UpdateListings = () => {
             <UploadImage
               propertyData={propertyData}
               setPropertyData={setPropertyData}
+              selectedFiles={selectedFiles}
+              setSelectedFiles={setSelectedFiles}
+              status={status}
+              setStatus={setStatus}
             />
           </div>
         </div>
