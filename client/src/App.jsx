@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import SignIn from "./pages/SignIn";
@@ -31,7 +31,7 @@ export default function App() {
       dispatch(getEnums()).unwrap();
       callRef.current = true;
     }
-  }, []);
+  }, [dispatch]);
 
   return (
     <Routes>

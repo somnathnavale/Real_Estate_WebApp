@@ -27,10 +27,10 @@ const listingSlice = createSlice({
   name: "listing",
   initialState,
   reducers: {
-    clearListingsState:(state,action)=>{
+    clearListingsState:()=>{
       return structuredClone(initialState)
     },
-    clearMyListings:(state,action)=>{
+    clearMyListings:(state)=>{
       state.mylistings=[];
     }
   },
@@ -123,7 +123,8 @@ const listingSlice = createSlice({
       })
       .addCase(deleteListing.fulfilled, (state, action) => {
         state.status = STATUS.IDLE;
-        const { _id, category } = action.payload?.listing;
+        const _id = action?.payload?.listing?._id;
+        const category = action?.payload?.listing?.category;
         state.recentListings = state.recentListings
           .filter((lis) => lis._id !== _id)
           .slice(0, 6);

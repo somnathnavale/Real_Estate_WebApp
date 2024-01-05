@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 function Snackbar({ message, type, open, onClose,time }) {
   const [isVisible, setIsVisible] = useState(open);
@@ -16,7 +16,7 @@ function Snackbar({ message, type, open, onClose,time }) {
 
       return () => clearTimeout(timer);
     }
-  }, [isVisible, onClose]);
+  }, [isVisible, onClose,time]);
 
   const typeClasses = {
     success: 'bg-green-500',

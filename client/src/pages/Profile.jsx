@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileForm from "./ProfileForm";
 import { allOptions } from "../utils/constants/user";
 import { useDispatch, useSelector } from "react-redux";

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { deleteListing, getMyListing } from "./listingService";
 import { STATUS } from "../../utils/constants/common";
@@ -43,7 +43,7 @@ const MyListings = () => {
           callRef.current = false;
         });
     }
-  }, [dispatch, mylistings, page]);
+  }, [dispatch, mylistings, page, user._id]);
 
   const handleDelete = () => {
     setOpen(false);

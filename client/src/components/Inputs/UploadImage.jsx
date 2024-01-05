@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { MdCancel, MdDelete } from "react-icons/md";
 import resizeFile from "../../utils/helpers/compressFile";
 import useFile from "../../hooks/useFile";
@@ -109,7 +109,7 @@ const UploadImage = ({
       <div className="col-span-full sm:col-span-3">
         <p className="text-lg font-medium text-slate-700">Selected Images</p>
         <div className="overflow-x-auto max-h-24">
-          {selectedFiles.map((file, idx) => (
+          {selectedFiles.map((file) => (
             <li
               key={file.name}
               className="flex justify-between px-2  pb-1 border-b-2 border-gray-300 items-center"
@@ -130,7 +130,7 @@ const UploadImage = ({
       <div className="col-span-full sm:col-span-3">
         <p className="text-lg font-medium text-slate-700">Uploaded Images</p>
         <div className="overflow-x-auto max-h-24">
-          {propertyData.photos.map((url, idx) => (
+          {propertyData.photos.map((url) => (
             <li
               key={url}
               className="flex justify-between px-2  pb-1 border-b-2 border-gray-300 items-center"
@@ -138,6 +138,7 @@ const UploadImage = ({
               <a
                 href={url}
                 target="_blank"
+                rel="noreferrer"
                 className="text-blue-800 hover:text-blue-500 underline underline-offset-2"
               >
                 {" "}

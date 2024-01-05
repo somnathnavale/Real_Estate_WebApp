@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { axiosPublic } from "../../api/axios";
 import PropertyCard from "../../components/PropertyCard";
 import { ErrorHandler } from "../../utils/helpers/asyncHandlers";
@@ -33,7 +33,7 @@ const SimilarListings = ({ listing }) => {
       callRef.current = true;
       fetch();
     }
-  }, [listing?._id]);
+  }, [listing?._id,listing?.category,listing?.listingType]);
 
   return (
     <div className="my-4">
