@@ -1,4 +1,3 @@
-import React from "react";
 import { storage } from "../firebase";
 import {
   ref,
@@ -16,19 +15,20 @@ const useFile = () => {
       };
     }
 
-    const uploadPromises = files.map((file, index) => {
+    const uploadPromises = files.map((file) => {
       return new Promise((resolve, reject) => {
         const imagesRef = ref(storage, new Date().getTime() + file.name);
         uploadBytes(imagesRef, file)
-          .then((daya) => {
+          .then(() => {
             return resolve(getDownloadURL(imagesRef));
           })
-          .catch((error) => {
+          .catch(() => {
             return reject(`error occured while uploding ${file.name} image`);
           });
       });
     });
 
+    // eslint-disable-next-line no-useless-catch
     try {
       const response = await Promise.all(uploadPromises);
       return {
@@ -43,7 +43,7 @@ const useFile = () => {
   };
 
   const handleFileDelete = async (urls) => {
-    const deletePromise = urls.map((url, index) => {
+    const deletePromise = urls.map((url) => {
       const delRef = ref(storage, url);
       return deleteObject(delRef);
     });

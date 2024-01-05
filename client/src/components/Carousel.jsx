@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { GrPrevious,GrNext } from "react-icons/gr";
 import noimage from "../assets/noimage.jpg";
 const Carousel = ({photos}) => {

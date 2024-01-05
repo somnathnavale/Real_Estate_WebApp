@@ -1,4 +1,3 @@
-import React from "react";
 
 const Dropdown = ({ data, field, onChange, options }) => {
   return (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Snackbar from "../components/Snackbar";
@@ -22,7 +22,7 @@ const SignUp = () => {
     e.preventDefault();
     dispatch(signUpUser(formData))
       .unwrap()
-      .then((e) => {
+      .then(() => {
         setStatus(STATUS.SUCCEEDED);
         setFormData(defaultFormData);
       })

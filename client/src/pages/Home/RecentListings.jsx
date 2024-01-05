@@ -1,4 +1,3 @@
-import React from 'react'
 import PropertyCard from '../../components/PropertyCard';
 import { useSelector } from 'react-redux';
 

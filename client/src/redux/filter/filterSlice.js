@@ -37,7 +37,7 @@ const filterSlice = createSlice({
       state.page=1;
       state.price[id].checked = !state.price[id].checked;
     },
-    clearFilters(state) {
+    clearFilters() {
       return initialState;
     },
     updatePage(state,action){

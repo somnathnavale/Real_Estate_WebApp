@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { defaultPropertyData, property } from "../../utils/constants/listings";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,7 +24,6 @@ const UpdateListings = () => {
   const {
     enums,
     error: enumError,
-    status: enumStatus,
   } = useSelector((store) => store.enum);
   const { user } = useSelector((store) => store.user);
 
@@ -33,13 +32,7 @@ const UpdateListings = () => {
   const callRef = useRef(false);
   const { handleFileUpload } = useFile();
 
-  useEffect(() => {
-    if (!callRef.current) {
-      fetch();
-    }
-  }, [dispatch]);
-
-  function fetch() {
+  const fetch=useCallback(()=>{
     setStatus(STATUS.LOADING);
     callRef.current = true;
     dispatch(getListing({ id }))
@@ -54,7 +47,13 @@ const UpdateListings = () => {
       .catch(() => {
         setStatus(STATUS.FAILED);
       });
-  }
+  },[dispatch,id])
+
+  useEffect(() => {
+    if (!callRef.current) {
+      fetch();
+    }
+  }, [dispatch,fetch]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -72,14 +71,14 @@ const UpdateListings = () => {
       }
       setPropertyData((prev) => ({
         ...prev,
-        photos: [...addedPhotos, ...prev?.photos],
+        photos: [...addedPhotos, ...prev.photos],
       }));
       await dispatch(
         updateListing({
           axios,
           data: {
             ...propertyData,
-            photos: [...addedPhotos, ...propertyData?.photos],
+            photos: [...addedPhotos, ...propertyData.photos],
             owner: user._id,
           },
         })

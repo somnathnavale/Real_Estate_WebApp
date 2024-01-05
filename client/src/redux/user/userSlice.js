@@ -55,7 +55,7 @@ const userSlice = createSlice({
         state.status = STATUS.FAILED;
         state.error = action.payload.message;
       })
-      .addCase(generateToken.pending, (state, action) => {
+      .addCase(generateToken.pending, (state) => {
         state.error=null;
         state.status=STATUS.LOADING
       })
@@ -63,7 +63,7 @@ const userSlice = createSlice({
         state.user ={...state.user,...action.payload};
         state.status=STATUS.IDLE
       })
-      .addCase(generateToken.rejected, (state, action) => {
+      .addCase(generateToken.rejected, (state) => {
         state.user = null;
         state.status=STATUS.FAILED;
       })
@@ -71,7 +71,7 @@ const userSlice = createSlice({
         state.error=null;
         state.status = STATUS.LOADING;
       })
-      .addCase(deleteUser.fulfilled, (state, action) => {
+      .addCase(deleteUser.fulfilled, (state) => {
         state.user = null;
         state.status = STATUS.IDLE;
       })
@@ -79,7 +79,7 @@ const userSlice = createSlice({
         state.status = STATUS.FAILED;
         state.error = action.payload.message;
       })
-      .addCase(logout.fulfilled, (state, action) => {
+      .addCase(logout.fulfilled, () => {
         return initialState;
       })
       .addCase(logout.rejected, (state, action) => {
@@ -89,5 +89,4 @@ const userSlice = createSlice({
   },
 });
 
-export const {  } = userSlice.actions;
 export default userSlice.reducer;

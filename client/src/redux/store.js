@@ -11,5 +11,6 @@ export const store = configureStore({
     listing:listingReducer,
     filter:filterReducer
   },
+  // eslint-disable-next-line no-undef
   devTools: process.env.NODE_ENV !== 'production',
 });
