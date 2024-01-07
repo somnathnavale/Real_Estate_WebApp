@@ -1,3 +1,4 @@
+import { useCallback } from "react";
 import { storage } from "../firebase";
 import {
   ref,
@@ -7,7 +8,7 @@ import {
 } from "firebase/storage";
 
 const useFile = () => {
-  const handleFileUpload = async (files) => {
+  const handleFileUpload = useCallback(async (files) => {
     if (!files.length) {
       return {
         success: false,
@@ -40,7 +41,7 @@ const useFile = () => {
       //   return { success: false, message: error.message };
       throw error;
     }
-  };
+  },[]);
 
   const handleFileDelete = async (urls) => {
     const deletePromise = urls.map((url) => {

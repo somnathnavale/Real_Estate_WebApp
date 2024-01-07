@@ -1,5 +1,6 @@
+import { memo } from "react";
 
-const TextInput = ({ input, data, field, onChange }) => {
+const TextInput = memo(({ input, data, field, onChange }) => {
   return (
     <>
       <label
@@ -22,7 +23,7 @@ const TextInput = ({ input, data, field, onChange }) => {
       ) : (
         <input
           type={input}
-          min={input==='number'?0:""}
+          min={input === "number" ? 0 : ""}
           id={field.key}
           name={field.key}
           required={field.required}
@@ -34,6 +35,8 @@ const TextInput = ({ input, data, field, onChange }) => {
       )}
     </>
   );
-};
+});
+
+TextInput.displayName = TextInput;
 
 export default TextInput;

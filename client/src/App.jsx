@@ -7,7 +7,7 @@ import Profile from "./pages/Profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Layout from "./components/Layout";
 import Listings from "./redux/listings/Listings";
-import AddListings from "./redux/listings/AddListings";
+import AddListing from "./redux/listings/add/AddListing";
 import ListingPage from "./redux/listings/ListingPage";
 import { useDispatch } from "react-redux";
 import {
@@ -15,10 +15,10 @@ import {
   getListings,
 } from "./redux/listings/listingService";
 import { getEnums } from "./redux/enum/enumService";
-import UpdateListings from "./redux/listings/UpdateListings";
 import NotFound from "./pages/NotFound";
 import PersistedLogin from "./components/PersistedLogin";
 import ForgotPassword from "./pages/ForgotPassword";
+import UpdateListing from "./redux/listings/add/UpdateListing";
 
 export default function App() {
   const callRef = useRef(false);
@@ -47,8 +47,8 @@ export default function App() {
           <Route path="/listings">
             <Route index element={<Listings />} />
             <Route element={<PrivateRoute />}>
-              <Route path="add" element={<AddListings />} />
-              <Route path="update/:id" element={<UpdateListings />} />
+              <Route path="add" element={<AddListing />} />
+              <Route path="update/:id" element={<UpdateListing />} />
             </Route>
             <Route path=":id" element={<ListingPage />} />
           </Route>
