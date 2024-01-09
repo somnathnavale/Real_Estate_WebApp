@@ -1,3 +1,5 @@
+import { property } from "../constants/listings";
+
 export const createFilterQuery=(filter)=>{
     let query={}
     if(filter.searchText){
@@ -27,3 +29,22 @@ export const createFilterQuery=(filter)=>{
     }
     return query;
 }
+
+export const PageValidations=(propertyData,page)=>{
+
+    const requiredFields=Object.values(property).reduce((acc,curr)=>{
+      if(curr.required===true && curr.page===page)
+        acc.push(curr.key);
+      return acc;
+    },[]);
+
+    for(let field of requiredFields){
+      const val=propertyData[field];
+      if(val==="" || val===null){
+        return{
+          status:true,
+          message:`${property[field].label} is required field`
+        }
+      }
+    }
+  }

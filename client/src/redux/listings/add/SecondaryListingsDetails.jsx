@@ -6,8 +6,7 @@ import { useSelector } from "react-redux";
 
 const SecondaryListingsDetails = memo(({ propertyData, handleChange }) => {
   const { enums } = useSelector((store) => store.enum);
-  console.log(property.category !== enums?.category?.COMMERCIAL);
-
+  
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <h2 className="text-2xl font-semibold text-center text-slate-700 sm:col-span-2">
@@ -22,14 +21,6 @@ const SecondaryListingsDetails = memo(({ propertyData, handleChange }) => {
         />
       </div>
       <div>
-        <TextInput
-          input="number"
-          data={propertyData}
-          field={property.floor}
-          onChange={handleChange}
-        />
-      </div>
-      <div>
         <Dropdown
           data={propertyData}
           field={property.furnishing}
@@ -37,14 +28,29 @@ const SecondaryListingsDetails = memo(({ propertyData, handleChange }) => {
           options={enums?.furnishing || []}
         />
       </div>
-      <div>
-        <Dropdown
-          data={propertyData}
-          field={property.lift}
-          onChange={handleChange}
-          options={enums?.lift || []}
-        />
-      </div>
+      {propertyData.category !==
+        enums?.category.find((item) => item.key === "HOUSE")?.value &&
+      propertyData.category !==
+        enums?.category.find((item) => item.key === "CONDOS")?.value ? (
+        <>
+          <div>
+            <Dropdown
+              data={propertyData}
+              field={property.lift}
+              onChange={handleChange}
+              options={enums?.lift || []}
+            />
+          </div>
+          <div>
+            <TextInput
+              input="number"
+              data={propertyData}
+              field={property.floor}
+              onChange={handleChange}
+            />
+          </div>
+        </>
+      ) : null}
       <div>
         <Dropdown
           data={propertyData}
@@ -53,7 +59,8 @@ const SecondaryListingsDetails = memo(({ propertyData, handleChange }) => {
           options={enums?.facing || []}
         />
       </div>
-      {property.category === enums?.category?.COMMERCIAL ? (
+      {propertyData.category !==
+      enums?.category.find((item) => item.key === "COMMERCIAL").value ? (
         <>
           <div>
             <TextInput

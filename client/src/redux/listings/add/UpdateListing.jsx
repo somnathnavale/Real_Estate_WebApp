@@ -5,22 +5,24 @@ import { defaultPropertyData } from "../../../utils/constants/listings";
 import { axiosPublic } from "../../../api/axios";
 import useAxios from "../../../hooks/useAxios";
 import useFile from "../../../hooks/useFile";
-import { STATUS } from "../../../utils/constants/common";
+import { STATUS, defaultToast } from "../../../utils/constants/common";
 import { getListing, updateListing } from "../listingService";
-import Snackbar from "../../../components/Snackbar";
 import PageRenderer from "./PageRenderer";
 import ButtonGroup from "./ButtonGroup";
+import { PageValidations } from "../../../utils/helpers/listingsHelper";
+import SnackbarToast from "../../../components/SnackbarToast";
 
 const UpdateListing = memo(() => {
   const { id } = useParams();
   const [page, setPage] = useState(1);
   const [status, setStatus] = useState(STATUS.IDLE);
-  const { error } = useSelector((store) => store.listing);
   const [propertyData, setPropertyData] = useState({
     ...structuredClone(defaultPropertyData),
   });
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [toast, setToast] = useState(defaultToast);
 
+  const { error: listingError } = useSelector((store) => store.listing);
   const { error: enumError } = useSelector((store) => store.enum);
   const { user } = useSelector((store) => store.user);
 
@@ -35,7 +37,7 @@ const UpdateListing = memo(() => {
     dispatch(getListing({ id }))
       .unwrap()
       .then((response) => {
-        const cloned=response?.listing;
+        const cloned = response?.listing;
         setPropertyData((prev) => ({
           ...prev,
           ...cloned,
@@ -58,6 +60,29 @@ const UpdateListing = memo(() => {
       fetch();
     }
   }, [dispatch, fetch]);
+
+  useEffect(() => {
+    let message =
+      status === STATUS.FAILED || enumError
+        ? listingError || enumError
+        : status === STATUS.SUCCEEDED
+        ? "Property Updated Successfully"
+        : "";
+    let type =
+      status === STATUS.FAILED || enumError
+        ? "error"
+        : status === STATUS.SUCCEEDED
+        ? "success"
+        : "none";
+    let open =
+      status === STATUS.FAILED || status === STATUS.SUCCEEDED || enumError;
+    setToast({
+      message,
+      open,
+      type,
+      time: type === "error" ? 6000 : 1500,
+    });
+  }, [listingError, enumError, status]);
 
   const handleSubmit = useCallback(
     async (e) => {
@@ -113,40 +138,32 @@ const UpdateListing = memo(() => {
     setPropertyData((prev) => ({ ...prev, [name]: value }));
   }, []);
 
-  const handlePageClick = useCallback((val) => {
-    setPage((prev) => prev + val);
+  const onToastClose = useCallback(() => {
+    setToast(defaultToast);
   }, []);
 
-  const handleSnackbar = () => {
-    let message =
-      status === STATUS.FAILED || enumError
-        ? error || enumError
-        : status === STATUS.SUCCEEDED
-        ? "Property Updated Successfully"
-        : "";
-    let type =
-      status === STATUS.FAILED || enumError
-        ? "error"
-        : status === STATUS.SUCCEEDED
-        ? "success"
-        : "none";
-    let open =
-      status === STATUS.FAILED || status === STATUS.SUCCEEDED || enumError;
-    let onClose = () => {
-      setStatus(STATUS.IDLE);
-    };
-    return {
-      message,
-      type,
-      open,
-      onClose,
-      time: type === "error" ? 6000 : 1500,
-    };
-  };
+  const handlePageClick = useCallback(
+    (val) => {
+      if (val == 1) {
+        const response = PageValidations(propertyData, page);
+        if (response?.status) {
+          setToast({
+            type: "warning",
+            message: response.message,
+            time: 2000,
+            open: true,
+          });
+          return;
+        }
+      }
+      setPage((prev) => prev + val);
+    },
+    [page, propertyData]
+  );
 
   return (
     <div className="w-[100%] max-w-xl mx-auto my-6 p-6 bg-[#F7F9FC] shadow-md rounded-lg">
-      <Snackbar {...handleSnackbar()} />
+      <SnackbarToast {...{ ...toast, onClose: onToastClose }} />
       <form>
         <PageRenderer
           page={page}

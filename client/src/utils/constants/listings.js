@@ -4,6 +4,7 @@ export const property = {
     key: "name",
     initialValue: "",
     info:"",
+    page:1,
     required: true,
   },
   locality:{
@@ -11,6 +12,7 @@ export const property = {
     key: "locality",
     initialValue: "",
     info:"",
+    page:3,
     required:true
   },
   street: {
@@ -18,6 +20,7 @@ export const property = {
     key: "street",
     initialValue: "",
     info:"",
+    page:3,
     required: true,
   },
   city: {
@@ -25,6 +28,7 @@ export const property = {
     key: "city",
     initialValue: "",
     info:"",
+    page:3,
     required: true,
   },
   state: {
@@ -32,6 +36,7 @@ export const property = {
     key: "state",
     initialValue: "",
     info:"",
+    page:3,
     required: true,
   },
   zipCode: {
@@ -39,6 +44,7 @@ export const property = {
     key: "zipCode",
     initialValue: "",
     info:"",
+    page:3,
     required: true,
   },
   country: {
@@ -46,6 +52,7 @@ export const property = {
     key: "country",
     initialValue: "",
     info:"",
+    page:3,
     required: true,
   },
   description: {
@@ -53,6 +60,7 @@ export const property = {
     key: "description",
     initialValue: "",
     info:"",
+    page:4,
     required: true,
   },
   photos: {
@@ -60,6 +68,7 @@ export const property = {
     key: "photos",
     initialValue: [],
     info:"",
+    page:4,
     required: false,
   },
   category: {
@@ -67,6 +76,7 @@ export const property = {
     key: "category",
     initialValue: "",
     info:"",
+    page:1,
     required: true,
   },
   listingType: {
@@ -74,6 +84,7 @@ export const property = {
     key: "listingType",
     initialValue: "",
     info:"",
+    page:1,
     required: true,
   },
   status: {
@@ -81,6 +92,7 @@ export const property = {
     key: "status",
     initialValue: "",
     info:"",
+    page:1,
     required: true,
   },
   availability: {
@@ -88,13 +100,23 @@ export const property = {
     key: "availability",
     initialValue: "",
     info:"",
+    page:1,
     required: true,
   },
   carpetArea: {
     label: "Area (sqft)",
     key: "carpetArea",
     initialValue: "",
+    page:1,
     info:"Add Carpet Area for Apartment and Commercial Properties, for Condo and Houses add Total Property Area",
+    required: true,
+  },
+  propertyAge:{
+    label: "Property Age (in Yrs)",
+    key: "propertyAge",
+    initialValue: "",
+    page:2,
+    info:"Provide total years count from property was developed",
     required: true,
   },
   furnishing: {
@@ -102,6 +124,7 @@ export const property = {
     key: "furnishing",
     initialValue: "",
     info:"",
+    page:2,
     required: true,
   },
   price: {
@@ -109,6 +132,7 @@ export const property = {
     key: "price",
     initialValue: "",
     info:"",
+    page:1,
     required: true,
   },
   floor: {
@@ -116,6 +140,7 @@ export const property = {
     key: "floor",
     initialValue: "",
     info:"",
+    page:2,
     required: false,
   },
   facing: {
@@ -123,6 +148,7 @@ export const property = {
     key: "facing",
     initialValue: "",
     info:"",
+    page:2,
     required: false,
   },
   lift: {
@@ -130,6 +156,7 @@ export const property = {
     key: "lift",
     initialValue: "",
     info:"",
+    page:2,
     required: false,
   },
   bathroom: {
@@ -137,6 +164,7 @@ export const property = {
     key: "bathroom",
     initialValue: "",
     info:"",
+    page:2,
     required: false,
   },
   bedroom: {
@@ -144,6 +172,7 @@ export const property = {
     key: "bed",
     initialValue: "",
     info:"",
+    page:2,
     required: false,
   },
   balcony: {
@@ -151,6 +180,7 @@ export const property = {
     key: "balcony",
     initialValue: "",
     info:"",
+    page:2,
     required: false,
   },
   parking: {
@@ -158,6 +188,7 @@ export const property = {
     key: "parking",
     initialValue: "",
     info:"",
+    page:2,
     required: false,
   },
   waterAvailability: {
@@ -165,6 +196,7 @@ export const property = {
     key: "waterAvailability",
     initialValue: "",
     info:"",
+    page:2,
     required: false,
   },
   electricityAvailability: {
@@ -172,13 +204,7 @@ export const property = {
     key: "electricityAvailability",
     initialValue: "",
     info:"",
-    required: false,
-  },
-  propertyAge:{
-    label: "Property Age (in Yrs)",
-    key: "propertyAge",
-    initialValue: "",
-    info:"Provide total years count from property was developed",
+    page:2,
     required: false,
   }
 };
