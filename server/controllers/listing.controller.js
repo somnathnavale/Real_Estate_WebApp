@@ -70,24 +70,6 @@ const getCategoryCount=asyncErrorHandler(async(req,res)=>{
         count:{$size:"$listings"}
       }
     }
-    // {
-    //   $group: {
-    //     _id: null,
-    //     categoryCounts: {
-    //       $push: {
-    //         k: "$value",
-    //         v: { $size: "$listings" },
-    //       },
-    //     },
-    //   },
-    // },
-    // {
-    //   $replaceRoot: {
-    //     newRoot: {
-    //       $arrayToObject: "$categoryCounts",
-    //     },
-    //   },
-    // },
   ]);
   res.json({categoryCounts:response})
 })
@@ -127,6 +109,31 @@ const updateListing=asyncErrorHandler(async(req,res)=>{
   res.json({ listing });
 })
 
+const getGeocode=async(req,res,next)=>{
+  try {
+    const query=req.query;
+    
+    const encodedObj = Object.keys(query)
+    .map((key) => `${key}=${encodeURIComponent(query[key])}`)
+    .join("&");
+
+    const jsonResponse=await fetch(`https://eu1.locationiq.com/v1/search?key=${process.env.GEOCODE_KEY}&structured?${encodedObj}&format=json`)
+    const response=await jsonResponse.json();
+    
+    if (Array.isArray(response) && response.length > 0) {
+      const location = response[0];
+      res.json({lat: location.lat, lon: location.lon });
+    } else {
+      next(new CustomError("No Such Address Exists",400));
+    }
+  } catch (error) {
+    if (error?.response) {
+      next(new CustomError(error?.response?.data?.error,400));
+    }
+    next(new CustomError( error?.message,404));
+  }
+}
+
 module.exports = {
   addListing,
   getAllListings,
@@ -134,4 +141,5 @@ module.exports = {
   getCategoryCount,
   deleteListing,
   updateListing,
+  getGeocode
 };

@@ -28,7 +28,7 @@ function Snackbar({ message, type, open, onClose,time }) {
 
   return (
     <div className={`fixed top-0 right-0 mt-6 mr-4 transform ${isVisible ? 'translate-y-0' : '-translate-y-16'} transition-transform duration-300 ease-in-out`} style={{zIndex:1000}}>
-      <div className={`text-white px-4 py-2 rounded shadow-md ${typeClasses[type]} text-lg flex justify-between gap-4 align-bottom`}>
+      <div className={`text-white px-4 py-2 rounded ${isVisible?"shadow-md":"shadow-none"} ${typeClasses[type]} text-lg flex justify-between gap-4 align-bottom`}>
         <span>{message}</span>
         <button className=" text-white h-6" onClick={onClose}>
           <MdOutlineCancel className={`${typeClasses[type]} cursor-pointer w-[100%] h-[100%] align-baseline -mb-1`}/>

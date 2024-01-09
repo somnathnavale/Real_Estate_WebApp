@@ -10,6 +10,7 @@ import PageRenderer from "./PageRenderer";
 import ButtonGroup from "./ButtonGroup";
 import { PageValidations } from "../../../utils/helpers/listingsHelper";
 import SnackbarToast from "../../../components/SnackbarToast";
+import { getGeocode } from "../../../utils/helpers/geocodeHelper";
 
 const AddListing = () => {
   const [page, setPage] = useState(1);
@@ -107,9 +108,10 @@ const AddListing = () => {
   }, []);
 
   const handlePageClick = useCallback(
-    (val) => {
+    async (val) => {
       if (val == 1) {
         const response = PageValidations(propertyData, page);
+
         if (response?.status) {
           setToast({
             type: "warning",
@@ -119,10 +121,28 @@ const AddListing = () => {
           });
           return;
         }
+
+        if (page === 3) {
+          const coordinets = await getGeocode(axios,propertyData);
+          if (!coordinets.success) {
+            setToast({
+              type: "warning",
+              message: coordinets.message,
+              time: 8000,
+              open: true,
+            });
+            return;
+          }
+          setPropertyData((prev) => ({
+            ...prev,
+            lat: coordinets.lat,
+            lon: coordinets.lon,
+          }));
+        }
       }
       setPage((prev) => prev + val);
     },
-    [page, propertyData]
+    [page, propertyData,axios]
   );
 
   return (
