@@ -16,7 +16,7 @@ const userRegistrationMailContent={
 }
 
 const propertyRegistrationMailContent={
-    subject:"Welcome to NextGen Estate",
+    subject:"Proprty Added Successfully",
     html:fs.readFileSync(path.resolve(__dirname,'../' ,'view', 'property-registration-template.html'), 'utf-8'),
     from:"",
     to:"" 

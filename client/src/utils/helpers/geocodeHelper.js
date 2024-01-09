@@ -16,7 +16,8 @@ export const getGeocode = async (axios, propertyData) => {
 
   try {
     const response = await axios.get(`/api/listings/geocode/address?${encodedObj}`);
-    return {success:true,...response.data};
+    const {lat,lon}=response.data;
+    return {success:true,coordinates:[lon,lat]};
   } catch (error) {
     const err=ErrorHandler(error);
     return { success: false, message:err.message};

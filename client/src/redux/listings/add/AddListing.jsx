@@ -123,11 +123,11 @@ const AddListing = () => {
         }
 
         if (page === 3) {
-          const coordinets = await getGeocode(axios,propertyData);
-          if (!coordinets.success) {
+          const response = await getGeocode(axios,propertyData);
+          if (!response.success) {
             setToast({
               type: "warning",
-              message: coordinets.message,
+              message: response.message,
               time: 8000,
               open: true,
             });
@@ -135,8 +135,7 @@ const AddListing = () => {
           }
           setPropertyData((prev) => ({
             ...prev,
-            lat: coordinets.lat,
-            lon: coordinets.lon,
+            coordinates:structuredClone(response.coordinates)
           }));
         }
       }

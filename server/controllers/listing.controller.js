@@ -11,7 +11,7 @@ const addListing = asyncErrorHandler(async (req, res) => {
     throw new CustomError("Not Allowed To Add Property", 401);
   
     //this removes empty enums fields
-  const enumsFields=["category","listingType","status","furnishing","facing","lift","waterAvailability","electricityAvailability"];
+  const enumsFields=["category","listingType","status","furnishing","facing","lift","waterAvailability","electricityAvailability","locality","street","city","state","country","zipCode"];
   enumsFields.forEach((field)=>{
     if(req.body[field]==""){
       delete req.body[field];
@@ -21,8 +21,14 @@ const addListing = asyncErrorHandler(async (req, res) => {
   const user=await User.findById(req.user.id);
   if(!user)
     throw new CustomError("Not Allowed To Add Property", 401);
-  
-  const newListing = new Listing(req.body);
+  const {coordinates,...data}=req.body;
+  const newListing = new Listing({
+    ...data,
+    location:{
+      type:"Point",
+      coordinates
+    }
+  });
   const response=await newListing.save();
   
   const { _id,name, price, category, listingType, address, photos } = response;

@@ -207,22 +207,14 @@ export const property = {
     page: 2,
     required: false,
   },
-  lat: {
-    label: "Latitude",
-    key: "lat",
-    initialValue: "",
+  coordinates:{
+    label: "Coordinates",
+    key: "coordinates",
+    initialValue: [],
     info: "",
     page: -1,
     required: false,
-  },
-  lon: {
-    label: "Latitude",
-    key: "lat",
-    initialValue: "",
-    info: "",
-    page: -1,
-    required: false,
-  },
+  }
 };
 
 export const defaultPropertyData = Object.values(property).reduce(

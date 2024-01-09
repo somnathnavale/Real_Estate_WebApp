@@ -141,10 +141,20 @@ const listingSchema = new mongoose.Schema({
       message,
     },
   },
-  owner: { type: String, ref: "User" }
+  owner: { type: String, ref: "User" },
+  location: {
+    type: {
+      type: String, 
+      enum: ['Point'],
+      required: true
+    },
+    coordinates:[Number]
+  }
 },{
   timestamps:true
 });
+
+listingSchema.index({ location: '2dsphere' });
 
 listingSchema.post(["find", "findOne", "findById","findOneAndUpdate"], async function (docs) {
   if (Array.isArray(docs)) {
