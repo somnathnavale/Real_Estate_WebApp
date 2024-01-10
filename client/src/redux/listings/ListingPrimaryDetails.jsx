@@ -89,7 +89,12 @@ const ListingPrimaryDetails = ({ listing }) => {
           />
           <ListingFeature
             Icon={BiSolidArea}
-            label="Carpet Area"
+            label={
+              listing?.category === enumConst?.category?.HOUSE ||
+              listing?.category === enumConst?.category?.CONDOS
+                ? "Property Area"
+                : "Carpet Area"
+            }
             value={`${listing?.carpetArea} sq. ft.`}
           />
           <ListingFeature
@@ -99,7 +104,7 @@ const ListingPrimaryDetails = ({ listing }) => {
           />
           <ListingFeature
             Icon={IoMdPricetags}
-            label="Price"
+            label={listing.listingType === enumConst?.listingType?.SALE ? "Price":"Rent"}
             value={
               listing.price !== undefined
                 ? `${listing?.price.toLocaleString("en-US", {

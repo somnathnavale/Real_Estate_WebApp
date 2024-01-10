@@ -5,8 +5,8 @@ import Dropdown from "../../../components/Inputs/Dropdown";
 import { useSelector } from "react-redux";
 
 const SecondaryListingsDetails = memo(({ propertyData, handleChange }) => {
-  const { enums } = useSelector((store) => store.enum);
-  
+  const { enums, enumConst } = useSelector((store) => store.enum);
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
       <h2 className="text-2xl font-semibold text-center text-slate-700 sm:col-span-2">
@@ -28,10 +28,8 @@ const SecondaryListingsDetails = memo(({ propertyData, handleChange }) => {
           options={enums?.furnishing || []}
         />
       </div>
-      {propertyData.category !==
-        enums?.category.find((item) => item.key === "HOUSE")?.value &&
-      propertyData.category !==
-        enums?.category.find((item) => item.key === "CONDOS")?.value ? (
+      {propertyData.category !== enumConst?.category?.HOUSE &&
+      propertyData.category !== enumConst?.category?.CONDOS ? (
         <>
           <div>
             <Dropdown
@@ -59,8 +57,7 @@ const SecondaryListingsDetails = memo(({ propertyData, handleChange }) => {
           options={enums?.facing || []}
         />
       </div>
-      {propertyData.category !==
-      enums?.category.find((item) => item.key === "COMMERCIAL").value ? (
+      {propertyData.category !== enumConst?.category?.COMMERCIAL ? (
         <>
           <div>
             <TextInput
