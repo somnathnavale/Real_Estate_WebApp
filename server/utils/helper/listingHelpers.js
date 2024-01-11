@@ -25,7 +25,14 @@ const generateQuery = (query, req) => {
   if (searchText) {
     const regex = new RegExp(searchText, "i");
     queryObj = {
-      $or: [{ name: regex }, { description: regex }, { address: regex }],
+      $or: [
+        { name: regex },
+        { description: regex },
+        { "address.locality": regex },
+        { "address.street": regex },
+        { "address.city": regex },
+        { "address.zipCode": regex },
+      ],
     };
   }
 
@@ -50,7 +57,7 @@ const generateQuery = (query, req) => {
   if (parking) {
     queryObj.parking = { $gt: 0 };
   }
-  
+
   const radius = 30;
 
   if (long !== null && long !== undefined) {
