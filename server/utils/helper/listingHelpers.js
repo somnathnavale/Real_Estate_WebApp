@@ -13,17 +13,19 @@ const generateQuery = (query, req) => {
     sort,
     limit,
     page,
-    userId
+    userId,
+    long,
+    lat,
   } = req.query;
 
-  if(userId){
-    queryObj.owner=userId;
+  if (userId) {
+    queryObj.owner = userId;
   }
 
   if (searchText) {
-    const regex=new RegExp(searchText,'i');
+    const regex = new RegExp(searchText, "i");
     queryObj = {
-      $or: [{ name:regex }, { description:regex }, { address: regex }],
+      $or: [{ name: regex }, { description: regex }, { address: regex }],
     };
   }
 
@@ -49,8 +51,22 @@ const generateQuery = (query, req) => {
     queryObj.parking = { $gt: 0 };
   }
   
-  query=query.find(queryObj);
-  const countQuery=query.clone().count();
+  const radius = 30;
+
+  if (long !== null && long !== undefined) {
+    queryObj.location = {
+      $near: {
+        $geometry: {
+          type: "Point",
+          coordinates: [parseFloat(long), parseFloat(lat)],
+        },
+        $maxDistance: radius * 1000,
+      },
+    };
+  }
+
+  query = query.find(queryObj);
+  const countQuery = query.clone().count();
 
   if (sort) {
     query.sort(sort);
@@ -62,9 +78,12 @@ const generateQuery = (query, req) => {
   limit = limit * 1 || 6;
 
   const skip = (page - 1) * limit;
-  query.skip(skip).limit(limit).select("name price category listingType address photos");
+  query
+    .skip(skip)
+    .limit(limit)
+    .select("name price category listingType address photos");
 
-  return {query,countQuery};
+  return { query, countQuery };
 };
 
-module.exports={generateQuery}
+module.exports = { generateQuery };

@@ -24,7 +24,7 @@ const PropertyCard =({
     >
       {/* <img
         className="mx-auto w-auto h-64 cursor-pointer hover:opacity-80"
-        src={photos[0] || background}
+        src={photos[0] }
         alt={name}
       /> */}
       <div className="mx-auto w-auto h-64 cursor-pointer hover:opacity-80">
