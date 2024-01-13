@@ -25,6 +25,7 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
    - From Client `.env` file, for firebase refer [firebase project setup](https://firebase.google.com/docs/web/setup).
    - From Server `.env` file, for mongodb refer [mongodb database setup ](https://www.freecodecamp.org/news/get-started-with-mongodb-atlas/).
    - Server `.env` file, for email and password - add your email address and to create password -> go to google account -> select security option -> select 2-Step verification -> scroll down and select app password option -> create app and password will be auto generated, use that password
+   - Server `.env` file, for GeoCode Key - sign up on location Iq, select Geocoding and create token
 
 ## Usage
 1. Start the backend server: `cd server && npm start`
@@ -37,6 +38,7 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 - Database: MongoDB
 - Authentication: JWT
 - Image Storage - Firbase
+- GeoSpatial Location - Location IQ
 - Email Notifications - Node Mailer
 - Logger - Wiston 
 
@@ -50,6 +52,7 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 3. Filter and Search Properties
 4. User profile management
 5. Email Notifications
+6. Geolocation Based Searching using mongoDB and Location IQ 
 
 ## Troubleshooting
 - If you encounter issues with authentication, ensure that your environment variables are correctly set.
