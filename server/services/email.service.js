@@ -73,21 +73,32 @@ const propertyRegistrationEmail = async (
   username,
   propertyName,
   category,
+  listingType,
   address,
   price
 ) => {
   try {
+    const wholeAddress = `${address?.locality}, ${address?.street}, ${address?.city}, ${address?.zipCode}, ${address?.state}, ${address?.country}`;
+
+    const propertyCost = `${parseInt(price).toLocaleString("en-US", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    })} ${listingType === "Rent" ? "Per Month" : ""}`;
+
     propertyRegistrationMailContent.to = userEmail;
+
     propertyRegistrationMailContent.from = {
       name: process.env.APP_NAME,
       address: process.env.EMAIL_ID,
     };
+
     propertyRegistrationMailContent.html = propertyRegistrationMailContent.html
       .replace("{{username}}", username)
       .replace("{{name}}", propertyName)
       .replace("{{category}}", category)
-      .replace("{{address}}",address)
-      .replace("{{price}}",price);
+      .replace("{{address}}", wholeAddress)
+      .replace("{{price}}", propertyCost);
 
     const response = await mailSender(propertyRegistrationMailContent);
     return response;
@@ -96,4 +107,8 @@ const propertyRegistrationEmail = async (
   }
 };
 
-module.exports = { forgotPasswordEmail, userRegistrationEmail, propertyRegistrationEmail};
+module.exports = {
+  forgotPasswordEmail,
+  userRegistrationEmail,
+  propertyRegistrationEmail,
+};

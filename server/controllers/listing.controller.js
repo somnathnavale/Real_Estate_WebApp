@@ -51,15 +51,15 @@ const addListing = asyncErrorHandler(async (req, res) => {
 
   const { _id, name, price, category, listingType, address, photos } = response;
   const listing = { _id, name, price, category, listingType, address, photos };
-  const wholeAddress = `${address?.locality}, ${address?.street}, ${address?.city}, ${address?.zipCode}, ${address?.state}, ${address?.country}`;
 
   await propertyRegistrationEmail(
     user?.email,
     user?.fullname || user?.username,
     name,
     category,
-    wholeAddress,
-    price + listingType === "Sale" ? "Per Month" : ""
+    listingType,
+    address,
+    price
   );
 
   res.status(200).json({ message: "Property Added Successfully", listing });
