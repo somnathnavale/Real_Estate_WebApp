@@ -6,6 +6,7 @@ import { RiAiGenerate } from "react-icons/ri";
 import { createPrompt } from "../../../utils/helpers/listingsHelper";
 import useAxios from "../../../hooks/useAxios";
 import { axiosPublic } from "../../../api/axios";
+import Tooltip from "../../../components/Tooltip";
 
 const ListingsPhotosDetails = memo(
   ({
@@ -17,8 +18,8 @@ const ListingsPhotosDetails = memo(
     status,
     setStatus,
   }) => {
-    const [loading,setLoading]=useState(false);
-    const [error,setError]=useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
 
     const axios = useAxios(axiosPublic);
 
@@ -41,7 +42,7 @@ const ListingsPhotosDetails = memo(
       } catch (error) {
         console.log(error);
         setError("Error While generating Description, try again");
-      }finally{
+      } finally {
         setLoading(false);
       }
     };
@@ -51,10 +52,16 @@ const ListingsPhotosDetails = memo(
         <h2 className="text-2xl font-semibold text-center text-slate-700">
           Other Information
         </h2>
-        <p className={`my-1 ${error ? "text-red-500" : "text-slate-500" } ${loading && "loading-dots"} text-center`}>
-          {
-            loading ? "Generating description using AI " : error?.length >0 ? error : ""
-          }
+        <p
+          className={`my-1 ${error ? "text-red-500" : "text-slate-500"} ${
+            loading && "loading-dots"
+          } text-center`}
+        >
+          {loading
+            ? "Generating description using AI "
+            : error?.length > 0
+            ? error
+            : ""}
         </p>
         <div className="relative">
           <TextInput
@@ -66,13 +73,15 @@ const ListingsPhotosDetails = memo(
           <button
             type="button"
             className="absolute top-0 right-1 w-6 h-6 hover:text-slate-500 disabled:text-slate-400"
-            title="Generate description using ai"
             onClick={generateDescription}
             disabled={loading}
           >
-            {
-              <RiAiGenerate className="w-full h-full " />
-            }
+            <Tooltip
+              message="Generate description using ai"
+              classes={"sm:right-0 lg:right-auto !w-40 !p-1"}
+            >
+              {<RiAiGenerate className="w-full h-full " />}
+            </Tooltip>
           </button>
         </div>
         <UploadImage

@@ -1,8 +1,9 @@
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Carousel from "./Carousel";
+import Tooltip from "./Tooltip";
 
-const PropertyCard =({
+const PropertyCard = ({
   _id,
   name,
   address,
@@ -40,17 +41,26 @@ const PropertyCard =({
         >
           On {listingType}
         </span>
-        <h2
-          className="text-base lg:text-lg font-semibold text-slate-800 mt-1"
-          title={name}
+        <Tooltip message={name} classes="top-11 !w-72 !bg-slate-700">
+          <h2 className="text-base lg:text-lg font-semibold text-slate-800 mt-1 cursor-pointer">
+            {name.substring(0, 30)}
+          </h2>
+        </Tooltip>
+        <Tooltip
+          message={
+            address?.locality + ", " + address?.street + ", " + address?.city
+          }
+          classes="top-6 !w-72 !bg-slate-700"
         >
-          {name.substring(0, 30)}
-        </h2>
-        <p className="text-gray-600" title={address?.locality}>
-          {(address?.locality + ", " + address?.city).length > 30
-            ? `${(address.locality + ", " + address.city).substring(0, 30)}...`
-            : address.locality + ", " + address.city}
-        </p>
+          <p className="text-gray-600 cursor-pointer">
+            {(address?.locality + ", " + address?.city).length > 30
+              ? `${(address.locality + ", " + address.city).substring(
+                  0,
+                  30
+                )}...`
+              : address.locality + ", " + address.city}
+          </p>
+        </Tooltip>
         <hr className="my-3 border-gray-300" />
         <div className="flex justify-between">
           <p className="text-sm lg:text-base font-semibold bg-green-500 text-white rounded-full px-2 py-1">
