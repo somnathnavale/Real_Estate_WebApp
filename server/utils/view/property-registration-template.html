@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Property Added</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background-color: #ffffff;
+      padding: 10px 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h2 {
+      color: #333333;
+    }
+
+    p {
+      color: #666666;
+    }
+
+    .property-details {
+      background-color: #f8f8f8;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .footer {
+      border-top: 1px solid #dddddd;
+      text-align: center;
+      color: #666666;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>New Property Added!</h2>
+    <p>Dear {{username}}</p>
+    <p>You have successfully added a new property to our platform.</p>
+    <div class="property-details">
+      <p><strong>Property Title:</strong> {{name}}</p>
+      <p><strong>Category:</strong> {{category}}</p>
+      <p><strong>Address:</strong> {{address}}</p>
+      <p><strong>Price:</strong> {{price}}</p>
+    </div>
+    <p>Thank you for choosing NextGen Estate to showcase your property. We wish you success in finding the right match.</p>
+    <div class="footer">
+        <p>NextGen Estate Ltd</p>
+      </div>
+  </div>
+</body>
+
+</html>

@@ -1,11 +1,10 @@
-import React, { useEffect } from "react";
 
 const InformationModal = ({ owner, open, onClose }) => {
   
   return (
     <>
       {open && (
-        <div className="fixed z-10 inset-0 overflow-y-auto">
+        <div className="fixed z-20 inset-0 overflow-y-auto">
           <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <div
               className="fixed inset-0 transition-opacity"
@@ -37,10 +36,10 @@ const InformationModal = ({ owner, open, onClose }) => {
                       Owner Details
                     </h3>
                     <div className="mt-2">
-                      <p className="text-sm mb-2  text-gray-500">
+                      {/* <p className="text-sm mb-2  text-gray-500">
                         <strong className="mr-1">Username:</strong>{" "}
                         {owner?.username}
-                      </p>
+                      </p> */}
                       <p className="text-sm mb-2 text-gray-500">
                         <strong className="mr-1">Fullname:</strong>{" "}
                         {owner?.fullname}

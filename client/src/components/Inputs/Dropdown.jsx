@@ -1,6 +1,6 @@
-import React from "react";
+import { memo } from "react";
 
-const Dropdown = ({ data, field, onChange, options }) => {
+const Dropdown = memo(({ data, field, onChange, options }) => {
   return (
     <>
       <label
@@ -21,13 +21,18 @@ const Dropdown = ({ data, field, onChange, options }) => {
           Select
         </option>
         {options.map((option) => (
-          <option key={option.key} value={option.value} className="hover:bg-slate-300">
+          <option
+            key={option.key}
+            value={option.value}
+            className="hover:bg-slate-300"
+          >
             {option.value}
           </option>
         ))}
       </select>
     </>
   );
-};
+});
 
+Dropdown.displayName = Dropdown;
 export default Dropdown;

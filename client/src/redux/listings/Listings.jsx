@@ -1,4 +1,3 @@
-import React from 'react';
 import Filter from '../filter/Filter';
 import AllListings from './AllListings';
 

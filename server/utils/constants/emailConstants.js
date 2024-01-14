@@ -8,11 +8,18 @@ const forgotPasswordMailContent={
     to:"" 
 }
 
-const UserRegistrationMailContent={
+const userRegistrationMailContent={
     subject:"Welcome to NextGen Estate",
     html:fs.readFileSync(path.resolve(__dirname,'../' ,'view', 'user-registration-template.html'), 'utf-8'),
     from:"",
     to:"" 
 }
 
-module.exports={forgotPasswordMailContent,UserRegistrationMailContent}
+const propertyRegistrationMailContent={
+    subject:"Proprty Added Successfully",
+    html:fs.readFileSync(path.resolve(__dirname,'../' ,'view', 'property-registration-template.html'), 'utf-8'),
+    from:"",
+    to:"" 
+}
+
+module.exports={forgotPasswordMailContent,userRegistrationMailContent,propertyRegistrationMailContent}

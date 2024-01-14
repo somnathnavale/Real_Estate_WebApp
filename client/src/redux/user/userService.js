@@ -6,7 +6,7 @@ import { clearFilters } from "../filter/filterSlice";
 
 export const signUpUser = createAsyncThunk(
   "user/signup",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async (props) => {
     const userData = props;
     const response = await axiosPublic.post("/api/auth/signup", userData);
     return response.data;
@@ -15,7 +15,7 @@ export const signUpUser = createAsyncThunk(
 
 export const signInUser = createAsyncThunk(
   "user/signin",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async (props) => {
     const userData = props;
     const response = await axiosPublic.post("/api/auth/signin", userData);
     return response.data;
@@ -24,7 +24,7 @@ export const signInUser = createAsyncThunk(
 
 export const updateUser = createAsyncThunk(
   "user/update",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async (props) => {
     const { id, userData, axios } = props;
     const response = await axios.put(`/api/user/update/${id}`, userData);
     return response.data;
@@ -33,7 +33,7 @@ export const updateUser = createAsyncThunk(
 
 export const generateToken = createAsyncThunk(
   "user/token",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async () => {
     const response = await axiosPublic.get(`/api/auth/token`);
     return response.data;
   })

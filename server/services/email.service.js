@@ -1,7 +1,8 @@
 const mailer = require("nodemailer");
 const {
-  UserRegistrationMailContent,
+  userRegistrationMailContent,
   forgotPasswordMailContent,
+  propertyRegistrationMailContent,
 } = require("../utils/constants/emailConstants.js");
 //const logger = require("../log/logger.js");
 
@@ -51,20 +52,63 @@ const forgotPasswordEmail = async (userEmail, otp) => {
 
 const userRegistrationEmail = async (userEmail, username) => {
   try {
-    UserRegistrationMailContent.to = userEmail;
-    UserRegistrationMailContent.from = {
+    userRegistrationMailContent.to = userEmail;
+    userRegistrationMailContent.from = {
       name: process.env.APP_NAME,
       address: process.env.EMAIL_ID,
     };
-    UserRegistrationMailContent.html = UserRegistrationMailContent.html.replace(
+    userRegistrationMailContent.html = userRegistrationMailContent.html.replace(
       "{{username}}",
       username
     );
-    const response = await mailSender(UserRegistrationMailContent);
+    const response = await mailSender(userRegistrationMailContent);
     return response;
   } catch (error) {
     throw error;
   }
 };
 
-module.exports={forgotPasswordEmail,userRegistrationEmail};
+const propertyRegistrationEmail = async (
+  userEmail,
+  username,
+  propertyName,
+  category,
+  listingType,
+  address,
+  price
+) => {
+  try {
+    const wholeAddress = `${address?.locality}, ${address?.street}, ${address?.city}, ${address?.zipCode}, ${address?.state}, ${address?.country}`;
+
+    const propertyCost = `${parseInt(price).toLocaleString("en-US", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    })} ${listingType === "Rent" ? "Per Month" : ""}`;
+
+    propertyRegistrationMailContent.to = userEmail;
+
+    propertyRegistrationMailContent.from = {
+      name: process.env.APP_NAME,
+      address: process.env.EMAIL_ID,
+    };
+
+    propertyRegistrationMailContent.html = propertyRegistrationMailContent.html
+      .replace("{{username}}", username)
+      .replace("{{name}}", propertyName)
+      .replace("{{category}}", category)
+      .replace("{{address}}", wholeAddress)
+      .replace("{{price}}", propertyCost);
+
+    const response = await mailSender(propertyRegistrationMailContent);
+    return response;
+  } catch (error) {
+    throw error;
+  }
+};
+
+module.exports = {
+  forgotPasswordEmail,
+  userRegistrationEmail,
+  propertyRegistrationEmail,
+};

@@ -1,4 +1,3 @@
-import React from "react";
 import FeaturedProperty from "./FeaturedProperty";
 import HomePoster from "./HomePoster";
 import RecentListings from "./RecentListings";

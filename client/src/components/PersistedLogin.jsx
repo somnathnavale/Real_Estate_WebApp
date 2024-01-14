@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import  { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { generateToken } from "../redux/user/userService";
 import { Outlet } from "react-router-dom";
@@ -24,7 +24,7 @@ const PersistedLogin = () => {
     }
   }, [dispatch, user]);
 
-  return <>{loading ? <p>Loading...</p> : <Outlet />}</>;
+  return <>{loading ? <p></p> : <Outlet />}</>;
 };
 
 export default PersistedLogin;

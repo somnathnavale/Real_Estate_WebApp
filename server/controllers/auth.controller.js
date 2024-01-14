@@ -11,8 +11,8 @@ const signUp = asyncErrorHandler(async (req, res) => {
   const hashedPassword = bcryptjs.hashSync(password, 10);
   const newUser = new User({password: hashedPassword ,...other});
   await newUser.save();
-  res.status(201).json({ success: true, message: "User Created Successfully" });
   await userRegistrationEmail(newUser?.email,newUser?.fullname || newUser?.username || newUser?.email )
+  res.status(201).json({ success: true, message: "User Created Successfully" });
 });
 
 const signIn = asyncErrorHandler(async (req, res) => {

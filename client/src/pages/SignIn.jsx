@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import Snackbar from "../components/Snackbar";
@@ -96,7 +96,7 @@ const SignIn = () => {
       </form>
       <div className="flex justify-between mt-5 flex-row">
         <div className="flex gap-2">
-          <p>Don't Have An Account?</p>
+          <p>Don&apos;t Have An Account?</p>
           <Link to="/sign-up" className="text-blue-700 hover:text-blue-500">
             Sign UP
           </Link>

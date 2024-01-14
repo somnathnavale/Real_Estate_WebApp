@@ -12,10 +12,10 @@ mongoose
   .connect(process.env.MONGO_URI)
   .then(async () => {
     try {
-      await Listing.deleteMany({});
-      await Listing.insertMany(listings)
-      // await Enum.deleteMany({});
-      // const response = await Enum.insertMany(enums);
+      // await Listing.deleteMany({});
+      // await Listing.insertMany(listings)
+      await Enum.deleteMany({});
+      const response = await Enum.insertMany(enums);
       console.log("successfully inserted");
     } catch (error) {
       

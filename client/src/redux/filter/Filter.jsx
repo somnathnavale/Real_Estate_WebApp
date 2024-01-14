@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   toggleCheckbox,
@@ -84,7 +84,7 @@ const Filter = () => {
                     type="checkbox"
                     name="category"
                     checked={searchFilter.category.includes(category)}
-                    onChange={(e) => handleCheckboxChange("category", category)}
+                    onChange={() => handleCheckboxChange("category", category)}
                     className="mr-2 h-4 w-4"
                   />
                   {category}
@@ -103,7 +103,7 @@ const Filter = () => {
                       type="checkbox"
                       name="listingType"
                       checked={searchFilter.listingType.includes(listingType)}
-                      onChange={(e) =>
+                      onChange={() =>
                         handleCheckboxChange("listingType", listingType)
                       }
                       className="mr-2 h-4 w-4"
@@ -124,7 +124,7 @@ const Filter = () => {
                     type="checkbox"
                     name="Furnishing"
                     checked={searchFilter.furnishing.includes(item)}
-                    onChange={(e) => handleCheckboxChange("furnishing", item)}
+                    onChange={() => handleCheckboxChange("furnishing", item)}
                     className="mr-2 h-4 w-4"
                   />
                   {item}
@@ -165,7 +165,7 @@ const Filter = () => {
                     type="checkbox"
                     name="amenity"
                     checked={searchFilter.amenities.includes(amenity)}
-                    onChange={(e) => handleCheckboxChange("amenities", amenity)}
+                    onChange={() => handleCheckboxChange("amenities", amenity)}
                     className="mr-2 h-4 w-4"
                   />
                   {amenity}

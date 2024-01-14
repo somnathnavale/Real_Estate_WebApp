@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { Link, useLocation } from "react-router-dom";
 
@@ -29,7 +29,19 @@ const ListingPrimaryDetails = ({ listing }) => {
         owner={listing?.owner}
       />
       <h1 className="text-2xl lg:text-3xl font-bold">{listing.name}</h1>
-      <p className="text-gray-500">{listing.address}</p>
+      <p className="text-gray-500">
+        {listing.address?.locality +
+          ", " +
+          listing.address?.street +
+          ", " +
+          listing.address?.city +
+          ", " +
+          listing.address?.zipCode +
+          ", " +
+          listing.address?.state +
+          ", " +
+          listing.address?.country}
+      </p>
       <hr className="my-4 " />
       <div>
         <div className="grid grid-cols-2 gap-4 mt-2">
@@ -49,7 +61,7 @@ const ListingPrimaryDetails = ({ listing }) => {
             value={
               listing?.status === enumConst?.status?.AVAILABLE
                 ? "Available"
-                : listing.listingType === enumConst?.status?.SALE
+                : listing.listingType === enumConst?.listingType?.SALE
                 ? "Sold Out"
                 : "Rented out"
             }
@@ -77,7 +89,12 @@ const ListingPrimaryDetails = ({ listing }) => {
           />
           <ListingFeature
             Icon={BiSolidArea}
-            label="Carpet Area"
+            label={
+              listing?.category === enumConst?.category?.HOUSE ||
+              listing?.category === enumConst?.category?.CONDOS
+                ? "Property Area"
+                : "Carpet Area"
+            }
             value={`${listing?.carpetArea} sq. ft.`}
           />
           <ListingFeature
@@ -87,7 +104,7 @@ const ListingPrimaryDetails = ({ listing }) => {
           />
           <ListingFeature
             Icon={IoMdPricetags}
-            label="Price"
+            label={listing.listingType === enumConst?.listingType?.SALE ? "Price":"Rent"}
             value={
               listing.price !== undefined
                 ? `${listing?.price.toLocaleString("en-US", {
@@ -95,7 +112,7 @@ const ListingPrimaryDetails = ({ listing }) => {
                     currency: "INR",
                     maximumFractionDigits: 0,
                   })} ${
-                    listing.listingType === enumConst?.status?.SALE
+                    listing.listingType === enumConst?.listingType?.SALE
                       ? ""
                       : "Per Month"
                   }`

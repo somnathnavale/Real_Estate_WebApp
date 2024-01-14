@@ -5,7 +5,7 @@ import { createFilterQuery } from "../../utils/helpers/listingsHelper";
 
 export const addListing = createAsyncThunk(
   "listing/add",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async (props) => {
     const { axios, data } = props;
     const response = await axios.post("/api/listings", data);
     return response.data;
@@ -37,7 +37,7 @@ export const getListings = createAsyncThunk(
 
 export const getCategoryWiseCount = createAsyncThunk(
   "category/count",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async () => {
     const response = await axiosPublic.get("/api/listings/category/count");
     return response.data;
   })
@@ -45,7 +45,7 @@ export const getCategoryWiseCount = createAsyncThunk(
 
 export const getListing = createAsyncThunk(
   "listing/get",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async (props) => {
     const { id } = props;
     const response = await axiosPublic.get(`/api/listings/${id}`);
     return response.data;
@@ -54,7 +54,7 @@ export const getListing = createAsyncThunk(
 
 export const getMyListing = createAsyncThunk(
   "listing/getMy",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async (props) => {
     const response = await axiosPublic.get("/api/listings", {
       params:props
     });
@@ -64,7 +64,7 @@ export const getMyListing = createAsyncThunk(
 
 export const deleteListing = createAsyncThunk(
   "listing/delete",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async (props) => {
     const { axios, id } = props;
     const response = await axios.delete(`/api/listings/${id}`);
     return response.data;
@@ -73,7 +73,7 @@ export const deleteListing = createAsyncThunk(
 
 export const updateListing = createAsyncThunk(
   "listing/update",
-  asyncHandler(async (props, thunkAPI) => {
+  asyncHandler(async (props) => {
     const { axios, data } = props;
     const response = await axios.put(`/api/listings/${data?._id}`, data);
     return response?.data;

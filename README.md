@@ -1,7 +1,7 @@
 # Project Title: NextGen Estate (Real Estate WebSite)
 
 ## Description
-NextGen Estate, a full-stack web application, empowers users to actively search, add, and manage properties across diverse categories and features. Employing a modern tech stack, it combines React with Redux-Toolkit for state management, Tailwind CSS for styling components, and Node.js with Express for the backend. MongoDB stores user profiles and properties, Firebase handles property images, and Nodemailer facilitates email notifications. Logging is efficiently managed through Winston.
+NextGen Estate, a full-stack web application, empowers users to actively search, add, and manage properties across diverse categories and features. Employing a modern tech stack, it combines React with Redux-Toolkit for state management, Tailwind CSS for styling components, and Node.js with Express for the backend. MongoDB stores user profiles and properties, Firebase handles property images, and Nodemailer facilitates email notifications. Logging is efficiently managed through Winston. Location-based Searching is achieved using Location IQ and GeoSpatial Searching using MongoDB, Integrated with GEMINI AI for automatic Property Description Generation Based on Filled Property Data. 
 
 ## Table of Contents
 1. [Installation](#installation)
@@ -9,9 +9,10 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 3. [Technologies Used](#technologies-used)
 4. [Folder Structure](#folder-structure)
 5. [Features](#features)
-6. [Troubleshooting](#troubleshooting)
-7. [Contact Information](#contact-information)
-8. [Acknowledgments](#acknowledgments)
+6. [Deployement](#deployment)
+7. [Troubleshooting](#troubleshooting)
+8. [Contact Information](#contact-information)
+9. [Acknowledgments](#acknowledgments)
 
 ## Installation
 1. Clone the repository: `git https://github.com/somnathnavale/Real_Estate_WebApp.git`
@@ -25,6 +26,8 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
    - From Client `.env` file, for firebase refer [firebase project setup](https://firebase.google.com/docs/web/setup).
    - From Server `.env` file, for mongodb refer [mongodb database setup ](https://www.freecodecamp.org/news/get-started-with-mongodb-atlas/).
    - Server `.env` file, for email and password - add your email address and to create password -> go to google account -> select security option -> select 2-Step verification -> scroll down and select app password option -> create app and password will be auto generated, use that password
+   - Server `.env` file, for GeoCode Key - sign up on location Iq, select Geocoding and create token
+   - Server `.env` file, for GEMINI Key - sign In to on gemini ai, refer [gemini ai docs](https://ai.google.dev/tutorials/node_quickstart) 
 
 ## Usage
 1. Start the backend server: `cd server && npm start`
@@ -37,8 +40,10 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 - Database: MongoDB
 - Authentication: JWT
 - Image Storage - Firbase
+- GeoSpatial Location - Location IQ
 - Email Notifications - Node Mailer
 - Logger - Wiston 
+- Description Generation - Gemini AI
 
 ## Folder Structure
 - `/client`: Frontend codebase
@@ -50,7 +55,15 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 3. Filter and Search Properties
 4. User profile management
 5. Email Notifications
+6. Geolocation Based Searching using mongoDB and Location IQ 
+7. AI Based Description generator
 
+## Deployment
+   1. Deployment is Done on vercel. (here verel function are used and nodejs is serving frontend build)
+   2. First Step is To add vercel.json file in server, and add necessary details
+   3. create frontend build using npm run build command and run npm run postbuild to copy pasting build from  client folder to publi folder in server
+   4. create account on vercel, create project on vercel connect it with your existing project on github, add environment variables and set your production branch in settings section of vercel.
+      
 ## Troubleshooting
 - If you encounter issues with authentication, ensure that your environment variables are correctly set.
 
@@ -70,14 +83,16 @@ For questions or feedback, connect with me on [Linkedin](https://www.linkedin.co
     - react-image-file-resizer
     - react-redux
     - react-router-dom
+    - markdown-to-jsx
 
 2. Back-End 
     - bcryptjs
     - cookie-parser
     - cors
-    - dotenv,
-    - express,
+    - dotenv
+    - express
     - jsonwebtoken
     - mongoose
     - nodemailer
     - winston
+    - @google/generative-ai
