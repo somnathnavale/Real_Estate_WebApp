@@ -10,6 +10,7 @@ import useAxios from "../../hooks/useAxios";
 import { axiosPublic } from "../../api/axios";
 import Pagination from "../../components/Pagination";
 import useFile from "../../hooks/useFile";
+import Tooltip from "../../components/Tooltip";
 
 const MyListings = () => {
   const [open, setOpen] = useState(false);
@@ -23,7 +24,7 @@ const MyListings = () => {
   const callRef = useRef(false);
   const navigate = useNavigate();
   const axios = useAxios(axiosPublic);
-  const {handleFileDelete}=useFile();
+  const { handleFileDelete } = useFile();
 
   useEffect(() => {
     if (!callRef.current) {
@@ -101,22 +102,35 @@ const MyListings = () => {
                   />
                 </div>
                 <div className="col-span-full xs:col-span-4 xs:px-4">
-                  <p
-                    title={property.name}
-                    className="font-medium text-lg cursor-pointer"
+                  <Tooltip message={property.name} classes="!p-1 !top-7">
+                    <p className="font-medium text-lg cursor-pointer">
+                      {property.name.length > 35
+                        ? property.name.slice(0, 33) + "..."
+                        : property.name}
+                    </p>
+                  </Tooltip>
+                  <Tooltip
+                    message={
+                      property.address.locality + ", " + property.address.city
+                    }
+                    classes="!p-1 !bg-slate-500 !top-7"
                   >
-                    {property.name.length > 35
-                      ? property.name.slice(0, 33) + "..."
-                      : property.name}
-                  </p>
-                  <p
-                    title={property.address?.locality}
-                    className="text-slate-500 cursor-pointer"
-                  >
-                    {(property.address.locality+", "+property.address.city).length > 80
-                      ? (property.address.locality+", "+property.address.city).slice(0, 78) + "..."
-                      : (property.address.locality+", "+property.address.city)}
-                  </p>
+                    <p className="text-slate-500 cursor-pointer">
+                      {(
+                        property.address.locality +
+                        ", " +
+                        property.address.city
+                      ).length > 80
+                        ? (
+                            property.address.locality +
+                            ", " +
+                            property.address.city
+                          ).slice(0, 78) + "..."
+                        : property.address.locality +
+                          ", " +
+                          property.address.city}
+                    </p>
+                  </Tooltip>
                 </div>
                 <button
                   disabled={status === STATUS.LOADING}
@@ -125,10 +139,14 @@ const MyListings = () => {
                     e.stopPropagation();
                     navigate(`/listings/update/${property._id}`);
                   }}
-                  title="Edit Property"
                 >
-                  <FaEdit className="h-5 w-5 lg:mr-1" />
-                  <span className="hidden lg:block"> Edit</span>
+                  <Tooltip
+                    message="Edit Property"
+                    classes="!w-24 !p-1 !-left-5 !top-8"
+                  >
+                    <FaEdit className="h-5 w-5 lg:mr-1" />
+                    <span className="hidden lg:block"> Edit</span>
+                  </Tooltip>
                 </button>
                 <button
                   disabled={status === STATUS.LOADING}
@@ -138,10 +156,14 @@ const MyListings = () => {
                     setSelectedListing(property);
                     setOpen(true);
                   }}
-                  title="Delete Property"
                 >
-                  <FaTrash className="h-5 w-5 lg:mr-1" />
-                  <span className="hidden lg:block"> Delete</span>
+                  <Tooltip
+                    message="Delete Property"
+                    classes="!w-28 !p-1 !-left-5 !top-8"
+                  >
+                    <FaTrash className="h-5 w-5 lg:mr-1" />
+                    <span className="hidden lg:block"> Delete</span>
+                  </Tooltip>
                 </button>
               </div>
             ))}
