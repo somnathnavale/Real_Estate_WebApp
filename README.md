@@ -1,7 +1,7 @@
 # Project Title: NextGen Estate (Real Estate WebSite)
 
 ## Description
-NextGen Estate, a full-stack web application, empowers users to actively search, add, and manage properties across diverse categories and features. Employing a modern tech stack, it combines React with Redux-Toolkit for state management, Tailwind CSS for styling components, and Node.js with Express for the backend. MongoDB stores user profiles and properties, Firebase handles property images, and Nodemailer facilitates email notifications. Logging is efficiently managed through Winston.
+NextGen Estate, a full-stack web application, empowers users to actively search, add, and manage properties across diverse categories and features. Employing a modern tech stack, it combines React with Redux-Toolkit for state management, Tailwind CSS for styling components, and Node.js with Express for the backend. MongoDB stores user profiles and properties, Firebase handles property images, and Nodemailer facilitates email notifications. Logging is efficiently managed through Winston. Location based Searching is achieved using Location IQ and GeoSpatial Searching using MongoDB, Integrated with GEMINI AI for automatic Property Description Generation Based on Filled Data. 
 
 ## Table of Contents
 1. [Installation](#installation)
@@ -26,6 +26,7 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
    - From Server `.env` file, for mongodb refer [mongodb database setup ](https://www.freecodecamp.org/news/get-started-with-mongodb-atlas/).
    - Server `.env` file, for email and password - add your email address and to create password -> go to google account -> select security option -> select 2-Step verification -> scroll down and select app password option -> create app and password will be auto generated, use that password
    - Server `.env` file, for GeoCode Key - sign up on location Iq, select Geocoding and create token
+   - Server `.env` file, for GEMINI Key - sign In to on gemini ai, refer [gemini ai docs](https://ai.google.dev/tutorials/node_quickstart) 
 
 ## Usage
 1. Start the backend server: `cd server && npm start`
@@ -53,6 +54,7 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 4. User profile management
 5. Email Notifications
 6. Geolocation Based Searching using mongoDB and Location IQ 
+7. AI Based Description generator
 
 ## Troubleshooting
 - If you encounter issues with authentication, ensure that your environment variables are correctly set.
@@ -73,14 +75,16 @@ For questions or feedback, connect with me on [Linkedin](https://www.linkedin.co
     - react-image-file-resizer
     - react-redux
     - react-router-dom
+    - markdown-to-jsx
 
 2. Back-End 
     - bcryptjs
     - cookie-parser
     - cors
-    - dotenv,
-    - express,
+    - dotenv
+    - express
     - jsonwebtoken
     - mongoose
     - nodemailer
     - winston
+    - @google/generative-ai
