@@ -11,11 +11,32 @@ const listingSchema = new mongoose.Schema({
     maxlength: [200, "property name is longer than expected"],
   },
   address: {
-    type: String,
-    required: [true, "property address is required"],
-    trim: true,
-    minlength: [10, "property address is shorter than expected"],
-    maxlength: [400, "property address is longer than expected"],
+    locality:{
+      type:String,
+      required:true
+    },
+    street: {
+      type: String,
+      required: true,
+    },
+    city: {
+      type: String,
+      required: true,
+    },
+    state: {
+      type: String,
+      required: true,
+    },
+    zipCode: {
+      type: String,
+      required: true,
+      minlength: [6, "Zip Code is shorter than expected"],
+      maxlength:[6,"Zip Code is longer than expected"]
+    },
+    country: {
+      type: String,
+      required: true,
+    },
   },
   description: {
     type: String,
@@ -59,6 +80,10 @@ const listingSchema = new mongoose.Schema({
     type: Number,
     required: [true, "carpet area is required"],
     min: [10, "provide correct property area"],
+  },
+  propertyAge: {
+    type: Number,
+    required: [true, "Property Age is required"],
   },
   furnishing: {
     type: String,
@@ -116,10 +141,20 @@ const listingSchema = new mongoose.Schema({
       message,
     },
   },
-  owner: { type: String, ref: "User" }
+  owner: { type: String, ref: "User" },
+  location: {
+    type: {
+      type: String, 
+      enum: ['Point'],
+      required: true
+    },
+    coordinates:[Number]
+  }
 },{
   timestamps:true
 });
+
+listingSchema.index({ location: '2dsphere' });
 
 listingSchema.post(["find", "findOne", "findById","findOneAndUpdate"], async function (docs) {
   if (Array.isArray(docs)) {

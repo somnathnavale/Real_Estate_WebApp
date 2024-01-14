@@ -24,7 +24,7 @@ const PersistedLogin = () => {
     }
   }, [dispatch, user]);
 
-  return <>{loading ? <p>Loading...</p> : <Outlet />}</>;
+  return <>{loading ? <p></p> : <Outlet />}</>;
 };
 
 export default PersistedLogin;

@@ -36,10 +36,10 @@ const InformationModal = ({ owner, open, onClose }) => {
                       Owner Details
                     </h3>
                     <div className="mt-2">
-                      <p className="text-sm mb-2  text-gray-500">
+                      {/* <p className="text-sm mb-2  text-gray-500">
                         <strong className="mr-1">Username:</strong>{" "}
                         {owner?.username}
-                      </p>
+                      </p> */}
                       <p className="text-sm mb-2 text-gray-500">
                         <strong className="mr-1">Fullname:</strong>{" "}
                         {owner?.fullname}

@@ -110,12 +110,12 @@ const MyListings = () => {
                       : property.name}
                   </p>
                   <p
-                    title={property.address}
+                    title={property.address?.locality}
                     className="text-slate-500 cursor-pointer"
                   >
-                    {property.address.length > 80
-                      ? property.address.slice(0, 78) + "..."
-                      : property.address}
+                    {(property.address.locality+", "+property.address.city).length > 80
+                      ? (property.address.locality+", "+property.address.city).slice(0, 78) + "..."
+                      : (property.address.locality+", "+property.address.city)}
                   </p>
                 </div>
                 <button
