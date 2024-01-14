@@ -9,9 +9,10 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 3. [Technologies Used](#technologies-used)
 4. [Folder Structure](#folder-structure)
 5. [Features](#features)
-6. [Troubleshooting](#troubleshooting)
-7. [Contact Information](#contact-information)
-8. [Acknowledgments](#acknowledgments)
+6. [Deployement](#deployment)
+7. [Troubleshooting](#troubleshooting)
+8. [Contact Information](#contact-information)
+9. [Acknowledgments](#acknowledgments)
 
 ## Installation
 1. Clone the repository: `git https://github.com/somnathnavale/Real_Estate_WebApp.git`
@@ -57,6 +58,12 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 6. Geolocation Based Searching using mongoDB and Location IQ 
 7. AI Based Description generator
 
+## Deployment
+   1. Deployment is Done on vercel. (here verel function are used and nodejs is serving frontend build)
+   2. First Step is To add vercel.json file in server, and add necessary details
+   3. create frontend build using npm run build command and run npm run postbuild to copy pasting build from  client folder to publi folder in server
+   4. create account on vercel, create project on vercel connect it with your existing project on github, add environment variables and set your production branch in settings section in vercel.
+      
 ## Troubleshooting
 - If you encounter issues with authentication, ensure that your environment variables are correctly set.
 
