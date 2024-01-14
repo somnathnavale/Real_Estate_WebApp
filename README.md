@@ -62,7 +62,7 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
    1. Deployment is Done on vercel. (here verel function are used and nodejs is serving frontend build)
    2. First Step is To add vercel.json file in server, and add necessary details
    3. create frontend build using npm run build command and run npm run postbuild to copy pasting build from  client folder to publi folder in server
-   4. create account on vercel, create project on vercel connect it with your existing project on github, add environment variables and set your production branch in settings section in vercel.
+   4. create account on vercel, create project on vercel connect it with your existing project on github, add environment variables and set your production branch in settings section of vercel.
       
 ## Troubleshooting
 - If you encounter issues with authentication, ensure that your environment variables are correctly set.
