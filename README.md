@@ -42,6 +42,7 @@ NextGen Estate, a full-stack web application, empowers users to actively search,
 - GeoSpatial Location - Location IQ
 - Email Notifications - Node Mailer
 - Logger - Wiston 
+- Description Generation - Gemini AI
 
 ## Folder Structure
 - `/client`: Frontend codebase
