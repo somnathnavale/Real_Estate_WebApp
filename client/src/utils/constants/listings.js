@@ -96,10 +96,10 @@ export const property = {
     required: true,
   },
   availability: {
-    label: "Availability (days)",
+    label: "Availability (in days)",
     key: "availability",
     initialValue: "",
-    info: "",
+    info: "Add days after property will ready for possession",
     page: 1,
     required: true,
   },
@@ -131,7 +131,7 @@ export const property = {
     label: "Price (in Rs.)",
     key: "price",
     initialValue: "",
-    info: "",
+    info: "Add monthly Rent for rented property otherwise add property selling price",
     page: 1,
     required: true,
   },
@@ -207,14 +207,14 @@ export const property = {
     page: 2,
     required: false,
   },
-  coordinates:{
+  coordinates: {
     label: "Coordinates",
     key: "coordinates",
     initialValue: [],
     info: "",
     page: -1,
     required: false,
-  }
+  },
 };
 
 export const defaultPropertyData = Object.values(property).reduce(

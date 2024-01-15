@@ -1,14 +1,23 @@
 import { memo } from "react";
+import { IoMdInformationCircleOutline } from "react-icons/io";
+import Tooltip from "../Tooltip";
 
 const TextInput = memo(({ input, data, field, onChange }) => {
   return (
     <>
       <label
         htmlFor={field.key}
-        className={`block ${
+        className={`flex items-center justify-between mx-1 ${
           field?.required ? "text-gray-700 font-normal" : "text-gray-500"
         } `}
-      >{`${field.label}${field?.required ? " *" : ""}`}</label>
+      >
+        {`${field.label}${field?.required ? " *" : ""}`}
+        {`${field.info}` ? (
+          <Tooltip message={field.info}>
+            <IoMdInformationCircleOutline className=" cursor-pointer w-5 h-5" />
+          </Tooltip>
+        ) : null}
+      </label>
       {input == "textarea" ? (
         <textarea
           id={field.key}
