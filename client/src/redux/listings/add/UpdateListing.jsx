@@ -11,6 +11,7 @@ import PageRenderer from "./PageRenderer";
 import ButtonGroup from "./ButtonGroup";
 import { PageValidations } from "../../../utils/helpers/listingsHelper";
 import SnackbarToast from "../../../components/SnackbarToast";
+import { getGeocode } from "../../../utils/helpers/geocodeHelper";
 
 const UpdateListing = memo(() => {
   const { id } = useParams();
@@ -126,7 +127,6 @@ const UpdateListing = memo(() => {
         setStatus(STATUS.SUCCEEDED);
         setSelectedFiles([]);
       } catch (error) {
-        console.log(error);
         setStatus(STATUS.FAILED);
       }
     },
@@ -143,7 +143,7 @@ const UpdateListing = memo(() => {
   }, []);
 
   const handlePageClick = useCallback(
-    (val) => {
+    async (val) => {
       if (val == 1) {
         const response = PageValidations(propertyData, page);
         if (response?.status) {
@@ -155,10 +155,26 @@ const UpdateListing = memo(() => {
           });
           return;
         }
+        if (page === 3) {
+          const response = await getGeocode(axios,propertyData);
+          if (!response.success) {
+            setToast({
+              type: "warning",
+              message: response.message,
+              time: 8000,
+              open: true,
+            });
+            return;
+          }
+          setPropertyData((prev) => ({
+            ...prev,
+            coordinates:structuredClone(response.coordinates)
+          }));
+        }
       }
       setPage((prev) => prev + val);
     },
-    [page, propertyData]
+    [page, propertyData,axios]
   );
 
   return (
