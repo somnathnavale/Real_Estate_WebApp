@@ -102,13 +102,11 @@ const MyListings = () => {
                   />
                 </div>
                 <div className="col-span-full xs:col-span-4 xs:px-4">
-                  <Tooltip message={property.name} classes="!p-1 !top-7">
                     <p className="font-medium text-lg cursor-pointer">
                       {property.name.length > 35
                         ? property.name.slice(0, 33) + "..."
                         : property.name}
                     </p>
-                  </Tooltip>
                   <Tooltip
                     message={
                       property.address.locality + ", " + property.address.city

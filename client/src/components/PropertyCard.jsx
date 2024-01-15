@@ -41,11 +41,9 @@ const PropertyCard = ({
         >
           On {listingType}
         </span>
-        <Tooltip message={name} classes="top-11 !w-72 !bg-slate-700">
-          <h2 className="text-base lg:text-lg font-semibold text-slate-800 mt-1 cursor-pointer">
-            {name.substring(0, 30)}
-          </h2>
-        </Tooltip>
+        <h2 className="text-base lg:text-lg font-semibold text-slate-800 mt-1 cursor-pointer">
+          {name.substring(0, 30)}
+        </h2>
         <Tooltip
           message={
             address?.locality + ", " + address?.street + ", " + address?.city
