@@ -83,7 +83,7 @@ const AddListing = () => {
       setPropertyData((prev) => ({
         ...prev,
         address: addressObj,
-        photos: addedPhotos,
+        photos: [...prev.photos,...addedPhotos],
       }));
       await dispatch(
         addListing({
@@ -91,13 +91,14 @@ const AddListing = () => {
           data: {
             ...propertyData,
             address: addressObj,
-            photos: addedPhotos,
+            photos: [...propertyData.photos,...addedPhotos],
             owner: user._id,
           },
         })
       ).unwrap();
       setStatus(STATUS.SUCCEEDED);
       setPropertyData(structuredClone(defaultPropertyData));
+      setPage(1);
     } catch (error) {
       setStatus(STATUS.FAILED);
     }
