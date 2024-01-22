@@ -1,7 +1,7 @@
 # Project Title: NextGen Estate (Real Estate WebSite)
 
 ## Description
-NextGen Estate, a full-stack web application, empowers users to actively search, add, and manage properties across diverse categories and features. Employing a modern tech stack, it combines React with Redux-Toolkit for state management, Tailwind CSS for styling components, and Node.js with Express for the backend. MongoDB stores user profiles and properties, Firebase handles property images, and Nodemailer facilitates email notifications. Logging is efficiently managed through Winston. Location-based Searching is achieved using Location IQ and GeoSpatial Searching using MongoDB, Integrated with GEMINI AI for automatic Property Description Generation Based on Filled Property Data. 
+NextGen Estate, a full-stack web application, empowers users to actively search, add, and manage properties across diverse categories and features. Employing a modern tech stack, it combines React with Redux-Toolkit for state management, Tailwind CSS for styling components, and Node.js with Express for the backend. MongoDB stores user profiles and properties, Firebase handles property images, and Nodemailer facilitates email notifications. Logging is efficiently managed through Winston. Location-based Searching is achieved using Location IQ and GeoSpatial Searching using MongoDB, Integrated with GEMINI AI for automatic Property Description Generation Based on Filled Property Data. [Link To Project](https://next-gen-estate-delta.vercel.app/)
 
 ## Table of Contents
 1. [Installation](#installation)
